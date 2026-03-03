@@ -397,17 +397,17 @@ a, button, .menu-icon {
 
     /* Make Navbar Smaller */
     .navbar {
-        height: 80px; /* Reduced from 100px */
+        height: 70px; /* Reduced from 100px */
         padding: 0 40px; /* Reduced padding */
     }
 
     .logo {
-        height: 70px; /* Reduced from 90px */
+        height: 60px; /* Reduced from 90px */
     }
 
     /* Adjust Hero Padding */
     .hero {
-        padding: 120px 20px 80px;
+        padding: 140px 20px 80px;
     }
 
     .hero-container {
@@ -424,17 +424,17 @@ a, button, .menu-icon {
 @media (max-width: 600px) {
     /* Make Navbar Even Smaller */
     .navbar {
-        height: 70px; /* Further reduced */
+        height: 50px; /* Further reduced */
         padding: 0 15px; /* Minimal padding */
     }
 
     .logo {
-        height: 50px; /* Further reduced */
+        height: 36px; /* Further reduced */
     }
 
     /* Adjust Hero Padding */
     .hero {
-        padding: 100px 15px 60px;
+        padding: 140px 15px 60px;
     }
 
     .hero-container {
