@@ -258,7 +258,7 @@ a, button, .menu-icon {
     width: 200px;
     height: 200px;
     transform: translateX(-50%) scale(0.8);
-    background: url('image/HolyWings.png') no-repeat center/contain;
+    background: url('image/holyWings.png') no-repeat center/contain;
     animation: crossFloat 4s ease-in-out infinite;
     z-index: -2;
 }
@@ -411,4 +411,5 @@ a, button, .menu-icon {
     .main-title { font-size: 1.8rem; letter-spacing: 2px; }
     .description { font-size: 1.2rem; line-height: 1.6; }
     .verse-reference { font-size: 1rem; }
+
 }
