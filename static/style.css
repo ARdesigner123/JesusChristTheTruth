@@ -383,7 +383,7 @@ a, button, .menu-icon {
 
 /* ================= RESPONSIVE ================= */
 
-/* Tablet and Mobile Breakpoint */
+/* Tablet Breakpoint (900px and below) */
 @media (max-width: 900px) {
     /* Hide Desktop Nav Links */
     .nav-links {
@@ -393,6 +393,16 @@ a, button, .menu-icon {
     /* Show Menu Icon */
     .menu-icon {
         display: block;
+    }
+
+    /* Make Navbar Smaller */
+    .navbar {
+        height: 80px; /* Reduced from 100px */
+        padding: 0 40px; /* Reduced padding */
+    }
+
+    .logo {
+        height: 70px; /* Reduced from 90px */
     }
 
     /* Adjust Hero Padding */
@@ -410,19 +420,19 @@ a, button, .menu-icon {
     }
 }
 
-/* Mobile Breakpoint */
+/* Mobile Breakpoint (600px and below) */
 @media (max-width: 600px) {
-    /* Navbar Adjustments */
+    /* Make Navbar Even Smaller */
     .navbar {
-        width: 95%;
-        padding: 0 20px;
+        height: 70px; /* Further reduced */
+        padding: 0 15px; /* Minimal padding */
     }
 
     .logo {
-        height: 60px;
+        height: 50px; /* Further reduced */
     }
 
-    /* Hero Section Adjustments */
+    /* Adjust Hero Padding */
     .hero {
         padding: 100px 15px 60px;
     }
@@ -433,23 +443,23 @@ a, button, .menu-icon {
     }
 
     .main-title {
-        font-size: 1.8rem;
+        font-size: 1.6rem; /* Smaller title */
         letter-spacing: 1px;
-        white-space: normal; /* Allow wrapping on very small screens */
+        white-space: normal;
     }
 
     .description {
-        font-size: 1.1rem;
+        font-size: 1rem;
         line-height: 1.6;
     }
 
     .verse-reference {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     /* Gospel Section */
     .gospel h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     /* Footer Adjustments */
@@ -458,6 +468,6 @@ a, button, .menu-icon {
     }
 
     .bible-icon {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 }
