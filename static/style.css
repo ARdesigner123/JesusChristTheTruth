@@ -197,7 +197,7 @@ a, button, .menu-icon {
     font-size: clamp(2rem, 5vw, 2.6rem); /* Scales between 2rem and 2.6rem */
     font-family: 'Cinzel', serif;
     position: relative;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
     letter-spacing: 3px;
     text-transform: uppercase;
     white-space: nowrap;
@@ -302,7 +302,7 @@ a, button, .menu-icon {
     font-family: 'Cardo', serif;
     font-style: italic;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-shadow: 1px 1px 0 #3b2206;
 }
 
@@ -429,7 +429,7 @@ a, button, .menu-icon {
     }
 
     .logo {
-        height: 36px; /* Further reduced */
+        height: 40px; /* Further reduced */
     }
 
     /* Adjust Hero Padding */
