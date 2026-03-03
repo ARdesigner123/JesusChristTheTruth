@@ -64,11 +64,11 @@ a, button, .menu-icon {
     height: 90px;
 }
 
-/* NAV LINKS CENTERED */
+/* Desktop Nav Links */
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 30px; /* More spacing between words */
+    gap: 30px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -84,43 +84,34 @@ a, button, .menu-icon {
     pointer-events: none;
 }
 
-/* Bigger Biblical Text */
 .nav-links li a {
     text-decoration: none;
     color: #fffdf5;
     font-weight: 700;
-    font-size: 1.5rem; /* Bigger and clearer */
+    font-size: 1.5rem;
     letter-spacing: 2px;
     font-family: 'Cormorant Garamond', serif;
     position: relative;
     padding: 16px 32px;
     transition: 0.3s ease;
     white-space: nowrap;
-
-    /* Scripture engraved look (cleaner) */
     text-shadow:
         1px 1px 0 #3b2206,
         0 0 8px rgba(255,215,0,0.25);
-
     -webkit-text-stroke: 0.4px #3b2206;
 }
 
 /* Yellow Glow Indicator */
 .nav-indicator {
     position: absolute;
-    height: 58px; /* match new padding */
+    height: 58px;
     background: linear-gradient(to bottom, #ffd700, #e6b800);
     border-radius: 30px;
-
-    /* Dark Brown Border */
     border: 3px solid #3b2206;
-
-    /* Inner engraved shadow */
     box-shadow:
         inset 0 4px 8px rgba(255,255,255,0.4),
         inset 0 -4px 8px rgba(59,34,6,0.6),
         0 0 25px gold;
-
     transition: all 0.4s ease;
     z-index: -1;
     opacity: 0;
@@ -128,21 +119,20 @@ a, button, .menu-icon {
 
 .nav-links li a.active {
     color: #3b2206;
-
     text-shadow:
         0 0 6px rgba(255,215,0,0.7),
         1px 1px 0 #fff3c4;
-
     -webkit-text-stroke: 0.6px #3b2206;
 }
 
-/* MENU ICON */
+/* Menu Icon */
 .menu-icon {
     font-size: 30px;
     color: #fff8e1;
+    display: none; /* Hidden on desktop */
 }
 
-/* Dropdown */
+/* ================= DROPDOWN (Mobile Menu) ================= */
 .dropdown {
     position: absolute;
     top: 120px;
@@ -150,17 +140,40 @@ a, button, .menu-icon {
     background: #3a2204;
     border-radius: 15px;
     width: 220px;
-    display: none;
+    display: none; /* Hidden by default */
     padding: 20px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    z-index: 20;
+}
+
+/* Mobile Nav Links inside Dropdown */
+.mobile-nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mobile-nav-links li a {
+    text-decoration: none;
+    color: #fffdf5;
+    font-size: 1.2rem;
+    font-family: 'Cormorant Garamond', serif;
+    padding: 10px;
+    display: block;
+    transition: 0.3s;
+}
+
+.mobile-nav-links li a:hover {
+    color: gold;
+    text-shadow: 0 0 10px gold;
 }
 
 /* ================= HERO SECTION ================= */
-
 .hero {
     text-align: center;
-    padding: 150px 20px 100px; /* Top padding reduced */
-    margin-top: -40px; /* Pull section closer to navbar */
+    padding: 150px 20px 100px;
+    margin-top: -40px;
     position: relative;
     z-index: 2;
 }
@@ -175,21 +188,19 @@ a, button, .menu-icon {
     box-shadow:
         inset 0 0 40px rgba(255,215,0,0.2),
         0 0 60px rgba(0,0,0,0.6);
-
     position: relative;
-
-    /* Allow cross to pierce outside */
     overflow: visible;
 }
 
+/* Responsive Title using clamp() */
 .main-title {
-    font-size: 2.6rem; /* Smaller to fit in one line */
+    font-size: clamp(2rem, 5vw, 2.6rem); /* Scales between 2rem and 2.6rem */
     font-family: 'Cinzel', serif;
     position: relative;
     margin-bottom: 40px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    white-space: nowrap; /* Force single line */
+    white-space: nowrap;
     text-shadow:
         2px 2px 0 #3b2206,
         4px 4px 0 #2b1603,
@@ -203,14 +214,14 @@ a, button, .menu-icon {
     left: 50%;
     width: 6px;
     height: 160px;
-    border: 1.5px solid #3b2206; /* dark brown stroke */
+    border: 1.5px solid #3b2206;
     background: linear-gradient(to bottom, #fffdf0 0%, #ffd700 40%, #e6b800 70%, #a87400 100%);
     transform: translateX(-50%);
     border-radius: 3px;
     box-shadow:
         0 0 20px gold,
         0 0 50px rgba(255,215,0,0.7),
-        0 -45px 0 0 rgba(255,215,0,0.25), /* crown-of-light effect */
+        0 -45px 0 0 rgba(255,215,0,0.25),
         inset 1px 1px 4px rgba(255,255,255,0.9),
         inset -2px -2px 6px rgba(120,70,0,0.7);
     animation:
@@ -221,7 +232,6 @@ a, button, .menu-icon {
     overflow: visible;
 }
 
-/* Horizontal bar */
 .cross-effect::after {
     content: "";
     position: absolute;
@@ -235,7 +245,6 @@ a, button, .menu-icon {
     box-shadow: 0 0 15px gold, inset 1px 1px 4px rgba(255,255,255,0.9), inset -2px -2px 6px rgba(120,70,0,0.7);
 }
 
-/* Light rays */
 .cross-effect::before {
     content: "";
     position: absolute;
@@ -250,7 +259,6 @@ a, button, .menu-icon {
     animation: rayPulse 4s ease-in-out infinite;
 }
 
-/* Holy wings behind cross */
 .cross-wings {
     position: absolute;
     top: -200px;
@@ -261,21 +269,6 @@ a, button, .menu-icon {
     background: url('image/holyWings.png') no-repeat center/contain;
     animation: crossFloat 4s ease-in-out infinite;
     z-index: -2;
-}
-
-/* Sparkles as stars */
-.cross-effect .sparkle {
-    position: absolute;
-    background: gold;
-    pointer-events: none;
-    opacity: 0;
-    filter: drop-shadow(0 0 6px gold);
-    border-radius: 50%;
-    transform-origin: center;
-    clip-path: polygon(
-        50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
-        50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
-    ); /* 5-point star shape */
 }
 
 /* ================= ANIMATIONS ================= */
@@ -301,32 +294,24 @@ a, button, .menu-icon {
     100% { opacity: 0.6; }
 }
 
-@keyframes sparkleDrift {
-    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
-    10% { opacity: 1; }
-    100% { transform: translate(var(--drift-x,0px), var(--drift-y,0px)) rotate(var(--rotate,0deg)); opacity: 0; }
-}
-
 /* ================= DESCRIPTION & VERSE ================= */
 .description {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem); /* Responsive font size */
     line-height: 2;
     color: #fff3c4;
     font-family: 'Cardo', serif;
     font-style: italic;
     text-align: center;
     margin-bottom: 20px;
-    text-shadow:
-        1px 1px 0 #3b2206;
+    text-shadow: 1px 1px 0 #3b2206;
 }
 
 .verse-reference {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2vw, 1.2rem);
     font-family: 'Cinzel', serif;
     color: gold;
     letter-spacing: 2px;
-    text-shadow:
-        0 0 10px rgba(255,215,0,0.6);
+    text-shadow: 0 0 10px rgba(255,215,0,0.6);
 }
 
 /* ================= GOSPEL SECTION ================= */
@@ -381,13 +366,12 @@ a, button, .menu-icon {
 /* Left ↔ Right movement */
 @keyframes bibleMove {
     0% { 
-        left: 10px; /* Start slightly inside the left edge */
-        transform: rotate(0deg); /* Reset rotation at start of loop */
+        left: 10px; 
+        transform: rotate(0deg); 
     }
     100% { 
-        /* Move to the right, leaving 10px padding from the edge */
         left: calc(100% - 50px); 
-        transform: rotate(360deg); /* Ensure it completes a full spin at the end */
+        transform: rotate(360deg); 
     }
 }
 
@@ -398,18 +382,82 @@ a, button, .menu-icon {
 }
 
 /* ================= RESPONSIVE ================= */
+
+/* Tablet and Mobile Breakpoint */
 @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .menu-icon { display: block; }
-    .hero-container { padding: 40px; }
-    .main-title { font-size: 2.2rem; }
+    /* Hide Desktop Nav Links */
+    .nav-links {
+        display: none;
+    }
+
+    /* Show Menu Icon */
+    .menu-icon {
+        display: block;
+    }
+
+    /* Adjust Hero Padding */
+    .hero {
+        padding: 120px 20px 80px;
+    }
+
+    .hero-container {
+        padding: 30px 20px;
+    }
+
+    /* Adjust Gospel Section */
+    .gospel {
+        padding: 60px 20px;
+    }
 }
 
+/* Mobile Breakpoint */
 @media (max-width: 600px) {
-    .hero { padding: 120px 15px 80px; }
-    .hero-container { padding: 30px; }
-    .main-title { font-size: 1.8rem; letter-spacing: 2px; }
-    .description { font-size: 1.2rem; line-height: 1.6; }
-    .verse-reference { font-size: 1rem; }
+    /* Navbar Adjustments */
+    .navbar {
+        width: 95%;
+        padding: 0 20px;
+    }
 
+    .logo {
+        height: 60px;
+    }
+
+    /* Hero Section Adjustments */
+    .hero {
+        padding: 100px 15px 60px;
+    }
+
+    .hero-container {
+        padding: 25px 15px;
+        border-radius: 15px;
+    }
+
+    .main-title {
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+        white-space: normal; /* Allow wrapping on very small screens */
+    }
+
+    .description {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .verse-reference {
+        font-size: 1rem;
+    }
+
+    /* Gospel Section */
+    .gospel h2 {
+        font-size: 1.8rem;
+    }
+
+    /* Footer Adjustments */
+    .footer {
+        padding: 40px 15px 20px;
+    }
+
+    .bible-icon {
+        font-size: 1.5rem;
+    }
 }

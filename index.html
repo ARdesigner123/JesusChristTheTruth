@@ -8,7 +8,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="static/style.css">
 
-    <!-- Font Awesome for Menu Icon -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
@@ -21,9 +21,9 @@
             <img src="static/image/jesusLogo.png" alt="Jesus Logo" class="logo">
         </div>
 
+        <!-- Desktop Links (Hidden on Mobile) -->
         <ul class="nav-links">
             <div class="nav-indicator"></div>
-
             <li><a href="index.html" class="active">Home</a></li>
             <li><a href="#">Bible</a></li>
             <li><a href="#">Topics</a></li>
@@ -31,12 +31,19 @@
             <li><a href="#">Store</a></li>
         </ul>
 
-        <div class="menu-icon" id="menuIcon">
-            <i class="fas fa-bars"></i>
+        <!-- Mobile Links (Hidden on Desktop, Visible on Mobile) -->
+        <div class="dropdown" id="dropdownMenu">
+            <ul class="mobile-nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="#">Bible</a></li>
+                <li><a href="#">Topics</a></li>
+                <li><a href="#">The Creator</a></li>
+                <li><a href="#">Store</a></li>
+            </ul>
         </div>
 
-        <div class="dropdown" id="dropdownMenu">
-            <!-- Empty for now -->
+        <div class="menu-icon" id="menuIcon">
+            <i class="fas fa-bars"></i>
         </div>
     </nav>
 
@@ -50,8 +57,8 @@
             </h1>
 
             <p class="description">
-                “For God so loved the world that He gave His one and only Son,
-                that whoever believes in Him shall not perish but have eternal life.”
+                "For God so loved the world that He gave His one and only Son,
+                that whoever believes in Him shall not perish but have eternal life."
             </p>
 
             <p class="verse-reference">

@@ -1,29 +1,37 @@
+// ================= MOBILE MENU =================
 const menuIcon = document.getElementById("menuIcon");
 const dropdown = document.getElementById("dropdownMenu");
 
 menuIcon.addEventListener("click", () => {
-    dropdown.style.display =
-        dropdown.style.display === "block" ? "none" : "block";
+    // Toggle display
+    if (dropdown.style.display === "block") {
+        dropdown.style.display = "none";
+    } else {
+        dropdown.style.display = "block";
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener("click", (e) => {
+    if (!dropdown.contains(e.target) && !menuIcon.contains(e.target)) {
+        dropdown.style.display = "none";
+    }
 });
 
 // ================= NAV INDICATOR =================
-
 const indicator = document.querySelector(".nav-indicator");
 const links = document.querySelectorAll(".nav-links a");
 
 // Set initial active position
 window.addEventListener("load", () => {
     const active = document.querySelector(".nav-links a.active");
-    moveIndicator(active);
+    if (active) moveIndicator(active);
 });
 
 links.forEach(link => {
-
     // Click event
     link.addEventListener("click", function() {
-        document.querySelector(".nav-links a.active")
-            ?.classList.remove("active");
-
+        document.querySelector(".nav-links a.active")?.classList.remove("active");
         this.classList.add("active");
         moveIndicator(this);
     });
@@ -36,7 +44,7 @@ links.forEach(link => {
 
     link.addEventListener("mouseleave", function() {
         const active = document.querySelector(".nav-links a.active");
-        moveIndicator(active);
+        if (active) moveIndicator(active);
     });
 });
 
@@ -44,6 +52,7 @@ function moveIndicator(element) {
     const rect = element.getBoundingClientRect();
     const parentRect = element.parentElement.parentElement.getBoundingClientRect();
 
+    // Calculate position relative to the navbar
     indicator.style.width = rect.width + 20 + "px";
     indicator.style.left = rect.left - parentRect.left - 10 + "px";
     indicator.style.top = rect.top - parentRect.top - 5 + "px";
