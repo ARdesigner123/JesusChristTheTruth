@@ -317,14 +317,146 @@ a, button, .menu-icon {
 /* ================= GOSPEL SECTION ================= */
 
 .gospel {
+    padding: 120px 20px;
     text-align: center;
-    padding: 100px 20px;
 }
 
-.gospel h2 {
-    font-size: 2.5rem;
+/* Gospel particles container */
+.gospel {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Particle */
+.gospel-particle {
+    position: absolute;
+    background: radial-gradient(circle, #fff8c4, gold, transparent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+
+    filter: blur(0.5px) drop-shadow(0 0 6px gold);
+
+    animation: floatParticle linear forwards;
+}
+
+/* Floating animation */
+@keyframes floatParticle {
+    0% {
+        transform: translate(0, 0) scale(0.8);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(var(--drift-x), var(--drift-y)) scale(1.4);
+        opacity: 0;
+    }
+}
+
+.gospel-container {
+    max-width: 900px;
+    margin: auto;
+    background: linear-gradient(to bottom, #6b3f0d, #4b2e05);
+    border-radius: 25px;
+    padding: 50px 40px;
+    border: 3px solid gold;
+    box-shadow:
+        inset 0 0 40px rgba(255,215,0,0.2),
+        0 0 60px rgba(0,0,0,0.6);
+}
+
+/* Title */
+.gospel-title {
+    font-size: 2.8rem;
     color: gold;
-    font-family: 'IM Fell English SC', serif;
+    margin-bottom: 50px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: divineGlow 3s ease-in-out infinite alternate;
+
+    text-shadow:
+        0 0 10px gold,
+        0 0 25px rgba(255,215,0,0.6);
+}
+
+@keyframes divineGlow {
+    from {
+        text-shadow: 0 0 10px gold;
+    }
+    to {
+        text-shadow:
+            0 0 25px gold,
+            0 0 50px rgba(255,215,0,0.7);
+    }
+}
+
+/* Each Gospel Block */
+.gospel-block {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 15px;
+
+    background: rgba(255,215,0,0.05);
+    border: 1px solid rgba(255,215,0,0.3);
+
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    transition: 
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.gospel-block.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Hover glow effect */
+.gospel-block:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+        0 0 25px rgba(255,215,0,0.5),
+        0 0 60px rgba(255,215,0,0.3);
+}
+
+/* Glow text when hovered */
+.gospel-block:hover p {
+    text-shadow:
+        0 0 10px gold,
+        0 0 20px rgba(255,215,0,0.7);
+}
+
+/* Section headings */
+.gospel-block h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #ffd700;
+    font-family: 'Cinzel', serif;
+
+    text-shadow: 0 0 8px rgba(255,215,0,0.5);
+}
+
+/* Verse text */
+.gospel-block p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    font-family: 'Cardo', serif;
+    font-style: italic;
+    color: #fff3c4;
+    margin-bottom: 8px;
+
+    text-shadow: 1px 1px 0 #3b2206;
+}
+
+/* Verse reference */
+.gospel-block span {
+    font-size: 0.95rem;
+    color: gold;
+    letter-spacing: 1px;
+
+    text-shadow: 0 0 8px rgba(255,215,0,0.5);
 }
 
 /* ================= FOOTER ================= */
@@ -460,6 +592,18 @@ a, button, .menu-icon {
     /* Gospel Section */
     .gospel h2 {
         font-size: 1.6rem;
+    }
+
+    .gospel-title {
+        font-size: 1.8rem;
+    }
+
+    .gospel-block h3 {
+        font-size: 1.2rem;
+    }
+
+    .gospel-block p {
+        font-size: 1rem;
     }
 
     /* Footer Adjustments */

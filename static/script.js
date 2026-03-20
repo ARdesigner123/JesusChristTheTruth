@@ -111,5 +111,98 @@ function createSparkle() {
     });
 }
 
+// ================= GOSPEL PARTICLES =================
+const gospelSection = document.querySelector(".gospel");
+
+function createParticle() {
+    const particle = document.createElement("span");
+    particle.classList.add("gospel-particle");
+
+    const container = document.querySelector(".gospel-container");
+
+    const rect = container.getBoundingClientRect();
+
+    // Randomly pick which edge to spawn from
+    const edge = Math.floor(Math.random() * 4);
+
+    let x, y, driftX, driftY;
+
+    switch(edge) {
+        case 0: // TOP
+            x = Math.random() * rect.width;
+            y = 0;
+            driftX = (Math.random() - 0.5) * 40;
+            driftY = -60 - Math.random() * 60;
+            break;
+
+        case 1: // RIGHT
+            x = rect.width;
+            y = Math.random() * rect.height;
+            driftX = 40 + Math.random() * 40;
+            driftY = (Math.random() - 0.5) * 40;
+            break;
+
+        case 2: // BOTTOM
+            x = Math.random() * rect.width;
+            y = rect.height;
+            driftX = (Math.random() - 0.5) * 40;
+            driftY = 60 + Math.random() * 60;
+            break;
+
+        case 3: // LEFT
+            x = 0;
+            y = Math.random() * rect.height;
+            driftX = -40 - Math.random() * 40;
+            driftY = (Math.random() - 0.5) * 40;
+            break;
+    }
+
+    particle.style.left = x + "px";
+    particle.style.top = y + "px";
+
+    // Random size
+    const size = Math.random() * 5 + 2;
+    particle.style.width = size + "px";
+    particle.style.height = size + "px";
+
+    // Drift direction
+    particle.style.setProperty('--drift-x', driftX + "px");
+    particle.style.setProperty('--drift-y', driftY + "px");
+
+    // Duration
+    const duration = Math.random() * 3 + 4;
+    particle.style.animationDuration = duration + "s";
+
+    container.appendChild(particle);
+
+    setTimeout(() => {
+        particle.remove();
+    }, duration * 1000);
+}
+
+// ================= SCROLL REVEAL =================
+const blocks = document.querySelectorAll(".gospel-block");
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        }
+    });
+}, { 
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+});
+
+blocks.forEach((block, index) => {
+    observer.observe(block);
+
+    // Add slight delay for each block
+    block.style.transitionDelay = `${index * 0.1}s`;
+});
+
+// Spawn particles
+setInterval(createParticle, 300);
+
 // Generate sparkles at constant rate
 setInterval(createSparkle, 250); // slightly more spaced
