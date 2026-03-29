@@ -172,7 +172,7 @@ a, button, .menu-icon {
 /* ================= HERO SECTION ================= */
 .hero {
     text-align: center;
-    padding: 150px 20px 100px;
+    padding: 150px 20px 10px;
     margin-top: -40px;
     position: relative;
     z-index: 2;
@@ -312,6 +312,146 @@ a, button, .menu-icon {
     color: gold;
     letter-spacing: 2px;
     text-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
+/* ================= ART SECTION ================= */
+
+.art-container {
+    margin-bottom: 80px;
+    padding: 30px;
+    border-radius: 20px;
+
+    background: rgba(255,215,0,0.05);
+    border: 2px solid rgba(255,215,0,0.3);
+
+    box-shadow:
+        0 0 30px rgba(255,215,0,0.2),
+        inset 0 0 20px rgba(255,215,0,0.1);
+}
+
+/* Title */
+.art-title {
+    font-size: 2rem;
+    color: gold;
+    margin-bottom: 30px;
+
+    text-shadow:
+        0 0 10px gold,
+        0 0 20px rgba(255,215,0,0.5);
+}
+
+/* Section blocks */
+.art-section {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    border-left: 3px solid gold;
+
+    background: rgba(255,215,0,0.03);
+    border-radius: 10px;
+
+    transition: 0.3s ease;
+}
+
+/* Section hover glow */
+.art-section:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+}
+
+/* Section titles */
+.art-section h3 {
+    color: #ffd700;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+
+    text-shadow: 0 0 8px rgba(255,215,0,0.6);
+}
+
+/* Images row */
+.art-images {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+/* Images styling */
+.art-images img {
+    width: 280px;
+    border-radius: 15px;
+    border: 2px solid gold;
+
+    box-shadow:
+        0 0 20px rgba(255,215,0,0.4);
+
+    transition: 0.4s ease;
+}
+
+/* Hover zoom */
+.art-images img:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 0 40px gold,
+        0 0 80px rgba(255,215,0,0.5);
+}
+
+/* Description */
+.art-description p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color: #fff3c4;
+
+    text-shadow: 1px 1px 0 #3b2206;
+}
+
+/* Quote */
+.art-quote {
+    margin-top: 25px;
+    font-style: italic;
+    color: #ffeaa7;
+}
+
+.art-quote p {
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px gold;
+}
+
+.art-quote span {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: gold;
+}
+
+/* References */
+.art-references {
+    margin-top: 25px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #d6b96b;
+}
+
+/* Links styling */
+.art-references a {
+    color: gold;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+/* Hover effect for links */
+.art-references a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 8px gold;
+}
+
+.art-references ul {
+    padding-left: 20px;
+}
+
+.art-references li {
+    margin-bottom: 5px;
 }
 
 /* ================= GOSPEL SECTION ================= */
