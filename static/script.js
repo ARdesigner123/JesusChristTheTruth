@@ -180,6 +180,197 @@ function createParticle() {
     }, duration * 1000);
 }
 
+// ================= DIVINE SCROLL REVEAL =================
+const revealElements = () => {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                // We use a small timeout to let the CSS transitions breathe
+                entry.target.classList.add("active");
+                // Remove the 'reveal' class once 'active' is set to clean up logic
+                entry.target.classList.remove("reveal");
+            }
+        });
+    }, observerOptions);
+
+    const targets = document.querySelectorAll(".disciple-card");
+    targets.forEach((el, index) => {
+        observer.observe(el);
+        // Stagger the entrance
+        el.style.transitionDelay = `${(index % 3) * 0.1}s`;
+    });
+};
+
+document.addEventListener('DOMContentLoaded', revealElements);
+
+// ================= DISCIPLE CARD PARTICLES =================
+document.querySelectorAll('.disciple-card').forEach(card => {
+    let particleInterval;
+
+    card.addEventListener('mouseenter', () => {
+        // Initial burst of 5 particles
+        for(let i=0; i<5; i++) createParticle(card); 
+        
+        // Steady stream of 3 particles
+        particleInterval = setInterval(() => {
+            for(let i=0; i<3; i++) createParticle(card);
+        }, 150); 
+    });
+
+    card.addEventListener('mouseleave', () => {
+        clearInterval(particleInterval);
+    });
+});
+
+function createParticle(container) {
+    const particle = document.createElement('div');
+    particle.className = 'gospel-particle'; 
+    
+    // Fallback if container is not passed (for global particles)
+    const targetContainer = container.tagName ? container : document.body;
+
+    const size = Math.random() * 5 + 3;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    
+    // Position logic
+    const x = Math.random() * targetContainer.offsetWidth;
+    const y = Math.random() * targetContainer.offsetHeight;
+    
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    particle.style.position = "absolute";
+    particle.style.zIndex = "10";
+    particle.style.pointerEvents = "none";
+
+    targetContainer.appendChild(particle);
+
+    const destinationX = (Math.random() - 0.5) * 150;
+    const destinationY = (Math.random() - 0.5) * 150;
+
+    const anim = particle.animate([
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${destinationX}px, ${destinationY}px) scale(0)`, opacity: 0 }
+    ], {
+        duration: 1200 + Math.random() * 800,
+        easing: 'ease-out'
+    });
+
+    anim.onfinish = () => particle.remove();
+}
+
+// Global ambient sparkles
+setInterval(() => createParticle(document.querySelector('.gospel')), 300);
+
+// Data for the Modals
+const discipleData = {
+    "Saint Simon Peter": {
+        bio: "Simon Peter, originally a fisherman on the Sea of Galilee, became the 'Rock' upon which the Church was built. Known for his fiery and impulsive nature, he was the first to declare Jesus as the Messiah. Despite denying Christ three times, he was restored and became the bold leader of the early church in Jerusalem and later Rome. He is traditionally believed to have been crucified upside down, feeling unworthy to die in the same manner as his Lord.",
+        mission: "To lead the Apostles and establish the Church's foundation."
+    },
+    "Saint Andrew": {
+        bio: "The brother of Peter and a former disciple of John the Baptist, Andrew was the very first Apostle called by Jesus. He is often called the 'Protocletos' (First Called). Andrew was known for bringing others to Christ, including his own brother. He preached across Asia Minor and Greece. Tradition holds that he was martyred on an X-shaped cross (St. Andrew's Cross), continuing to preach to onlookers for two days until he passed.",
+        mission: "Bringing individuals to Christ and spreading the Gospel to the East."
+    },
+    "Saint James the Greater": {
+        bio: "The son of Zebedee and brother of John, James was part of the 'inner circle' (Peter, James, and John) who witnessed the Transfiguration and the Agony in Gethsemane. He was known for his intense zeal, earning the nickname 'Son of Thunder.' James was the first of the Twelve to be martyred, beheaded by King Herod Agrippa I in 44 AD. He remains the patron saint of Spain.",
+        mission: "Boldly proclaiming the Kingdom and pioneering missionary work."
+    },
+    "Saint John the Beloved": {
+        bio: "The youngest Apostle and the 'disciple whom Jesus loved,' John was the only Apostle who did not flee during the Crucifixion, staying at the foot of the cross. He was entrusted with the care of Mary, the mother of Jesus. John wrote the Fourth Gospel, three epistles, and the Book of Revelation while exiled on the Island of Patmos. He is the only Apostle traditionally believed to have died of old age.",
+        mission: "To testify to the divinity of Christ through the theology of Love."
+    },
+    "Saint Philip": {
+        bio: "Philip was from Bethsaida, the same town as Peter and Andrew. He was the one who famously told Nathanael, 'Come and see.' Philip was a practical man; he was the one Jesus questioned about how to feed the 5,000. He spent his later years preaching in Phrygia (modern-day Turkey), where he eventually met his martyrdom.",
+        mission: "Direct evangelism and serving the practical needs of the growing church."
+    },
+    "Saint Bartholomew": {
+        bio: "Also known as Nathanael, he was the man Jesus called 'an Israelite in whom there is no guile.' Initially skeptical of anything from Nazareth, he became a devoted follower after a brief conversation with Christ. Historical accounts suggest he traveled as far as India and Armenia to spread the Gospel. He suffered a particularly brutal martyrdom, being flayed alive for his faith.",
+        mission: "Spreading the light of Christ to the furthest reaches of the East."
+    },
+    "Saint Matthew": {
+        bio: "Formerly known as Levi, Matthew was a tax collector in Capernaum—a profession loathed by his fellow Jews. When Jesus said 'Follow me,' Matthew left his wealthy lifestyle behind immediately. He wrote the First Gospel, primarily for a Jewish audience, to prove that Jesus was the fulfillment of Old Testament prophecies. He later preached in Ethiopia and Persia.",
+        mission: "Documenting the fulfillment of the Law through the life of Christ."
+    },
+    "Saint Thomas": {
+        bio: "Often unfairly remembered only as 'Doubting Thomas,' he was actually a man of great courage who once said, 'Let us also go, that we may die with him.' While he struggled to believe in the Resurrection until he saw the wounds, his confession 'My Lord and my God!' is one of the most profound in the Bible. He is credited with bringing Christianity to India, where he was martyred.",
+        mission: "Bringing the Gospel to distant lands and overcoming doubt through faith."
+    },
+    "Saint James the Lesser": {
+        bio: "The son of Alphaeus, he is called 'the Less' likely because he was younger or shorter than the other James. He played a massive role in the early church as the first Bishop of Jerusalem. Known for his deep prayer life and holiness, he was eventually pushed from the pinnacle of the Temple and beaten to death when he refused to deny Christ.",
+        mission: "Preserving the purity and law of the early church in Jerusalem."
+    },
+    "Saint Jude Thaddeus": {
+        bio: "Not to be confused with Judas Iscariot, Jude (or Thaddeus) was the brother of James the Lesser. He wrote the Epistle of Jude to warn against false teachers. He is the patron saint of 'lost causes' or 'desperate situations,' symbolizing the hope that Christ offers when all seems lost. He preached in Mesopotamia and Armenia.",
+        mission: "Encouraging the faithful to contend for the faith in difficult times."
+    },
+    "Saint Simon the Zealot": {
+        bio: "Before following Jesus, Simon belonged to the Zealots, a political group dedicated to the violent overthrow of the Roman occupation. His transformation is a testament to Christ's peace—he went from a man of political violence to a man of spiritual salvation. He is said to have preached in Egypt and Persia alongside St. Jude.",
+        mission: "Channeling earthly passion into the spiritual zeal for the Kingdom."
+    },
+    "Saint Matthias": {
+        bio: "Matthias was a follower of Jesus from the beginning, having witnessed the baptism of John and the Resurrection. After Judas Iscariot's death, the Apostles cast lots, and the Holy Spirit chose Matthias to take his place among the Twelve. He was a faithful witness who preached in Judea and modern-day Georgia.",
+        mission: "Filling the void left by betrayal and maintaining the apostolic witness."
+    },
+    "Judas Iscariot": {
+        bio: "Judas was the treasurer of the group, but his heart was corrupted by greed. He is the tragic figure who betrayed Jesus for thirty pieces of silver with a kiss in the Garden of Gethsemane. His life serves as a somber warning that proximity to Jesus does not guarantee a changed heart. Overcome with remorse but lacking repentance, he took his own life shortly after the betrayal.",
+        mission: "The fulfillment of prophecy through the mystery of betrayal."
+    }
+};
+
+function openModal(card, index) {
+    const modal = document.getElementById('disciple-modal');
+    const name = card.querySelector('h3').innerText;
+    const img = card.querySelector('img').src;
+    const occ = card.querySelector('.occupation').innerText;
+
+    // Fill content
+    document.getElementById('modal-name').innerText = name;
+    document.getElementById('modal-img').src = img;
+    document.getElementById('modal-occupation').innerText = occ;
+    document.getElementById('modal-bio').innerText = discipleData[name]?.bio || "Biography coming soon...";
+
+    // CLEAR OLD THEMES
+    modal.classList.remove('slide-left', 'slide-top', 'slide-right', 'judas-theme');
+
+    // CHECK IF IT'S JUDAS
+    if (name === "Judas Iscariot") {
+        modal.classList.add('judas-theme');
+    }
+
+    // Determine Direction based on row position
+    const position = (index % 3); 
+    if (position === 0) modal.classList.add('slide-left');
+    else if (position === 1) modal.classList.add('slide-top');
+    else modal.classList.add('slide-right');
+
+    // Show modal
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeModal() {
+    const modal = document.getElementById('disciple-modal');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 600); // Matches CSS transition time
+}
+
+// Attach click events to the "More Info" buttons
+document.querySelectorAll('.disciple-card').forEach((card, index) => {
+    const btn = card.querySelector('.more-info-btn');
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevents card hover trigger
+        openModal(card, index);
+    });
+});
+
 // ================= SCROLL REVEAL =================
 const blocks = document.querySelectorAll(".gospel-block");
 
