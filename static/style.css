@@ -929,12 +929,6 @@ a, button, .menu-icon {
     background: #fff;
 }
 
-/* Responsive */
-@media (max-width: 800px) {
-    .modal-body { flex-direction: column; text-align: center; }
-    .modal-content { width: 95%; height: 90vh; overflow-y: auto; }
-}
-
 /* ================= FOOTER ================= */
 .footer {
     position: relative;
@@ -993,101 +987,120 @@ a, button, .menu-icon {
 
 /* Tablet Breakpoint (900px and below) */
 @media (max-width: 900px) {
-    /* Hide Desktop Nav Links */
-    .nav-links {
-        display: none;
-    }
-
-    /* Show Menu Icon */
-    .menu-icon {
-        display: block;
-    }
+    /* Hide Desktop Nav Links & Show Menu Icon */
+    .nav-links { display: none; }
+    .menu-icon { display: block; }
 
     /* Make Navbar Smaller */
-    .navbar {
-        height: 70px; /* Reduced from 100px */
-        padding: 0 40px; /* Reduced padding */
-    }
-
-    .logo {
-        height: 60px; /* Reduced from 90px */
-    }
+    .navbar { height: 70px; padding: 0 40px; }
+    .logo { height: 60px; }
 
     /* Adjust Hero Padding */
-    .hero {
-        padding: 140px 20px 80px;
-    }
-
-    .hero-container {
-        padding: 30px 20px;
-    }
+    .hero { padding: 140px 20px 80px; }
+    .hero-container { padding: 30px 20px; }
+    
+    /* Cross Effect Scaling */
+    .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
+    .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
 
     /* Adjust Gospel Section */
-    .gospel {
-        padding: 60px 20px;
+    .gospel { padding: 60px 20px; }
+    
+    /* DISCIPLES GRID: 3 Columns -> 2 Columns */
+    .disciples-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 25px;
+    }
+}
+
+/* Modal Breakpoint (800px and below) */
+@media (max-width: 800px) {
+    .modal-body { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 20px; 
+    }
+    .modal-content { 
+        width: 95%; 
+        height: 90vh; 
+        overflow-y: auto; 
+        padding: 30px 20px; /* Reduced padding for more text room */
+    }
+    .modal-visuals .window-frame {
+        height: 200px; /* Prevent image from taking up entire mobile screen */
+        width: 80%;
+        margin: 0 auto 15px;
+    }
+    .modal-info {
+        border-left: none;
+        border-top: 3px solid gold;
+        padding: 20px 10px;
+    }
+    .modal-overlay.judas-theme .modal-info {
+        border-top: 3px solid #c0c0c0;
     }
 }
 
 /* Mobile Breakpoint (600px and below) */
 @media (max-width: 600px) {
     /* Make Navbar Even Smaller */
-    .navbar {
-        height: 50px; /* Further reduced */
-        padding: 0 15px; /* Minimal padding */
-    }
+    .navbar { height: 50px; padding: 0 15px; }
+    .logo { height: 40px; }
 
-    .logo {
-        height: 40px; /* Further reduced */
-    }
-
-    /* Adjust Hero Padding */
-    .hero {
-        padding: 140px 15px 60px;
-    }
-
-    .hero-container {
-        padding: 25px 15px;
-        border-radius: 15px;
-    }
-
-    .main-title {
-        font-size: 1.6rem; /* Smaller title */
-        letter-spacing: 1px;
-        white-space: normal;
-    }
-
-    .description {
-        font-size: 1rem;
-        line-height: 1.6;
-    }
-
-    .verse-reference {
-        font-size: 0.9rem;
-    }
+    /* Adjust Hero */
+    .hero { padding: 140px 15px 60px; }
+    .hero-container { padding: 25px 15px; border-radius: 15px; }
+    .main-title { font-size: 1.6rem; letter-spacing: 1px; white-space: normal; }
+    .description { font-size: 1rem; line-height: 1.6; }
+    .verse-reference { font-size: 0.9rem; }
+    
+    /* Cross Effect further scaling */
+    .cross-effect { transform: translateX(-50%) scale(0.6); top: -100px; }
+    .cross-wings { transform: translateX(-50%) scale(0.4); top: -130px; }
 
     /* Gospel Section */
-    .gospel h2 {
-        font-size: 1.6rem;
-    }
+    .gospel h2 { font-size: 1.6rem; }
+    .gospel-title { font-size: 1.8rem; }
+    .gospel-block h3 { font-size: 1.2rem; }
+    .gospel-block p { font-size: 1rem; }
+    
+    /* Art Section Images */
+    .art-images img { width: 100%; max-width: 280px; }
 
-    .gospel-title {
-        font-size: 1.8rem;
-    }
-
-    .gospel-block h3 {
-        font-size: 1.2rem;
-    }
-
-    .gospel-block p {
-        font-size: 1rem;
+    /* DISCIPLES GRID: 2 Columns -> 1 Column */
+    .disciples-grid { 
+        grid-template-columns: 1fr; 
     }
 
     /* Footer Adjustments */
-    .footer {
-        padding: 40px 15px 20px;
-    }
+    .footer { padding: 40px 15px 20px; }
+    .bible-icon { font-size: 1.3rem; }
+}
 
-    .bible-icon {
-        font-size: 1.3rem;
+/* ================= JUDAS CARD RESPONSIVE ALIGNMENT ================= */
+
+/* 1. DESKTOP (3 Columns): Center Judas in the middle column */
+@media (min-width: 901px) {
+    .judas-card {
+        grid-column: 2; /* Forces the card into the 2nd (middle) column */
+    }
+}
+
+/* 2. TABLET (2 Columns): Center Judas across both columns */
+@media (max-width: 900px) and (min-width: 601px) {
+    .judas-card {
+        grid-column: 1 / -1; /* Spans the entire row */
+        max-width: 60%;      /* Prevents it from stretching too wide */
+        margin: 0 auto;      /* Centers the container */
+    }
+}
+
+/* 3. MOBILE (1 Column): Normal stacking */
+@media (max-width: 600px) {
+    .judas-card {
+        grid-column: 1;      /* Fits securely into the single column */
+        max-width: none;     /* Clears any width restrictions */
+        width: 100%;         /* Forces it to be identically wide as the other cards */
+        margin: 0;           /* Removes the centering margin from tablet mode */
     }
 }
