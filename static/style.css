@@ -599,6 +599,23 @@ a, button, .menu-icon {
     text-shadow: 0 0 8px rgba(255,215,0,0.5);
 }
 
+/* ================= GOSPEL GRID ================= */
+.gospel-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns side-by-side */
+    gap: 30px; /* Space between the blocks */
+    align-items: stretch; /* Makes sure side-by-side boxes are the same height */
+}
+
+/* Remove the old bottom margin so the grid 'gap' can handle spacing properly */
+.gospel-grid .gospel-block {
+    margin-bottom: 0; 
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers the text perfectly inside the box */
+}
+
 /* ================= DISCIPLES SECTION ================= */
 
 .disciples-grid {
@@ -929,6 +946,279 @@ a, button, .menu-icon {
     background: #fff;
 }
 
+/* ================= THE HOLY TRINITY SECTION ================= */
+.trinity {
+    padding: 100px 20px;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 80%);
+    position: relative;
+}
+
+/* The Triangle Container */
+.trinity-diagram {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 600px;
+    margin: 0 auto 80px;
+}
+
+/* SVG Lines Overlay */
+.trinity-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 8px gold);
+}
+
+/* Individual Nodes */
+.trinity-node {
+    position: absolute;
+    width: 160px;
+    background: rgba(43, 26, 3, 0.95);
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px solid #6b3f0d;
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    transition: all 0.4s ease;
+}
+
+.trinity-node:hover {
+    border-color: gold;
+    transform: scale(1.05) !important; /* Overrides positioning transform safely */
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+    filter: brightness(1.2);
+}
+
+/* Node Placements to form the Triangle */
+.node-father {
+    top: -50px; /* Moved higher to prevent overlapping with the center GOD node */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* FIX: Ensure the Father node stays centered when scaling up on hover */
+.node-father:hover {
+    transform: translateX(-50%) scale(1.05) !important;
+    border-color: gold;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+    filter: brightness(1.2);
+}
+
+.node-son {
+    bottom: 0;
+    left: 5%;
+}
+
+.node-spirit {
+    bottom: 0;
+    right: 5%;
+}
+
+/* Center GOD Node */
+.trinity-center {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #ffd700, #8b6b23);
+    padding: 30px 40px;
+    border-radius: 50%;
+    border: 4px solid #fffdf5;
+    box-shadow: 0 0 40px gold, inset 0 0 20px #4b2e05;
+    z-index: 3;
+    animation: divinePulse 3s infinite alternate;
+}
+
+.god-text {
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    font-size: 2.5rem;
+    text-shadow: 0 0 15px rgba(0,0,0,0.8);
+    margin: 0;
+}
+
+@keyframes divinePulse {
+    from { box-shadow: 0 0 30px gold, inset 0 0 10px #4b2e05; }
+    to { box-shadow: 0 0 60px #fff8c4, inset 0 0 25px #4b2e05; }
+}
+
+/* Mini Arch for Trinity Nodes */
+.small-arch {
+    height: 120px;
+    border-width: 4px;
+    border-top-width: 15px;
+    margin-bottom: 10px;
+}
+
+.trinity-node h3 {
+    font-family: 'Cinzel', serif;
+    color: gold;
+    font-size: 1.1rem;
+}
+
+/* Explanation Container */
+.trinity-description {
+    max-width: 900px;
+    margin: 0 auto;
+    background: rgba(43, 26, 3, 0.7);
+    padding: 40px 50px;
+    border-radius: 20px;
+    border-left: 5px solid gold;
+    border-right: 5px solid gold;
+    box-shadow: inset 0 0 30px rgba(255,215,0,0.1), 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.trinity-description h3 {
+    font-family: 'Cinzel', serif;
+    color: gold;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.trinity-description p {
+    font-family: 'Cardo', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #fff8e1;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+/* Unique Animation: Divine Emerge */
+.trinity-reveal {
+    opacity: 0;
+    transform: scale(0.85) translateY(80px);
+    filter: blur(10px) drop-shadow(0 0 50px gold);
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trinity-reveal.active {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0) drop-shadow(0 0 0 transparent);
+}
+
+/* ================= HOLY FAMILY TREE SECTION ================= */
+.family-tree {
+    padding: 80px 20px;
+    background: radial-gradient(circle at center top, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+}
+
+.tree-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Row Layouts */
+.tree-row {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.children-row {
+    align-items: flex-start;
+}
+
+.tree-branch {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 20px;
+    border-top: 2px dashed rgba(255, 215, 0, 0.3); /* Implies the family line */
+    position: relative;
+}
+
+/* Unique Entry Animation: Heavenly 3D Flip */
+.tree-reveal {
+    opacity: 0;
+    transform: perspective(1000px) rotateX(90deg) translateY(-50px); /* Starts flipped back and high up */
+    filter: blur(15px) brightness(2); /* Starts blindingly bright */
+    transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.tree-card.active {
+    opacity: 1;
+    transform: perspective(1000px) rotateX(0deg) translateY(0);
+    filter: brightness(0.6) blur(0); /* Returns to dim state */
+}
+
+/* Tree Card Base (Dim to Bright Glow) */
+.tree-card {
+    background: rgba(43, 26, 3, 0.85);
+    padding: 25px;
+    border-radius: 20px;
+    border: 2px solid #6b3f0d;
+    width: 280px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.tree-card:hover {
+    filter: brightness(1.5) contrast(1.1); /* Bright Gold Glow */
+    border-color: #ffeb3b;
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 215, 0, 0.2);
+    z-index: 10;
+}
+
+/* Make Jesus Card slightly larger */
+.jesus-card {
+    width: 320px;
+    border-color: gold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+/* Cathedral Arch Frame Design */
+.arch-frame {
+    width: 100%;
+    height: 250px;
+    border: 8px solid #3b2206;
+    border-top: 25px solid #3b2206;
+    border-radius: 50% 50% 10px 10px; /* Creates the Arch shape */
+    overflow: hidden;
+    background: #000;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+    transition: 0.5s ease;
+}
+
+.tree-card:hover .arch-frame {
+    box-shadow: 0 0 25px gold, inset 0 0 15px gold;
+    border-color: #8b6b23;
+}
+
+.arch-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.tree-card:hover .arch-frame img {
+    transform: scale(1.1);
+}
+
+/* Typography & Button */
+.tree-text h3 { font-family: 'Cinzel', serif; color: #ffd700; font-size: 1.3rem; }
+.tree-card p { font-family: 'Cardo', serif; color: #fff8e1; font-size: 0.9rem; margin-bottom: 15px; opacity: 0.8; }
+
 /* ================= FOOTER ================= */
 .footer {
     position: relative;
@@ -1011,6 +1301,10 @@ a, button, .menu-icon {
         grid-template-columns: repeat(2, 1fr); 
         gap: 25px;
     }
+
+    .tree-row { gap: 20px; }
+    .tree-branch { border-top: none; } /* Remove dashes on smaller screens */
+    .tree-card { width: 45%; } /* 2 columns on tablet */
 }
 
 /* Modal Breakpoint (800px and below) */
@@ -1063,6 +1357,12 @@ a, button, .menu-icon {
     .gospel-title { font-size: 1.8rem; }
     .gospel-block h3 { font-size: 1.2rem; }
     .gospel-block p { font-size: 1rem; }
+
+    /* MAKE GOSPEL GRID 1 COLUMN ON MOBILE */
+    .gospel-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
     
     /* Art Section Images */
     .art-images img { width: 100%; max-width: 280px; }
@@ -1075,6 +1375,29 @@ a, button, .menu-icon {
     /* Footer Adjustments */
     .footer { padding: 40px 15px 20px; }
     .bible-icon { font-size: 1.3rem; }
+
+    .tree-card { width: 100%; } /* 1 column on mobile */
+    .jesus-card { width: 100%; }
+
+    /* Trinity Mobile Adjustments */
+    .trinity-diagram { 
+        height: 450px; /* Shrinks the triangle on mobile */
+        margin-bottom: 50px;
+    }
+    .trinity-node { 
+        width: 120px; 
+        padding: 10px;
+    }
+    .small-arch { height: 90px; }
+    .trinity-center { padding: 20px 25px; }
+    .god-text { font-size: 1.8rem; }
+    
+    .node-son { left: 0; }
+    .node-spirit { right: 0; }
+
+    .trinity-description { padding: 25px 20px; }
+    .trinity-description h3 { font-size: 1.4rem; }
+    .trinity-description p { font-size: 1rem; text-align: left; }
 }
 
 /* ================= JUDAS CARD RESPONSIVE ALIGNMENT ================= */

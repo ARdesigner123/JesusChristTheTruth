@@ -198,7 +198,7 @@ const revealElements = () => {
         });
     }, observerOptions);
 
-    const targets = document.querySelectorAll(".disciple-card");
+    const targets = document.querySelectorAll(".gospel-block, .disciple-card, .tree-reveal, .trinity-reveal");
     targets.forEach((el, index) => {
         observer.observe(el);
         // Stagger the entrance
@@ -209,7 +209,7 @@ const revealElements = () => {
 document.addEventListener('DOMContentLoaded', revealElements);
 
 // ================= DISCIPLE CARD PARTICLES =================
-document.querySelectorAll('.disciple-card').forEach(card => {
+document.querySelectorAll('.disciple-card, .tree-card').forEach(card => {
     let particleInterval;
 
     card.addEventListener('mouseenter', () => {
@@ -320,6 +320,38 @@ const discipleData = {
     "Judas Iscariot": {
         bio: "Judas was the treasurer of the group, but his heart was corrupted by greed. He is the tragic figure who betrayed Jesus for thirty pieces of silver with a kiss in the Garden of Gethsemane. His life serves as a somber warning that proximity to Jesus does not guarantee a changed heart. Overcome with remorse but lacking repentance, he took his own life shortly after the betrayal.",
         mission: "The fulfillment of prophecy through the mystery of betrayal."
+    },
+    "God The Father": {
+        bio: "The one true God, Creator of the universe. In Christian theology, He is the first person of the Trinity, whose love for humanity was so great that He sent His only Son.",
+        mission: "To love, create, and offer salvation to the world."
+    },
+    "Virgin Mary": {
+        bio: "Chosen by God to be the earthly mother of Jesus through the miraculous conception by the Holy Spirit. Her faithful obedience ('Let it be done to me') changed the course of human history. While honored in ancient traditions for her 'Perpetual Virginity,' many biblical scholars and Protestant traditions note that after the virgin birth of Jesus, she and Joseph went on to have a natural marriage, giving birth to His earthly brothers: James, Joses, Simon, and Jude.",
+        mission: "To bear the Savior of the world and anchor the Holy Family."
+    },
+    "Saint Joseph": {
+        bio: "A righteous carpenter from the line of David. He served as the earthly father and protector of Jesus, guiding the Holy Family through exile in Egypt and raising Jesus in Nazareth. After the miraculous birth of Christ, he and Mary raised a bustling household together, bringing up Jesus alongside His younger brothers—James, Joses, Jude, and Simon—and their sisters.",
+        mission: "To protect, provide for, and faithfully lead the Holy Family."
+    },
+    "Jesus Christ": {
+        bio: "The central figure of Christianity, the Messiah, and the Son of God. He lived a sinless life, performed miracles, and willingly died on the cross to pay the penalty for human sin, rising again on the third day.",
+        mission: "To bring salvation and eternal life to all who believe."
+    },
+    "James the Just": {
+        bio: "Also known as James, brother of the Lord. He initially did not believe in Jesus but became a prominent leader in the early Jerusalem Church after encountering the resurrected Christ. He authored the Book of James.",
+        mission: "Leading the early Jewish Christians in Jerusalem."
+    },
+    "Jude": {
+        bio: "Often identified as the author of the Epistle of Jude, he initially doubted Jesus' divinity alongside his brothers. After the resurrection, he became a steadfast believer and a vital leader in the early Christian community, warning the church against false teachers.",
+        mission: "To contend earnestly for the faith and protect the early church from corruption."
+    },
+    "Simon": {
+        bio: "Simon (or Simeon) was one of the brothers of Jesus. Tradition holds that after the martyrdom of James the Just, Simon succeeded him as the second bishop of Jerusalem, guiding the Jewish Christian community through the turbulent times of the Jewish-Roman wars.",
+        mission: "Shepherding and protecting the Jewish Christian community in Jerusalem."
+    },
+    "Joses": {
+        bio: "Also known as Joseph, Joses is mentioned in the Gospels as one of Jesus' brothers. While less is recorded about his specific leadership compared to James and Jude, he was part of the devoted holy family that formed the core of the early believers after the Resurrection.",
+        mission: "Serving faithfully within the foundational roots of the early church."
     }
 };
 
@@ -363,7 +395,7 @@ function closeModal() {
 }
 
 // Attach click events to the "More Info" buttons
-document.querySelectorAll('.disciple-card').forEach((card, index) => {
+document.querySelectorAll('.disciple-card, .tree-card').forEach((card, index) => {
     const btn = card.querySelector('.more-info-btn');
     btn.addEventListener('click', (e) => {
         e.stopPropagation(); // Prevents card hover trigger
