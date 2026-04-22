@@ -14,8 +14,16 @@ body {
     overflow-x: hidden;
 }
 
-/* Cursor hover */
-a, button, .menu-icon {
+/* Cursor hover for links, buttons, and interactive containers */
+a, 
+button, 
+.menu-icon,
+.gospel-block,
+.disciple-card,
+.tree-card,
+.trinity-node,
+.timeline-item .timeline-box,
+.timeline-item .square-frame {
     cursor: url("cursor/yellowcross.cur"), pointer;
 }
 

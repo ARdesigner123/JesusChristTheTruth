@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, observerOptions);
 
-    document.querySelectorAll(".timeline-item").forEach(item => {
+    document.querySelectorAll(".timeline-item, .church-reveal").forEach(item => {
         timelineObserver.observe(item);
     });
 
@@ -39,5 +39,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Apply height
         timelineFill.style.height = `${scrollPercentage * 100}%`;
+    });
+
+    // ================= CHURCH TABS LOGIC =================
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // 1. Remove active class from all buttons and contents
+            tabButtons.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+
+            // 2. Add active class to the clicked button
+            btn.classList.add('active');
+
+            // 3. Find the matching content ID and activate it
+            const targetId = btn.getAttribute('data-tab');
+            const targetContent = document.getElementById(targetId);
+            if(targetContent) {
+                targetContent.classList.add('active');
+            }
+        });
     });
 });

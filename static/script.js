@@ -60,14 +60,14 @@ function moveIndicator(element) {
 }
 
 // ================= CURSOR GLOW =================
-
 const glow = document.createElement("div");
 glow.classList.add("cursor-glow");
 document.body.appendChild(glow);
 
 document.addEventListener("mousemove", (e) => {
-    glow.style.left = e.pageX + "px";
-    glow.style.top = e.pageY + "px";
+    // Use clientX and clientY for position: fixed elements!
+    glow.style.left = e.clientX + "px";
+    glow.style.top = e.clientY + "px";
 });
 
 // ================= CROSS EFFECT =================
