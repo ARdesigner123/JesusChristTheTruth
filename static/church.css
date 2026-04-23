@@ -358,6 +358,107 @@
     text-align: justify;
 }
 
+/* Make Content Scrollable */
+.scrollable-tab {
+    max-height: 600px; /* Limits the height of the container */
+    overflow-y: auto;  /* Adds vertical scrollbar when content is too long */
+    align-items: flex-start; /* Prevents flexbox from vertically stretching long content */
+}
+
+/* Custom Golden Scrollbar for Tabs */
+.scrollable-tab::-webkit-scrollbar {
+    width: 8px;
+}
+.scrollable-tab::-webkit-scrollbar-track {
+    background: rgba(43, 26, 3, 0.5);
+    border-radius: 4px;
+}
+.scrollable-tab::-webkit-scrollbar-thumb {
+    background: gold;
+    border-radius: 4px;
+}
+.scrollable-tab::-webkit-scrollbar-thumb:hover {
+    background: #ffeb3b;
+}
+
+/* Source Links */
+.source-link {
+    display: inline-block;
+    margin-top: 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: #ffd700;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+.source-link:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+    text-shadow: 0 0 10px gold;
+}
+
+/* Bible Books List Styling */
+.bible-books-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 20px;
+}
+.bible-books-list li {
+    font-family: 'Cardo', serif;
+    color: #fff8e1;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+}
+.bible-books-list li::before {
+    content: '✧';
+    position: absolute;
+    left: 0;
+    color: gold;
+}
+.bible-books-list strong {
+    color: gold;
+}
+
+/* Individual Saint Blocks */
+.saint-block {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    border-left: 3px solid gold;
+    margin-top: 25px;
+}
+.saint-info h4 {
+    font-family: 'Cinzel', serif;
+    color: #ffd700;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+.saint-info p {
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+.saint-img-frame {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border: 3px solid #6b3f0d;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0,0,0,0.8);
+}
+.saint-img-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* Ornate Picture Frame */
 .tab-image {
     flex: 1;
@@ -388,6 +489,182 @@
     display: block;
     border: 6px solid #1a0f02;
     border-radius: 5px;
+}
+
+/* ================= CATHOLIC THEME OVERRIDES ================= */
+.catholic-theme .tab-buttons {
+    background: rgba(43, 10, 10, 0.9); /* Deep Vatican Red hue */
+    border-bottom: 2px solid #8b2323;
+}
+
+.catholic-theme .tab-btn:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.catholic-theme .tab-btn.active {
+    background: rgba(139, 35, 35, 0.4);
+    border-bottom: 4px solid #ff4500;
+    text-shadow: 0 0 10px #ff4500;
+}
+
+/* Gothic Cathedral Window Frame */
+.gothic-frame {
+    width: 100%;
+    max-width: 380px;
+    height: 500px;
+    padding: 8px;
+    background: linear-gradient(135deg, #8b2323, #4a0e0e, #ffd700);
+    /* The Gothic Cathedral Arch Shape */
+    border-radius: 150px 150px 10px 10px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,215,0,0.4);
+    transition: transform 0.6s ease, filter 0.6s ease;
+    filter: brightness(0.9);
+    position: relative;
+    overflow: hidden;
+}
+
+.gothic-frame::after {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 140px 140px 5px 5px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.tab-content:hover .gothic-frame {
+    transform: scale(1.02);
+    filter: brightness(1.15);
+    box-shadow: 0 20px 50px rgba(255,69,0,0.3), inset 0 0 20px gold;
+}
+
+.gothic-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 140px 140px 5px 5px;
+    transition: transform 1s ease;
+}
+
+.tab-content:hover .gothic-frame img {
+    transform: scale(1.08);
+}
+
+/* ================= PROTESTANT SECTION ================= */
+.protestant-section {
+    padding: 80px 20px;
+    background: radial-gradient(circle at top center, rgba(30, 60, 114, 0.1) 0%, transparent 80%);
+}
+
+/* ================= METHODIST THEME OVERRIDES ================= */
+.methodist-theme .tab-buttons {
+    background: rgba(10, 25, 47, 0.9); /* Deep Oxford Blue */
+    border-bottom: 2px solid #1e3c72;
+}
+
+.methodist-theme .tab-btn:hover {
+    background: rgba(42, 82, 152, 0.3);
+}
+
+.methodist-theme .tab-btn.active {
+    background: rgba(30, 60, 114, 0.6);
+    border-bottom: 4px solid #4da8da; /* Light Blue Highlight */
+    text-shadow: 0 0 10px #4da8da;
+}
+
+/* Wesleyan Bevel Frame Design */
+.wesley-frame {
+    width: 100%;
+    max-width: 380px;
+    padding: 15px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    border-radius: 3px;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.7),
+        0 0 0 6px #1a0f02, /* Inner dark border */
+        0 0 0 10px #ffd700; /* Outer gold border */
+    transition: transform 0.6s ease, filter 0.6s ease;
+    filter: brightness(0.9);
+    margin: 10px; /* Space for the box-shadow expansion */
+}
+
+.tab-content:hover .wesley-frame {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+    box-shadow: 
+        0 20px 45px rgba(77, 168, 218, 0.3),
+        0 0 0 6px #1a0f02, 
+        0 0 0 12px #fff; /* Outer border turns white on hover */
+}
+
+.wesley-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .wesley-frame img {
+    transform: scale(1.05);
+}
+
+/* ================= BAPTIST THEME OVERRIDES ================= */
+.baptist-theme .tab-buttons {
+    background: rgba(15, 38, 48, 0.9); /* Deep River Dark Cyan */
+    border-bottom: 2px solid #205c6e;
+}
+
+.baptist-theme .tab-btn:hover {
+    background: rgba(43, 137, 163, 0.2);
+}
+
+.baptist-theme .tab-btn.active {
+    background: rgba(32, 92, 110, 0.5);
+    border-bottom: 4px solid #00e5ff; /* Bright Cyan Highlight */
+    text-shadow: 0 0 10px #00e5ff;
+}
+
+/* Vintage Plaque Frame Design (Alternating Corners) */
+.plaque-frame {
+    width: 100%;
+    max-width: 380px;
+    padding: 12px;
+    background: linear-gradient(135deg, #1c3d4d, #307a91, #1c3d4d);
+    /* Unique Shape: 2 rounded corners, 2 sharp corners */
+    border-radius: 40px 5px 40px 5px; 
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.6),
+        inset 0 0 10px rgba(0, 229, 255, 0.3);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+    filter: brightness(0.85);
+    position: relative;
+    border: 2px solid #00e5ff;
+}
+
+.tab-content:hover .plaque-frame {
+    transform: translateY(-10px) scale(1.03);
+    filter: brightness(1.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 229, 255, 0.2),
+        inset 0 0 20px rgba(0, 229, 255, 0.6);
+}
+
+.plaque-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    /* Match the parent's unique border radius */
+    border-radius: 32px 3px 32px 3px; 
+    border: 4px solid #0d1e26;
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .plaque-frame img {
+    transform: scale(1.04);
 }
 
 /* ================= RESPONSIVE TIMELINE ================= */
@@ -456,5 +733,14 @@
     }
     .tab-text p {
         text-align: left;
+    }
+
+    .saint-block {
+        flex-direction: column;
+        text-align: center;
+    }
+    .saint-block {
+        border-left: none;
+        border-top: 3px solid gold;
     }
 }

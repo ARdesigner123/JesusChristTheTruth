@@ -42,24 +42,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ================= CHURCH TABS LOGIC =================
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    const tabContainers = document.querySelectorAll('.church-tabs-container');
 
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // 1. Remove active class from all buttons and contents
-            tabButtons.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
+    // Loop through each container (Orthodox and Catholic) individually
+    tabContainers.forEach(container => {
+        const tabButtons = container.querySelectorAll('.tab-btn');
+        const tabContents = container.querySelectorAll('.tab-content');
 
-            // 2. Add active class to the clicked button
-            btn.classList.add('active');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1. Remove active class from buttons/contents ONLY within this container
+                tabButtons.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
 
-            // 3. Find the matching content ID and activate it
-            const targetId = btn.getAttribute('data-tab');
-            const targetContent = document.getElementById(targetId);
-            if(targetContent) {
-                targetContent.classList.add('active');
-            }
+                // 2. Add active class to the clicked button
+                btn.classList.add('active');
+
+                // 3. Find the matching content ID and activate it
+                const targetId = btn.getAttribute('data-tab');
+                const targetContent = document.getElementById(targetId);
+                if(targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
         });
     });
 });
