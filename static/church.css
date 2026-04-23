@@ -881,6 +881,80 @@
     transform: scale(1.03);
 }
 
+/* ================= PENTECOSTAL THEME OVERRIDES ================= */
+.pentecostal-theme .tab-buttons {
+    background: rgba(25, 10, 10, 0.95); /* Deep Charcoal/Ember */
+    border-bottom: 2px solid #661a00;
+}
+
+.pentecostal-theme .tab-btn:hover {
+    background: rgba(255, 69, 0, 0.15); /* Subtle orange glow */
+}
+
+.pentecostal-theme .tab-btn.active {
+    background: rgba(102, 26, 0, 0.6);
+    border-bottom: 4px solid #ff4500; /* Vibrant Orange-Red Highlight */
+    text-shadow: 0 0 10px #ff4500, 0 0 20px #ff8c00;
+}
+
+/* Radiant Flame Frame Design */
+.flame-frame {
+    width: 100%;
+    max-width: 360px;
+    padding: 6px;
+    background: #120804;
+    border-radius: 8px;
+    position: relative;
+    /* Offset fiery shadow to give it movement */
+    box-shadow: 
+        8px 8px 0px rgba(255, 69, 0, 0.4),
+        -8px -8px 0px rgba(255, 140, 0, 0.4),
+        0 15px 35px rgba(0,0,0,0.8);
+    transition: transform 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
+    filter: brightness(0.9);
+}
+
+/* Inner glowing border */
+.flame-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 2px solid rgba(255, 140, 0, 0.3);
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 5;
+    transition: border-color 0.5s ease;
+}
+
+.tab-content:hover .flame-frame {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+    /* The "Ignite" hover effect */
+    box-shadow: 
+        0px 0px 30px rgba(255, 69, 0, 0.7),
+        0px 0px 50px rgba(255, 140, 0, 0.5),
+        0 15px 35px rgba(0,0,0,0.8);
+}
+
+.tab-content:hover .flame-frame::after {
+    border-color: rgba(255, 215, 0, 0.8);
+}
+
+.flame-frame img {
+    width: 100%;
+    height: 100%;
+    max-height: 400px;
+    display: block;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #330d00;
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .flame-frame img {
+    transform: scale(1.03);
+}
+
 /* ================= RESPONSIVE TIMELINE ================= */
 @media (max-width: 900px) {
     .timeline-line, .timeline-line-fill {
