@@ -667,6 +667,220 @@
     transform: scale(1.04);
 }
 
+/* ================= LUTHERAN THEME OVERRIDES ================= */
+.lutheran-theme .tab-buttons {
+    background: rgba(60, 15, 15, 0.95); /* Deep Wittenberg Burgundy */
+    border-bottom: 2px solid #8a2424;
+}
+
+.lutheran-theme .tab-btn:hover {
+    background: rgba(138, 36, 36, 0.3);
+}
+
+.lutheran-theme .tab-btn.active {
+    background: rgba(94, 23, 23, 0.8);
+    border-bottom: 4px solid #ffba5c; /* Warm Amber Highlight */
+    text-shadow: 0 0 10px #ffba5c;
+}
+
+/* Heavy Timber Frame Design (Symbolizing the Wittenberg Church Door) */
+.luther-frame {
+    width: 100%;
+    max-width: 380px;
+    padding: 10px;
+    background: #2b1a03;
+    border: 12px solid #1a0f02; /* Thick outer dark wood border */
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.8),
+        inset 0 0 0 4px #5c3a0a, /* Inner lighter wood trim */
+        inset 0 0 15px rgba(0,0,0,0.9);
+    transition: transform 0.6s ease, filter 0.6s ease;
+    filter: brightness(0.9) sepia(0.2); /* Slight vintage parchment feel */
+}
+
+/* Faux Iron Nails on the Timber Frame */
+.luther-frame::before, .luther-frame::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #0d0802;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 2px rgba(255,255,255,0.2);
+    z-index: 5;
+}
+
+.luther-frame::before { top: 15px; left: 15px; }
+.luther-frame::after { bottom: 15px; right: 15px; }
+
+.tab-content:hover .luther-frame {
+    transform: scale(1.03) translateY(-5px);
+    filter: brightness(1.1) sepia(0);
+    box-shadow: 
+        0 20px 45px rgba(138, 36, 36, 0.5),
+        inset 0 0 0 4px #ffba5c, 
+        inset 0 0 15px rgba(0,0,0,0.5);
+}
+
+.luther-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .luther-frame img {
+    transform: scale(1.05);
+}
+
+/* ================= ANGLICAN THEME OVERRIDES ================= */
+.anglican-theme .tab-buttons {
+    background: rgba(43, 20, 60, 0.95); /* Deep Canterbury Purple */
+    border-bottom: 2px solid #5a3080;
+}
+
+.anglican-theme .tab-btn:hover {
+    background: rgba(90, 48, 128, 0.3);
+}
+
+.anglican-theme .tab-btn.active {
+    background: rgba(65, 30, 90, 0.8);
+    border-bottom: 4px solid #d4af37; /* Royal Metallic Gold */
+    text-shadow: 0 0 10px #d4af37;
+}
+
+/* Tudor Arch Frame Design (Rounded top, flat bottom) */
+.tudor-frame {
+    width: 100%;
+    max-width: 350px;
+    padding: 8px;
+    background: linear-gradient(135deg, #462066, #2a1040);
+    border-radius: 180px 180px 8px 8px; /* High arch top */
+    border: 3px solid #d4af37;
+    position: relative;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.8),
+        inset 0 0 20px rgba(0,0,0,0.6);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease, box-shadow 0.6s ease;
+    filter: brightness(0.9);
+}
+
+/* Inner gold trim for royal effect */
+.tudor-frame::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px dashed rgba(212, 175, 55, 0.6);
+    border-radius: 170px 170px 5px 5px;
+    pointer-events: none;
+    z-index: 5;
+    transition: border-color 0.6s ease;
+}
+
+.tab-content:hover .tudor-frame {
+    transform: scale(1.03) translateY(-8px);
+    filter: brightness(1.1);
+    box-shadow: 
+        0 25px 45px rgba(70, 32, 102, 0.6), /* Purple glowing shadow */
+        0 0 0 4px rgba(212, 175, 55, 0.3); /* Outer faint gold halo */
+}
+
+.tab-content:hover .tudor-frame::before {
+    border: 2px solid #d4af37; /* Dashes become solid on hover */
+}
+
+.tudor-frame img {
+    width: 100%;
+    height: 100%;
+    max-height: 480px;
+    display: block;
+    object-fit: cover;
+    border-radius: 170px 170px 4px 4px;
+    border: 4px solid #1a0f02;
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .tudor-frame img {
+    transform: scale(1.04);
+}
+
+/* ================= PRESBYTERIAN THEME OVERRIDES ================= */
+.presbyterian-theme .tab-buttons {
+    background: rgba(17, 38, 27, 0.95); /* Deep Highland Green */
+    border-bottom: 2px solid #2d5e40;
+}
+
+.presbyterian-theme .tab-btn:hover {
+    background: rgba(45, 94, 64, 0.3);
+}
+
+.presbyterian-theme .tab-btn.active {
+    background: rgba(30, 66, 47, 0.8);
+    border-bottom: 4px solid #a68a42; /* Antique Brass Highlight */
+    text-shadow: 0 0 10px #a68a42;
+}
+
+/* Geneva Pillar Frame Design (Structured, Thick Top/Bottom, Thin Sides) */
+.geneva-frame {
+    width: 100%;
+    max-width: 360px;
+    padding: 12px;
+    background: linear-gradient(to bottom, #11261b, #1f402e);
+    border-top: 12px solid #a68a42; /* Heavy brass top pillar */
+    border-bottom: 12px solid #a68a42; /* Heavy brass bottom pillar */
+    border-left: 3px solid #a68a42;
+    border-right: 3px solid #a68a42;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 
+        0 15px 35px rgba(0,0,0,0.8),
+        inset 0 0 15px rgba(0,0,0,0.9);
+    transition: transform 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
+    filter: brightness(0.9);
+}
+
+/* Decorative inner corner notches */
+.geneva-frame::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border: 1px solid rgba(166, 138, 66, 0.4);
+    margin: 6px;
+    pointer-events: none;
+    z-index: 5;
+    transition: border-color 0.6s ease;
+}
+
+.tab-content:hover .geneva-frame {
+    transform: scale(1.03) translateY(-6px);
+    filter: brightness(1.1);
+    box-shadow: 
+        0 25px 45px rgba(45, 94, 64, 0.4), /* Green glowing shadow */
+        inset 0 0 20px rgba(0,0,0,0.7);
+}
+
+.tab-content:hover .geneva-frame::before {
+    border-color: rgba(166, 138, 66, 0.9);
+}
+
+.geneva-frame img {
+    width: 100%;
+    height: 100%;
+    max-height: 400px;
+    display: block;
+    object-fit: cover;
+    border: 2px solid #0d1a12;
+    transition: transform 0.8s ease;
+}
+
+.tab-content:hover .geneva-frame img {
+    transform: scale(1.03);
+}
+
 /* ================= RESPONSIVE TIMELINE ================= */
 @media (max-width: 900px) {
     .timeline-line, .timeline-line-fill {
