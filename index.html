@@ -14,11 +14,14 @@
 <body>
 
     <video id="bg-video" loop muted src="static/jesusIntro.mp4"></video>
+    <audio id="intro-audio" src="static/jesus.mp3" preload="auto"></audio>
 
     <div id="intro-overlay">
-        <div id="start-screen">
+        <div id="start-screen" style="display: none;">
             <p>Click anywhere to begin</p>
         </div>
+
+        <div id="skip-hint" style="display: none;">Click anywhere to skip</div>
         
         <div id="bible-reference">Revelation 22:13 (NKJV)</div>
 
@@ -43,7 +46,7 @@
             <div class="custom-cross" id="cross-container">
                 <div class="cross-vertical"></div>
                 <div class="cross-horizontal"></div>
-                </div>
+            </div>
             <h1 class="main-title">Jesus Christ The Truth</h1>
         </div>
 

@@ -13,12 +13,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Elements ---
     const introOverlay = document.getElementById("intro-overlay");
     const startScreen = document.getElementById("start-screen");
+    const skipHint = document.getElementById("skip-hint");
     const textSequenceBox = document.getElementById("text-sequence");
     const bibleRef = document.getElementById("bible-reference");
     const cracksSvg = document.getElementById("cracks-svg");
     const lightning = document.getElementById("lightning");
     const shatterContainer = document.getElementById("shatter-container");
     const bgVideo = document.getElementById("bg-video");
+    const introAudio = document.getElementById("intro-audio");
     const mainUi = document.getElementById("main-ui");
     const crossContainer = document.getElementById("cross-container");
 
@@ -31,43 +33,108 @@ document.addEventListener("DOMContentLoaded", () => {
         "AND THE END"
     ];
 
+    let isSkipped = false;
+    let introRunning = false;
+
     // --- Dynamic Golden Star Generator ---
     function generateStars() {
         for(let i = 0; i < 20; i++) {
             let star = document.createElement("div");
             star.classList.add("star");
-            
             star.style.left = (Math.random() * 200 - 50) + "%";
             star.style.top = (Math.random() * 200 - 50) + "%";
-            
             star.style.animationDuration = (Math.random() * 1.5 + 1.5) + "s";
             star.style.animationDelay = (Math.random() * 2) + "s";
-            
             star.style.setProperty('--tx', (Math.random() * 100 - 50) + "px");
             star.style.setProperty('--ty', (Math.random() * 100 - 50) + "px");
-
             crossContainer.appendChild(star);
         }
     }
 
-    // --- Start Sequence on Click ---
-    introOverlay.addEventListener("click", startAnimation, { once: true });
+    // --- Attempt Autoplay & Handle Browser Blocks ---
+    async function attemptAutoplay() {
+        try {
+            // Attempt to play audio immediately
+            await introAudio.play();
+            // If we get here, the browser allowed autoplay!
+            startScreen.style.display = "none";
+            runAnimationSequence();
+        } catch (err) {
+            // Browser blocked autoplay (Standard security feature)
+            // Show "Click to begin" instead
+            startScreen.style.display = "block";
+            introOverlay.addEventListener("click", () => {
+                if (!introRunning) {
+                    startScreen.style.display = "none";
+                    introAudio.play();
+                    runAnimationSequence();
+                }
+            }, { once: true });
+        }
+    }
 
-    async function startAnimation() {
-        startScreen.style.display = "none";
+    // Start attempting autoplay on load
+    attemptAutoplay();
+
+    // --- Skip Logic ---
+    introOverlay.addEventListener("click", () => {
+        if (introRunning && !isSkipped) {
+            skipIntro();
+        }
+    });
+
+    function skipIntro() {
+        isSkipped = true;
+        introAudio.pause(); // Cut the music
+        
+        // Immediately reveal main UI
+        bgVideo.muted = false; 
+        bgVideo.play();
+        bgVideo.style.opacity = "1";
+        
+        introOverlay.style.display = "none";
+        cracksSvg.style.display = "none";
+        
+        if (!crossContainer.querySelector('.star')) {
+            generateStars();
+        }
+        mainUi.classList.remove("hidden");
+    }
+
+    // --- Core Animation Sequence ---
+    async function runAnimationSequence() {
+        introRunning = true;
+        skipHint.style.display = "block"; // Show "Click to skip"
+        
+        if (isSkipped) return;
         bibleRef.style.opacity = "1";
 
         for (let i = 0; i < phrases.length; i++) {
+            if (isSkipped) return;
             await showPhrase(phrases[i]);
         }
 
+        if (isSkipped) return;
         cracksSvg.classList.add("crack-active");
-        await new Promise(r => setTimeout(r, 2200));
+        
+        // Wait 2.2 seconds but allow skip interruption
+        await new Promise(r => {
+            let elapsed = 0;
+            let interval = setInterval(() => {
+                elapsed += 100;
+                if (isSkipped || elapsed >= 2200) {
+                    clearInterval(interval);
+                    r();
+                }
+            }, 100);
+        });
 
+        if (isSkipped) return;
         bibleRef.style.opacity = "0";
         lightning.classList.add("lightning-flash");
 
         setTimeout(() => {
+            if (isSkipped) return;
             explodeScreen();
             
             bgVideo.muted = false; 
@@ -76,10 +143,12 @@ document.addEventListener("DOMContentLoaded", () => {
             
             introOverlay.style.background = "transparent";
             cracksSvg.style.display = "none";
+            skipHint.style.display = "none";
 
             setTimeout(() => {
+                if (isSkipped) return;
                 introOverlay.style.display = "none";
-                generateStars(); 
+                if (!crossContainer.querySelector('.star')) generateStars(); 
                 mainUi.classList.remove("hidden");
             }, 800);
 
@@ -88,9 +157,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function showPhrase(text) {
         return new Promise((resolve) => {
+            if (isSkipped) return resolve();
+            
             textSequenceBox.textContent = text;
             textSequenceBox.style.opacity = "1"; 
+            
             setTimeout(() => {
+                if (isSkipped) return resolve();
                 textSequenceBox.style.opacity = "0"; 
                 setTimeout(() => resolve(), 400); 
             }, 1000); 
@@ -118,8 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ================= AUTHENTICATION LOGIC =================
-    
-    // IMPORTANT: Your live Render.com backend URL
     const BACKEND_URL = "https://jesusbackend.onrender.com"; 
 
     let isLoginMode = true; 
@@ -185,7 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = passField.value.trim();
 
         if (isLoginMode) {
-            // --- REAL BACKEND LOGIN ---
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
@@ -200,20 +270,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                // Success
                 authMessage.classList.add("success");
                 authMessage.style.color = "#4caf50";
                 authMessage.textContent = "Login successful! Redirecting...";
-                setTimeout(() => {
-                    window.location.href = "main.html";
-                }, 1000);
+                setTimeout(() => window.location.href = "main.html", 1000);
 
             } catch (err) {
                 authMessage.textContent = "Failed to connect to the server.";
             }
 
         } else {
-            // --- REAL BACKEND REGISTER ---
             const userError = validateUsername(username);
             if (userError) {
                 authMessage.textContent = userError;
@@ -236,17 +302,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await response.json();
 
                 if (!response.ok) {
-                    authMessage.textContent = data.error; // Displays "Username is already taken"
+                    authMessage.textContent = data.error; 
                     return;
                 }
 
-                // Success
                 authMessage.classList.add("success");
                 authMessage.style.color = "#4caf50";
                 authMessage.textContent = "Registration successful! Redirecting...";
-                setTimeout(() => {
-                    window.location.href = "main.html";
-                }, 1000);
+                setTimeout(() => window.location.href = "main.html", 1000);
 
             } catch (err) {
                 authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
