@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const introOverlay = document.getElementById("intro-overlay");
     const startScreen = document.getElementById("start-screen");
     const textSequenceBox = document.getElementById("text-sequence");
-    const bibleRef = document.getElementById("bible-reference"); // NEW REFERENCE ELEMENT
+    const bibleRef = document.getElementById("bible-reference");
     const cracksSvg = document.getElementById("cracks-svg");
     const lightning = document.getElementById("lightning");
     const shatterContainer = document.getElementById("shatter-container");
@@ -55,26 +55,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function startAnimation() {
         startScreen.style.display = "none";
-        
-        // Fade in the Bible reference
         bibleRef.style.opacity = "1";
 
-        // Show Phrases
         for (let i = 0; i < phrases.length; i++) {
             await showPhrase(phrases[i]);
         }
 
-        // Draw Cracks from center
         cracksSvg.classList.add("crack-active");
         await new Promise(r => setTimeout(r, 2200));
 
-        // Fade out Bible reference just before the shatter/flash
         bibleRef.style.opacity = "0";
-
-        // Lightning Flash
         lightning.classList.add("lightning-flash");
 
-        // Shatter Effect
         setTimeout(() => {
             explodeScreen();
             
@@ -126,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ================= AUTHENTICATION LOGIC =================
+    
+    // IMPORTANT: Your live Render.com backend URL
+    const BACKEND_URL = "https://jesusbackend.onrender.com"; 
+
     let isLoginMode = true; 
     const btnLogin = document.getElementById("btn-login");
     const btnRegister = document.getElementById("btn-register");
@@ -137,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const userField = document.getElementById("username");
     const passField = document.getElementById("password");
 
+    // UI Toggles
     btnLogin.addEventListener("click", (e) => {
         e.preventDefault();
         isLoginMode = true;
@@ -157,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
         authMessage.textContent = ""; 
     });
 
+    // Validation
     function validateUsername(user) {
         if (user.length < 8 || user.length > 20) return "Username must be 8 to 20 characters.";
         if (!/^[A-Za-z0-9]/.test(user)) return "Username cannot start with a special character.";
@@ -176,66 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return null; 
     }
 
-    authForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        authMessage.classList.remove("success");
-        authMessage.textContent = "";
-
-        const username = userField.value.trim();
-        const password = passField.value.trim();
-
-        if (isLoginMode) {
-            const savedUser = localStorage.getItem("jct_username");
-            const savedPass = localStorage.getItem("jct_password");
-
-            if (!savedUser) {
-                authMessage.textContent = "User not found. Please register first.";
-                return;
-            }
-
-            if (username !== savedUser || password !== savedPass) {
-                authMessage.textContent = "Incorrect username or password.";
-                return;
-            }
-
-            authMessage.classList.add("success");
-            authMessage.textContent = "Login successful! Redirecting...";
-            setTimeout(() => {
-                window.location.href = "main.html";
-            }, 1000);
-
-        } else {
-            const userError = validateUsername(username);
-            if (userError) {
-                authMessage.textContent = userError;
-                return;
-            }
-
-            const passError = validatePassword(password);
-            if (passError) {
-                authMessage.textContent = passError;
-                return;
-            }
-
-            localStorage.setItem("jct_username", username);
-            localStorage.setItem("jct_password", password);
-
-            authMessage.classList.add("success");
-            authMessage.textContent = "Registration successful! Redirecting...";
-            setTimeout(() => {
-                window.location.href = "main.html";
-            }, 1000);
-        }
-    });
-
-    // ================= AUTHENTICATION LOGIC =================
-    // IMPORTANT: Change this to your Render.com URL once it is deployed!
-    // For local testing on your computer, keep it as http://localhost:3000
-    const BACKEND_URL = "https://jesusbackend.onrender.com"; 
-
-    // ... (Keep your existing variable declarations and toggle logic here) ...
-
-    // Handle Form Submission with Real Backend
+    // Single Form Submission handling Real Backend
     authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         authMessage.classList.remove("success");
@@ -310,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 1000);
 
             } catch (err) {
-                authMessage.textContent = "Failed to connect to the server.";
+                authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
             }
         }
     });
