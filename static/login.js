@@ -228,4 +228,90 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ================= AUTHENTICATION LOGIC =================
+    // IMPORTANT: Change this to your Render.com URL once it is deployed!
+    // For local testing on your computer, keep it as http://localhost:3000
+    const BACKEND_URL = "https://jesusbackend.onrender.com"; 
+
+    // ... (Keep your existing variable declarations and toggle logic here) ...
+
+    // Handle Form Submission with Real Backend
+    authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        authMessage.classList.remove("success");
+        authMessage.style.color = "#ff4d4d"; // Reset to red
+        authMessage.textContent = "Processing..."; // Loading state
+
+        const username = userField.value.trim();
+        const password = passField.value.trim();
+
+        if (isLoginMode) {
+            // --- REAL BACKEND LOGIN ---
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    authMessage.textContent = data.error;
+                    return;
+                }
+
+                // Success
+                authMessage.classList.add("success");
+                authMessage.style.color = "#4caf50";
+                authMessage.textContent = "Login successful! Redirecting...";
+                setTimeout(() => {
+                    window.location.href = "main.html";
+                }, 1000);
+
+            } catch (err) {
+                authMessage.textContent = "Failed to connect to the server.";
+            }
+
+        } else {
+            // --- REAL BACKEND REGISTER ---
+            const userError = validateUsername(username);
+            if (userError) {
+                authMessage.textContent = userError;
+                return;
+            }
+
+            const passError = validatePassword(password);
+            if (passError) {
+                authMessage.textContent = passError;
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    authMessage.textContent = data.error; // Displays "Username is already taken"
+                    return;
+                }
+
+                // Success
+                authMessage.classList.add("success");
+                authMessage.style.color = "#4caf50";
+                authMessage.textContent = "Registration successful! Redirecting...";
+                setTimeout(() => {
+                    window.location.href = "main.html";
+                }, 1000);
+
+            } catch (err) {
+                authMessage.textContent = "Failed to connect to the server.";
+            }
+        }
+    });
 });
