@@ -59,6 +59,19 @@ function moveIndicator(element) {
     indicator.style.opacity = "1";
 }
 
+// ================= LOGOUT LOGIC =================
+const logoutBtns = document.querySelectorAll(".logout-btn");
+
+logoutBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        // Clear local storage authentication items securely
+        localStorage.removeItem("jct_username");
+        localStorage.removeItem("jct_password");
+        
+        // Let the default HTML href action redirect them to index.html
+    });
+});
+
 // ================= CURSOR GLOW =================
 const glow = document.createElement("div");
 glow.classList.add("cursor-glow");
