@@ -17,7 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const textSequenceBox = document.getElementById("text-sequence");
     const bibleRef = document.getElementById("bible-reference");
     const cracksSvg = document.getElementById("cracks-svg");
-    const lightning = document.getElementById("lightning");
+    const lightningBg = document.getElementById("lightning");
+    const lightningBolt = document.getElementById("lightning-bolt");
+    const particleContainer = document.getElementById("particle-container"); // NEW
     const shatterContainer = document.getElementById("shatter-container");
     const bgVideo = document.getElementById("bg-video");
     const introAudio = document.getElementById("intro-audio");
@@ -36,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSkipped = false;
     let introRunning = false;
 
-    // --- Dynamic Golden Star Generator ---
     function generateStars() {
         for(let i = 0; i < 20; i++) {
             let star = document.createElement("div");
@@ -51,17 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- Attempt Autoplay & Handle Browser Blocks ---
     async function attemptAutoplay() {
         try {
-            // Attempt to play audio immediately
             await introAudio.play();
-            // If we get here, the browser allowed autoplay!
             startScreen.style.display = "none";
             runAnimationSequence();
         } catch (err) {
-            // Browser blocked autoplay (Standard security feature)
-            // Show "Click to begin" instead
             startScreen.style.display = "block";
             introOverlay.addEventListener("click", () => {
                 if (!introRunning) {
@@ -73,10 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Start attempting autoplay on load
     attemptAutoplay();
 
-    // --- Skip Logic ---
     introOverlay.addEventListener("click", () => {
         if (introRunning && !isSkipped) {
             skipIntro();
@@ -85,15 +79,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function skipIntro() {
         isSkipped = true;
-        introAudio.pause(); // Cut the music
+        introAudio.pause(); 
         
-        // Immediately reveal main UI
         bgVideo.muted = false; 
         bgVideo.play();
         bgVideo.style.opacity = "1";
         
         introOverlay.style.display = "none";
         cracksSvg.style.display = "none";
+        lightningBg.style.display = "none";
+        lightningBolt.style.display = "none";
+        if(particleContainer) particleContainer.innerHTML = '';
         
         if (!crossContainer.querySelector('.star')) {
             generateStars();
@@ -101,10 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mainUi.classList.remove("hidden");
     }
 
-    // --- Core Animation Sequence ---
     async function runAnimationSequence() {
         introRunning = true;
-        skipHint.style.display = "block"; // Show "Click to skip"
+        skipHint.style.display = "block"; 
         
         if (isSkipped) return;
         bibleRef.style.opacity = "1";
@@ -117,12 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isSkipped) return;
         cracksSvg.classList.add("crack-active");
         
-        // Wait 2.2 seconds but allow skip interruption
         await new Promise(r => {
             let elapsed = 0;
             let interval = setInterval(() => {
                 elapsed += 100;
-                if (isSkipped || elapsed >= 2200) {
+                if (isSkipped || elapsed >= 2200) { // Wait for slow crack glow
                     clearInterval(interval);
                     r();
                 }
@@ -131,11 +125,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (isSkipped) return;
         bibleRef.style.opacity = "0";
-        lightning.classList.add("lightning-flash");
+        
+        // 1. Trigger Lightning
+        lightningBg.classList.add("lightning-flash");
+        lightningBolt.classList.add("bolt-strike");
 
+        // 2. Trigger Electric Particles almost immediately
+        setTimeout(() => {
+            if (!isSkipped) explodeParticles();
+        }, 50);
+
+        // 3. Trigger Heavy Glass Shatter a fraction of a second later
         setTimeout(() => {
             if (isSkipped) return;
-            explodeScreen();
+            explodeScreen(); 
             
             bgVideo.muted = false; 
             bgVideo.play();
@@ -148,20 +151,19 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 if (isSkipped) return;
                 introOverlay.style.display = "none";
+                if(particleContainer) particleContainer.innerHTML = ''; 
                 if (!crossContainer.querySelector('.star')) generateStars(); 
                 mainUi.classList.remove("hidden");
             }, 800);
 
-        }, 200); 
+        }, 400); // 400ms delay gives particles time to be seen before glass breaks
     }
 
     function showPhrase(text) {
         return new Promise((resolve) => {
             if (isSkipped) return resolve();
-            
             textSequenceBox.textContent = text;
             textSequenceBox.style.opacity = "1"; 
-            
             setTimeout(() => {
                 if (isSkipped) return resolve();
                 textSequenceBox.style.opacity = "0"; 
@@ -170,23 +172,71 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- THE NEW ELECTRIC PARTICLES ---
+    function explodeParticles() {
+        if (!particleContainer) return;
+        const count = 150; // Lots of electric sparks
+        
+        for (let i = 0; i < count; i++) {
+            const particle = document.createElement("div");
+            particle.classList.add("electric-particle");
+            
+            // Thin and long to look like electric splinters
+            const width = Math.random() * 2 + 1; // 1-3px thin
+            const height = Math.random() * 30 + 10; // 10-40px long
+            particle.style.width = width + "px";
+            particle.style.height = height + "px";
+
+            // Start near the center (within 5% of center)
+            const startXOffset = (Math.random() * 10 - 5); 
+            const startYOffset = (Math.random() * 10 - 5); 
+            particle.style.left = `calc(50% + ${startXOffset}vw)`;
+            particle.style.top = `calc(50% + ${startYOffset}vh)`;
+
+            particleContainer.appendChild(particle);
+            void particle.offsetWidth; // force reflow
+
+            // Move AWAY from center at moderate speed
+            const angle = Math.random() * Math.PI * 2; 
+            const distance = Math.random() * 80 + 100; // 100-180vw away
+            const transX = Math.cos(angle) * distance + "vw";
+            const transY = Math.sin(angle) * distance + "vh";
+            
+            // Point the particle exactly in the direction it's traveling
+            const rot = (angle * 180 / Math.PI + 90) + "deg"; 
+
+            particle.style.setProperty('--tx', transX);
+            particle.style.setProperty('--ty', transY);
+            particle.style.setProperty('--rot', rot);
+
+            particle.classList.add("particle-blast");
+
+            setTimeout(() => particle.remove(), 1200); 
+        }
+    }
+
     function explodeScreen() {
-        for(let i = 0; i < 60; i++) {
+        for(let i = 0; i < 70; i++) {
             let shard = document.createElement("div");
             shard.classList.add("shard");
-            let size = Math.random() * 20 + 5;
+            let size = Math.random() * 25 + 10;
             shard.style.width = size + "vw";
             shard.style.height = size + "vw";
             let clip = `polygon(${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%, ${Math.random()*100}% ${Math.random()*100}%)`;
             shard.style.clipPath = clip;
             shatterContainer.appendChild(shard);
-            void shard.offsetWidth;
-            let transX = (Math.random() * 400 - 200) + "vw";
-            let transY = (Math.random() * 400 - 200) + "vh";
+            void shard.offsetWidth; 
+            
+            let angle = Math.random() * Math.PI * 2;
+            let distance = Math.random() * 100 + 100; 
+            let transX = Math.cos(angle) * distance + "vw";
+            let transY = Math.sin(angle) * distance + "vh";
             let rot = (Math.random() * 1080 - 540) + "deg"; 
+            
             shard.style.transform = `translate(-50%, -50%) translate(${transX}, ${transY}) rotate(${rot})`;
             shard.classList.add("fly");
-            setTimeout(() => shard.style.opacity = "0", 200);
+            
+            setTimeout(() => shard.style.opacity = "0", 400);
         }
     }
 
@@ -204,7 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const userField = document.getElementById("username");
     const passField = document.getElementById("password");
 
-    // UI Toggles
     btnLogin.addEventListener("click", (e) => {
         e.preventDefault();
         isLoginMode = true;
@@ -225,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
         authMessage.textContent = ""; 
     });
 
-    // Validation
     function validateUsername(user) {
         if (user.length < 8 || user.length > 20) return "Username must be 8 to 20 characters.";
         if (!/^[A-Za-z0-9]/.test(user)) return "Username cannot start with a special character.";
@@ -245,12 +293,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return null; 
     }
 
-    // Single Form Submission handling Real Backend
     authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         authMessage.classList.remove("success");
-        authMessage.style.color = "#ff4d4d"; // Reset to red
-        authMessage.textContent = "Processing..."; // Loading state
+        authMessage.style.color = "#ff4d4d"; 
+        authMessage.textContent = "Processing..."; 
 
         const username = userField.value.trim();
         const password = passField.value.trim();
