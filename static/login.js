@@ -293,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return null; 
     }
 
+    // Single Form Submission handling Real Backend
     authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         authMessage.classList.remove("success");
@@ -303,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = passField.value.trim();
 
         if (isLoginMode) {
+            // --- LOGIN ---
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
@@ -317,6 +319,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
+                // Tell the browser who is logged in for the time tracker
+                localStorage.setItem("jct_logged_in_user", username);
+
                 authMessage.classList.add("success");
                 authMessage.style.color = "#4caf50";
                 authMessage.textContent = "Login successful! Redirecting...";
@@ -327,23 +332,27 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         } else {
+            // --- REGISTER ---
             const userError = validateUsername(username);
-            if (userError) {
-                authMessage.textContent = userError;
-                return;
-            }
-
+            if (userError) { authMessage.textContent = userError; return; }
             const passError = validatePassword(password);
-            if (passError) {
-                authMessage.textContent = passError;
-                return;
+            if (passError) { authMessage.textContent = passError; return; }
+
+            // NEW: Fetch user country via free IP API
+            let userCountry = "Unknown";
+            try {
+                const geoRes = await fetch("https://ipapi.co/json/");
+                const geoData = await geoRes.json();
+                if (geoData.country_name) userCountry = geoData.country_name;
+            } catch (err) {
+                console.warn("Could not fetch location data.");
             }
 
             try {
                 const response = await fetch(`${BACKEND_URL}/api/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password, country: userCountry }) // Send country to DB
                 });
 
                 const data = await response.json();
@@ -353,13 +362,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
+                // Tell the browser who is logged in for the time tracker
+                localStorage.setItem("jct_logged_in_user", username);
+
                 authMessage.classList.add("success");
                 authMessage.style.color = "#4caf50";
                 authMessage.textContent = "Registration successful! Redirecting...";
                 setTimeout(() => window.location.href = "main.html", 1000);
 
             } catch (err) {
-                authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
+                authMessage.textContent = "Failed to connect to the server.";
             }
         }
     });

@@ -83,6 +83,77 @@ document.addEventListener("mousemove", (e) => {
     glow.style.top = e.clientY + "px";
 });
 
+// ================= ACTIVE TIME TRACKER & LOGOUT =================
+const currentUser = localStorage.getItem("jct_logged_in_user");
+const BACKEND_URL = "https://jesusbackend.onrender.com";
+let sessionSeconds = 0;
+
+if (currentUser) {
+    // 1. Increment local timer every second
+    setInterval(() => {
+        sessionSeconds++;
+    }, 1000);
+
+    // 2. Sync to DB every 15 seconds safely
+    setInterval(async () => {
+        if (sessionSeconds > 0) {
+            const timeToSync = sessionSeconds;
+            sessionSeconds = 0; // Reset counter immediately to avoid double counting
+
+            try {
+                await fetch(`${BACKEND_URL}/api/update-time`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: currentUser, time_added: timeToSync })
+                });
+            } catch (err) {
+                sessionSeconds += timeToSync; // If server fails, add the time back so it syncs next cycle
+            }
+        }
+    }, 15000);
+
+    // 3. Sync if they close the tab or switch apps
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === 'hidden' && sessionSeconds > 0) {
+            const timeToSync = sessionSeconds;
+            sessionSeconds = 0;
+            // keepalive ensures the fetch finishes even while the browser is closing
+            fetch(`${BACKEND_URL}/api/update-time`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: currentUser, time_added: timeToSync }),
+                keepalive: true 
+            });
+        }
+    });
+}
+
+// 4. Secure Logout Logic (Flushes final time and clears data)
+const logoutBtns = document.querySelectorAll(".logout-btn");
+
+logoutBtns.forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        
+        // Push the final remaining seconds to the database before leaving
+        if (currentUser && sessionSeconds > 0) {
+            try {
+                await fetch(`${BACKEND_URL}/api/update-time`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: currentUser, time_added: sessionSeconds })
+                });
+            } catch(err) { console.warn("Final sync failed"); }
+        }
+
+        // Destroy session data securely
+        localStorage.removeItem("jct_logged_in_user");
+        
+        // Redirect to login screen
+        window.location.href = "index.html"; 
+    });
+});
+
 // ================= CROSS EFFECT =================
 const cross = document.querySelector(".cross-effect");
 
