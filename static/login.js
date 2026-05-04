@@ -294,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Single Form Submission handling Real Backend
+    // Single Form Submission handling Real Backend
     authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         authMessage.classList.remove("success");
@@ -304,7 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = passField.value.trim();
 
         if (isLoginMode) {
-            // --- LOGIN ---
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
                     method: 'POST',
@@ -319,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                // Tell the browser who is logged in for the time tracker
+                // CRITICAL: Tells the timer script WHO is logged in!
                 localStorage.setItem("jct_logged_in_user", username);
 
                 authMessage.classList.add("success");
@@ -332,13 +332,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         } else {
-            // --- REGISTER ---
             const userError = validateUsername(username);
-            if (userError) { authMessage.textContent = userError; return; }
-            const passError = validatePassword(password);
-            if (passError) { authMessage.textContent = passError; return; }
+            if (userError) {
+                authMessage.textContent = userError;
+                return;
+            }
 
-            // NEW: Fetch user country via free IP API
+            const passError = validatePassword(password);
+            if (passError) {
+                authMessage.textContent = passError;
+                return;
+            }
+
+            // --- FETCH COUNTRY IP BEFORE REGISTERING ---
             let userCountry = "Unknown";
             try {
                 const geoRes = await fetch("https://ipapi.co/json/");
@@ -352,7 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const response = await fetch(`${BACKEND_URL}/api/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password, country: userCountry }) // Send country to DB
+                    // ADDED COUNTRY HERE
+                    body: JSON.stringify({ username, password, country: userCountry }) 
                 });
 
                 const data = await response.json();
@@ -362,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-                // Tell the browser who is logged in for the time tracker
+                // CRITICAL: Tells the timer script WHO is logged in!
                 localStorage.setItem("jct_logged_in_user", username);
 
                 authMessage.classList.add("success");
@@ -371,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 setTimeout(() => window.location.href = "main.html", 1000);
 
             } catch (err) {
-                authMessage.textContent = "Failed to connect to the server.";
+                authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
             }
         }
     });
