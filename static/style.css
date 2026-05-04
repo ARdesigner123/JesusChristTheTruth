@@ -93,6 +93,11 @@ button,
     pointer-events: none;
 }
 
+.nav-links li {
+    position: relative;
+    z-index: 2; /* Creates proper stacking for the links */
+}
+
 .nav-links li a {
     text-decoration: none;
     color: #fffdf5;
@@ -106,19 +111,22 @@ button,
     white-space: nowrap;
     text-shadow: 1px 1px 0 #3b2206, 0 0 8px rgba(255,215,0,0.25);
     -webkit-text-stroke: 0.4px #3b2206;
-    z-index: 2; /* NEW: Keeps the text above the yellow indicator */
+    z-index: 5; /* Keeps the text firmly above the yellow indicator */
 }
 
+/* Yellow Glow Indicator */
 .nav-indicator {
     position: absolute;
-    height: 48px; 
+    height: 46px; 
     background: linear-gradient(to bottom, #ffd700, #e6b800);
     border-radius: 25px;
-    border: 3px solid #3b2206;
-    box-shadow: inset 0 4px 8px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(59,34,6,0.6), 0 0 25px gold;
-    transition: all 0.4s ease;
-    z-index: 0; /* FIXED: Changed from -1 so it doesn't hide behind the navbar! */
+    border: 2px solid #3b2206;
+    box-shadow: inset 0 4px 8px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(59,34,6,0.6), 0 0 20px rgba(255,215,0,0.6);
+    /* Snappy, elastic sliding animation */
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1); 
+    z-index: 1; /* Sits right behind the text but in front of the navbar */
     opacity: 0;
+    pointer-events: none; /* CRITICAL: Prevents the bubble from blocking your mouse hovers! */
 }
 
 .nav-links li a.active {

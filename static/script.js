@@ -1,76 +1,66 @@
-// ================= MOBILE MENU =================
+// ================= MOBILE MENU & NAV =================
 const menuIcon = document.getElementById("menuIcon");
 const dropdown = document.getElementById("dropdownMenu");
 
-menuIcon.addEventListener("click", () => {
-    // Toggle display
-    if (dropdown.style.display === "block") {
-        dropdown.style.display = "none";
-    } else {
-        dropdown.style.display = "block";
-    }
-});
+if(menuIcon && dropdown) {
+    menuIcon.addEventListener("click", () => {
+        dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+    });
 
-// Close dropdown when clicking outside
-document.addEventListener("click", (e) => {
-    if (!dropdown.contains(e.target) && !menuIcon.contains(e.target)) {
-        dropdown.style.display = "none";
-    }
-});
+    document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target) && !menuIcon.contains(e.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+}
 
-// ================= NAV INDICATOR =================
+// ================= NAV INDICATOR (FIXED ANIMATION) =================
 const indicator = document.querySelector(".nav-indicator");
 const links = document.querySelectorAll(".nav-links a");
 
-// Set initial active position
 window.addEventListener("load", () => {
     const active = document.querySelector(".nav-links a.active");
-    if (active) moveIndicator(active);
+    if (active && indicator) {
+        indicator.style.opacity = "1";
+        moveIndicator(active);
+    }
 });
 
 links.forEach(link => {
-    // Click event
     link.addEventListener("click", function() {
         document.querySelector(".nav-links a.active")?.classList.remove("active");
         this.classList.add("active");
-        moveIndicator(this);
+        if(indicator) moveIndicator(this);
     });
 
-    // Hover effect
     link.addEventListener("mouseenter", function() {
-        moveIndicator(this);
-        indicator.style.opacity = "1";
+        if(indicator) { 
+            indicator.style.opacity = "1";
+            moveIndicator(this); 
+        }
     });
 
     link.addEventListener("mouseleave", function() {
         const active = document.querySelector(".nav-links a.active");
-        if (active) moveIndicator(active);
+        if (active && indicator) moveIndicator(active);
     });
 });
 
 function moveIndicator(element) {
-    const rect = element.getBoundingClientRect();
-    const parentRect = element.parentElement.parentElement.getBoundingClientRect();
+    if(!indicator) return;
+    
+    // Using offsetLeft provides perfectly accurate tracking inside the flex container
+    const li = element.parentElement; 
+    
+    const linkWidth = element.offsetWidth;
+    const linkLeft = li.offsetLeft + element.offsetLeft;
+    const linkTop = li.offsetTop + element.offsetTop;
+    const linkHeight = element.offsetHeight;
 
-    // Calculate position relative to the navbar
-    indicator.style.width = rect.width + 20 + "px";
-    indicator.style.left = rect.left - parentRect.left - 10 + "px";
-    indicator.style.top = rect.top - parentRect.top - 5 + "px";
-    indicator.style.opacity = "1";
+    indicator.style.width = `${linkWidth + 24}px`; // Adds padding around text
+    indicator.style.left = `${linkLeft - 12}px`;
+    indicator.style.top = `${linkTop - ((46 - linkHeight) / 2)}px`; // Centers vertically
 }
-
-// ================= LOGOUT LOGIC =================
-const logoutBtns = document.querySelectorAll(".logout-btn");
-
-logoutBtns.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        // Clear local storage authentication items securely
-        localStorage.removeItem("jct_username");
-        localStorage.removeItem("jct_password");
-        
-        // Let the default HTML href action redirect them to index.html
-    });
-});
 
 // ================= CURSOR GLOW =================
 const glow = document.createElement("div");
@@ -78,78 +68,79 @@ glow.classList.add("cursor-glow");
 document.body.appendChild(glow);
 
 document.addEventListener("mousemove", (e) => {
-    // Use clientX and clientY for position: fixed elements!
     glow.style.left = e.clientX + "px";
     glow.style.top = e.clientY + "px";
 });
 
-// ================= ACTIVE TIME TRACKER & LOGOUT =================
+// ================= BULLETPROOF ACTIVE TIME TRACKER =================
 const currentUser = localStorage.getItem("jct_logged_in_user");
 const BACKEND_URL = "https://jesusbackend.onrender.com";
 let sessionSeconds = 0;
 
+// Master function to sync time to the database
+function syncTime(isAsync = true) {
+    if (!currentUser || sessionSeconds <= 0) return;
+    
+    const timeToSync = sessionSeconds;
+    sessionSeconds = 0; // Reset immediately to prevent duplicate counting
+    
+    const payload = JSON.stringify({ username: currentUser, time_added: timeToSync });
+
+    if (!isAsync && navigator.sendBeacon) {
+        // sendBeacon guarantees delivery when closing the tab, clicking a link, or logging out
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(`${BACKEND_URL}/api/update-time`, blob);
+    } else {
+        // Normal background sync
+        fetch(`${BACKEND_URL}/api/update-time`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true
+        }).catch(() => {
+            sessionSeconds += timeToSync; // If internet drops, save the time for the next sync
+        });
+    }
+}
+
 if (currentUser) {
-    // 1. Increment local timer every second
+    // 1. Tick up every 1 second
     setInterval(() => {
         sessionSeconds++;
     }, 1000);
 
-    // 2. Sync to DB every 15 seconds safely
-    setInterval(async () => {
-        if (sessionSeconds > 0) {
-            const timeToSync = sessionSeconds;
-            sessionSeconds = 0; // Reset counter immediately to avoid double counting
+    // 2. Background sync every 5 seconds (frequent to prevent data loss)
+    setInterval(() => {
+        syncTime(true);
+    }, 5000);
 
-            try {
-                await fetch(`${BACKEND_URL}/api/update-time`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: currentUser, time_added: timeToSync })
-                });
-            } catch (err) {
-                sessionSeconds += timeToSync; // If server fails, add the time back so it syncs next cycle
-            }
-        }
-    }, 15000);
-
-    // 3. Sync if they close the tab or switch apps
+    // 3. Sync if they close the browser tab, refresh, or click a link to another page
+    window.addEventListener("beforeunload", () => {
+        syncTime(false);
+    });
+    
+    // 4. Sync if they switch to another app/tab on their phone
     document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === 'hidden' && sessionSeconds > 0) {
-            const timeToSync = sessionSeconds;
-            sessionSeconds = 0;
-            // keepalive ensures the fetch finishes even while the browser is closing
-            fetch(`${BACKEND_URL}/api/update-time`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: currentUser, time_added: timeToSync }),
-                keepalive: true 
-            });
+        if (document.visibilityState === 'hidden') {
+            syncTime(false);
         }
     });
 }
 
-// 4. Secure Logout Logic (Flushes final time and clears data)
+// ================= SECURE LOGOUT =================
 const logoutBtns = document.querySelectorAll(".logout-btn");
 
 logoutBtns.forEach(btn => {
-    btn.addEventListener("click", async (e) => {
-        e.preventDefault();
+    btn.addEventListener("click", (e) => {
+        e.preventDefault(); // Stop immediate redirection
         
-        // Push the final remaining seconds to the database before leaving
-        if (currentUser && sessionSeconds > 0) {
-            try {
-                await fetch(`${BACKEND_URL}/api/update-time`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: currentUser, time_added: sessionSeconds })
-                });
-            } catch(err) { console.warn("Final sync failed"); }
-        }
+        // 1. Force a final time sync using sendBeacon
+        syncTime(false);
 
-        // Destroy session data securely
+        // 2. Destroy session data
         localStorage.removeItem("jct_logged_in_user");
         
-        // Redirect to login screen
+        // 3. Now redirect back to login
         window.location.href = "index.html"; 
     });
 });
