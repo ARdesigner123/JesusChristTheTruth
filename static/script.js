@@ -73,7 +73,14 @@ document.addEventListener("mousemove", (e) => {
 });
 
 // ================= BULLETPROOF ACTIVE TIME TRACKER =================
-const currentUser = localStorage.getItem("jct_logged_in_user");
+// 1. Check for BOTH types of users
+const normalUser = localStorage.getItem("jct_logged_in_user");
+const guestUser = localStorage.getItem("jct_guest_user");
+
+// 2. Identify who is playing, and if they are a guest
+const currentUser = normalUser || guestUser;
+const isGuest = !!guestUser; 
+
 const BACKEND_URL = "https://jesusbackend.onrender.com";
 let sessionSeconds = 0;
 
@@ -84,7 +91,12 @@ function syncTime(isAsync = true) {
     const timeToSync = sessionSeconds;
     sessionSeconds = 0; // Reset immediately to prevent duplicate counting
     
-    const payload = JSON.stringify({ username: currentUser, time_added: timeToSync });
+    // 3. IMPORTANT: Include the isGuest flag in the payload so the backend knows which table to update!
+    const payload = JSON.stringify({ 
+        username: currentUser, 
+        time_added: timeToSync, 
+        isGuest: isGuest 
+    });
 
     if (!isAsync && navigator.sendBeacon) {
         // sendBeacon guarantees delivery when closing the tab, clicking a link, or logging out
@@ -104,22 +116,22 @@ function syncTime(isAsync = true) {
 }
 
 if (currentUser) {
-    // 1. Tick up every 1 second
+    // Tick up every 1 second
     setInterval(() => {
         sessionSeconds++;
     }, 1000);
 
-    // 2. Background sync every 5 seconds (frequent to prevent data loss)
+    // Background sync every 5 seconds (frequent to prevent data loss)
     setInterval(() => {
         syncTime(true);
     }, 5000);
 
-    // 3. Sync if they close the browser tab, refresh, or click a link to another page
+    // Sync if they close the browser tab, refresh, or click a link to another page
     window.addEventListener("beforeunload", () => {
         syncTime(false);
     });
     
-    // 4. Sync if they switch to another app/tab on their phone
+    // Sync if they switch to another app/tab on their phone
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === 'hidden') {
             syncTime(false);
@@ -137,8 +149,9 @@ logoutBtns.forEach(btn => {
         // 1. Force a final time sync using sendBeacon
         syncTime(false);
 
-        // 2. Destroy session data
+        // 2. Destroy ALL session data securely
         localStorage.removeItem("jct_logged_in_user");
+        localStorage.removeItem("jct_guest_user");
         
         // 3. Now redirect back to login
         window.location.href = "index.html"; 
