@@ -294,7 +294,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Single Form Submission handling Real Backend
-    // Single Form Submission handling Real Backend
     authForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         authMessage.classList.remove("success");
@@ -382,4 +381,55 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+    // ================= GUEST LOGIN LOGIC =================
+    const btnGuest = document.getElementById("btn-guest");
+    
+    if (btnGuest) {
+        btnGuest.addEventListener("click", async () => {
+            authMessage.classList.remove("success");
+            authMessage.style.color = "#ffd700"; 
+            authMessage.textContent = "Entering as Guest..."; 
+
+            // 1. Get Country
+            let userCountry = "Unknown";
+            try {
+                const geoRes = await fetch("https://ipapi.co/json/");
+                const geoData = await geoRes.json();
+                if (geoData.country_name) userCountry = geoData.country_name;
+            } catch (err) { }
+
+            // 2. Check if they were already a guest before
+            const savedGuest = localStorage.getItem("jct_guest_user");
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/guest-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guestName: savedGuest, country: userCountry }) 
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    authMessage.style.color = "#ff4d4d";
+                    authMessage.textContent = data.error; 
+                    return;
+                }
+
+                // 3. Save guest identity and CLEAR normal user identity to prevent overlap
+                localStorage.setItem("jct_guest_user", data.guestName);
+                localStorage.removeItem("jct_logged_in_user");
+
+                authMessage.classList.add("success");
+                authMessage.style.color = "#4caf50";
+                authMessage.textContent = `Welcome, ${data.guestName}! Redirecting...`;
+                setTimeout(() => window.location.href = "main.html", 1000);
+
+            } catch (err) {
+                authMessage.style.color = "#ff4d4d";
+                authMessage.textContent = "Failed to connect to the server.";
+            }
+        });
+    }
 });
