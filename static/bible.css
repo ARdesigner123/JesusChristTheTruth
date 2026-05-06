@@ -298,6 +298,169 @@
 .bible-reveal { opacity: 0; transform: translateY(60px); transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .bible-reveal.active { opacity: 1; transform: translateY(0); }
 
+/* ================= NEW: READ BIBLE BUTTON ================= */
+.orthodox-read-btn {
+    margin-top: 10px; /* Space below Read History */
+    background: transparent;
+}
+
+.orthodox-read-btn:hover { 
+    background: #d4af37; 
+    color: #000; 
+    border-color: #d4af37; 
+    box-shadow: 0 0 15px #d4af37; 
+}
+
+/* ================= BIBLE READER SLIDE PANEL ================= */
+.panel-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(5px);
+}
+
+.panel-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.side-panel {
+    position: fixed;
+    top: 0; right: -100vw; /* Hidden far off screen */
+    width: 65vw; /* Covers more than half the screen */
+    min-width: 400px;
+    max-width: 900px; 
+    height: 100vh;
+    background: linear-gradient(to bottom, #2b1a03, #150b01);
+    border-left: 2px solid #d4af37;
+    
+    /* Curved corners */
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    
+    box-shadow: -15px 0 50px rgba(0,0,0,0.9);
+    z-index: 1000;
+    transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel.open {
+    right: 0; /* Slides into view */
+}
+
+/* Panel Header & Close Button */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 40px 20px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.panel-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    letter-spacing: 2px;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #d4af37;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #fff;
+    transform: scale(1.2) translateX(5px);
+    text-shadow: 0 0 15px #fff;
+}
+
+/* Panel Content & Scrollbar */
+.panel-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px 40px 50px;
+}
+
+.panel-content::-webkit-scrollbar { width: 8px; }
+.panel-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+.panel-content::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+
+/* Testament Titles */
+.testament-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #fffdf5;
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+    padding-bottom: 10px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Books Grid Layout */
+.books-grid {
+    display: grid;
+    /* Automatically creates 2 or 3 columns depending on screen size */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Individual Book Categories */
+.book-category {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+.book-section {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: #a67c52;
+    margin-bottom: 15px;
+    border-bottom: 1px dashed rgba(166, 124, 82, 0.4);
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.book-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.book-item {
+    font-family: 'Cardo', serif;
+    font-size: 1.15rem;
+    color: #e6e6e6;
+    padding: 8px 10px;
+    margin-bottom: 3px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+/* Book Hover Effects */
+.book-item:hover {
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.08);
+    border-left: 3px solid #ffd700;
+    transform: translateX(8px);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
 /* ================= RESPONSIVE DESIGN ================= */
 @media (max-width: 1200px) {
     .bible-title { font-size: 1.9rem; }
@@ -322,6 +485,17 @@
 
 @media (max-width: 900px) {
     .genesis-grid { grid-template-columns: 1fr; } /* Stack genesis cards on mobile */
+}
+
+@media (max-width: 768px) {
+    .side-panel {
+        width: 100vw;
+        border-radius: 0;
+        border-left: none;
+    }
+    .panel-header { padding: 25px 20px 15px; }
+    .panel-content { padding: 15px 20px 40px; }
+    .books-grid { grid-template-columns: 1fr; } /* Stack on small mobile */
 }
 
 @media (max-width: 600px) {

@@ -27,4 +27,32 @@ document.addEventListener("DOMContentLoaded", () => {
         bibleObserver.observe(el);
     });
 
+    // ================= BIBLE READER PANEL LOGIC =================
+    const openReaderBtn = document.getElementById("open-orthodox-reader");
+    const closeReaderBtn = document.getElementById("close-panel-btn");
+    const sidePanel = document.getElementById("bible-reader-panel");
+    const panelOverlay = document.getElementById("panel-overlay");
+
+    if (openReaderBtn && sidePanel && panelOverlay) {
+        
+        // Open Panel
+        openReaderBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            sidePanel.classList.add("open");
+            panelOverlay.classList.add("open");
+            document.body.style.overflow = "hidden"; // Prevents background scrolling
+        });
+
+        // Close Panel via Back Arrow
+        closeReaderBtn.addEventListener("click", closePanel);
+
+        // Close Panel by clicking the dark overlay outside the menu
+        panelOverlay.addEventListener("click", closePanel);
+
+        function closePanel() {
+            sidePanel.classList.remove("open");
+            panelOverlay.classList.remove("open");
+            document.body.style.overflow = "auto"; // Restores background scrolling
+        }
+    }
 });

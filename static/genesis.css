@@ -1,0 +1,207 @@
+/* ================= HEADER & BACK BUTTON ================= */
+.book-header {
+    text-align: center;
+    padding: 60px 20px 20px;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.back-arrow {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    color: #a67c52;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    border-radius: 50%;
+    border: 1px solid #4b2e05;
+}
+
+.back-arrow:hover {
+    color: #ffd700;
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: translateY(-50%) translateX(-10px); /* Slides to the left */
+}
+
+.book-title {
+    font-size: 3rem;
+    color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.title-underline {
+    width: 150px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #ffd700, transparent);
+    margin: 15px auto 40px;
+}
+
+/* ================= MAIN READER LAYOUT ================= */
+.reader-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 100px;
+}
+
+.chapter-section {
+    margin-bottom: 80px;
+}
+
+.chapter-divider {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.5), transparent);
+    margin: 60px 0;
+}
+
+.chapter-header h2 {
+    font-size: 2.2rem;
+    color: #fffdf5;
+    margin-bottom: 15px;
+    border-left: 5px solid #d4af37;
+    padding-left: 15px;
+}
+
+.chapter-summary {
+    font-family: 'Cardo', serif;
+    font-size: 1.2rem;
+    color: #cccccc;
+    background: rgba(20, 10, 5, 0.6);
+    border: 1px solid rgba(166, 124, 82, 0.3);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.chapter-summary strong {
+    color: #ffd700;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* ================= SPLIT LAYOUT (Sticky Image) ================= */
+.chapter-layout {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start; /* CRITICAL for sticky to work */
+}
+
+/* Reverses the order for Chapter 2 to break monotony */
+.reverse-layout {
+    flex-direction: row-reverse;
+}
+
+/* Left Side: Verses */
+.verses-column {
+    flex: 6; /* Takes up 60% of space */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.verse {
+    font-family: 'Cardo', serif;
+    font-size: 1.25rem;
+    color: #e6e6e6;
+    line-height: 1.8;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.verse:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+.v-num {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    color: #d4af37;
+    font-size: 1rem;
+    margin-right: 10px;
+    vertical-align: super;
+}
+
+/* Highlight the English Translations */
+.trans {
+    color: #a67c52;
+    font-style: italic;
+    font-size: 1.1rem;
+    text-shadow: 0 0 5px rgba(166, 124, 82, 0.3);
+}
+
+/* Right Side: Sticky Image */
+.image-column {
+    flex: 4; /* Takes up 40% of space */
+    position: sticky;
+    top: 130px; /* Sticks beneath the navbar as you scroll */
+}
+
+.sticky-image-frame {
+    background: linear-gradient(135deg, #6b3f0d 0%, #d4af37 50%, #4b2e05 100%);
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.sticky-image-frame img {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+    filter: brightness(0.8) sepia(0.2) contrast(1.1);
+    border: 2px solid #2b1a03;
+}
+
+.image-caption {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    color: #ffd700;
+    margin-top: 12px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* ================= ANIMATIONS ================= */
+.reveal-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.reveal-element.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+    .chapter-layout, .reverse-layout {
+        flex-direction: column;
+    }
+    
+    .image-column {
+        position: relative;
+        top: 0;
+        width: 100%;
+        max-width: 500px;
+        margin: 30px auto 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .book-title { font-size: 2.2rem; margin-top: 50px; }
+    .back-arrow { top: 20px; transform: none; left: 10px; }
+    .back-arrow:hover { transform: translateX(-5px); }
+    .verse { font-size: 1.1rem; }
+    .trans { font-size: 1rem; }
+}

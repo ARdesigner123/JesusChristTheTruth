@@ -144,9 +144,13 @@
                     <p>It teaches that Scripture is the pinnacle of Holy Tradition, not separate from it. It heavily emphasizes <strong>Theosis</strong> (the process of becoming united with God) within the Divine Liturgy.</p>
                 </div>
 
-                <a href="https://www.oca.org/orthodoxy/the-orthodox-faith/doctrine-scripture/the-bible" target="_blank" class="bible-source-link orthodox-link">
+                <a href="https://www.orthodoxroad.com/where-did-the-christian-bible-come-from/" target="_blank" class="bible-source-link orthodox-link">
                     Read History <i class="fas fa-external-link-alt"></i>
                 </a>
+                
+                <button class="bible-source-link orthodox-read-btn" id="open-orthodox-reader">
+                    Read Bible <i class="fas fa-book-reader"></i>
+                </button>
             </div>
 
             <div class="bible-divider bible-reveal"></div>
@@ -208,8 +212,161 @@
                     Read History <i class="fas fa-external-link-alt"></i>
                 </a>
             </div>
+
         </div>
     </section>
+
+    <div id="panel-overlay" class="panel-overlay"></div>
+    <div id="bible-reader-panel" class="side-panel">
+        <div class="panel-header">
+            <h2>Orthodox Canon</h2>
+            <button id="close-panel-btn" class="close-btn" title="Go Back">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <div class="panel-content">
+            
+            <h3 class="testament-title">Old Testament (51 Books)</h3>
+            
+            <div class="books-grid">
+                
+                <div class="book-category">
+                    <h4 class="book-section">The Law (Pentateuch)</h4>
+                    <ul class="book-list">
+                        <li class="book-item" onclick="window.location.href='genesis.html'">Genesis</li>
+                        <li class="book-item">Exodus</li>
+                        <li class="book-item">Leviticus</li>
+                        <li class="book-item">Numbers</li>
+                        <li class="book-item">Deuteronomy</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">Historical</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Joshua</li>
+                        <li class="book-item">Judges</li>
+                        <li class="book-item">Ruth</li>
+                        <li class="book-item">1 Kingdoms (1 Samuel)</li>
+                        <li class="book-item">2 Kingdoms (2 Samuel)</li>
+                        <li class="book-item">3 Kingdoms (1 Kings)</li>
+                        <li class="book-item">4 Kingdoms (2 Kings)</li>
+                        <li class="book-item">1 Chronicles</li>
+                        <li class="book-item">2 Chronicles</li>
+                        <li class="book-item">1 Esdras</li>
+                        <li class="book-item">Ezra (2 Esdras)</li>
+                        <li class="book-item">Nehemiah</li>
+                        <li class="book-item">Tobit</li>
+                        <li class="book-item">Judith</li>
+                        <li class="book-item">Esther</li>
+                        <li class="book-item">1 Maccabees</li>
+                        <li class="book-item">2 Maccabees</li>
+                        <li class="book-item">3 Maccabees</li>
+                        <li class="book-item">4 Maccabees (Appendix)</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">Wisdom Literature</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Job</li>
+                        <li class="book-item">Psalms (+ Psalm 151)</li>
+                        <li class="book-item">Proverbs</li>
+                        <li class="book-item">Ecclesiastes</li>
+                        <li class="book-item">Song of Songs</li>
+                        <li class="book-item">Wisdom of Solomon</li>
+                        <li class="book-item">Sirach (Ecclesiasticus)</li>
+                        <li class="book-item">Prayer of Manasseh</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">Major Prophets</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Isaiah</li>
+                        <li class="book-item">Jeremiah</li>
+                        <li class="book-item">Lamentations</li>
+                        <li class="book-item">Baruch</li>
+                        <li class="book-item">Epistle of Jeremiah</li>
+                        <li class="book-item">Ezekiel</li>
+                        <li class="book-item">Daniel (w/ additions)</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">Minor Prophets</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Hosea</li>
+                        <li class="book-item">Joel</li>
+                        <li class="book-item">Amos</li>
+                        <li class="book-item">Obadiah</li>
+                        <li class="book-item">Jonah</li>
+                        <li class="book-item">Micah</li>
+                        <li class="book-item">Nahum</li>
+                        <li class="book-item">Habakkuk</li>
+                        <li class="book-item">Zephaniah</li>
+                        <li class="book-item">Haggai</li>
+                        <li class="book-item">Zechariah</li>
+                        <li class="book-item">Malachi</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <h3 class="testament-title" style="margin-top: 50px;">New Testament (27 Books)</h3>
+            
+            <div class="books-grid">
+                
+                <div class="book-category">
+                    <h4 class="book-section">Gospels & History</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Matthew</li>
+                        <li class="book-item">Mark</li>
+                        <li class="book-item">Luke</li>
+                        <li class="book-item">John</li>
+                        <li class="book-item">Acts of the Apostles</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">Pauline Epistles</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Romans</li>
+                        <li class="book-item">1 Corinthians</li>
+                        <li class="book-item">2 Corinthians</li>
+                        <li class="book-item">Galatians</li>
+                        <li class="book-item">Ephesians</li>
+                        <li class="book-item">Philippians</li>
+                        <li class="book-item">Colossians</li>
+                        <li class="book-item">1 Thessalonians</li>
+                        <li class="book-item">2 Thessalonians</li>
+                        <li class="book-item">1 Timothy</li>
+                        <li class="book-item">2 Timothy</li>
+                        <li class="book-item">Titus</li>
+                        <li class="book-item">Philemon</li>
+                    </ul>
+                </div>
+
+                <div class="book-category">
+                    <h4 class="book-section">General Epistles & Prophecy</h4>
+                    <ul class="book-list">
+                        <li class="book-item">Hebrews</li>
+                        <li class="book-item">James</li>
+                        <li class="book-item">1 Peter</li>
+                        <li class="book-item">2 Peter</li>
+                        <li class="book-item">1 John</li>
+                        <li class="book-item">2 John</li>
+                        <li class="book-item">3 John</li>
+                        <li class="book-item">Jude</li>
+                        <li class="book-item" style="margin-top: 10px; color: #ff6666;">Revelation</li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 
     <footer class="footer">
         <span class="bible-icon">📖</span>
