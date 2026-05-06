@@ -27,32 +27,48 @@ document.addEventListener("DOMContentLoaded", () => {
         bibleObserver.observe(el);
     });
 
-    // ================= BIBLE READER PANEL LOGIC =================
-    const openReaderBtn = document.getElementById("open-orthodox-reader");
-    const closeReaderBtn = document.getElementById("close-panel-btn");
-    const sidePanel = document.getElementById("bible-reader-panel");
+    // ================= MULTI-PANEL READER LOGIC =================
     const panelOverlay = document.getElementById("panel-overlay");
+    const closeBtns = document.querySelectorAll(".close-btn");
 
-    if (openReaderBtn && sidePanel && panelOverlay) {
-        
-        // Open Panel
-        openReaderBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            sidePanel.classList.add("open");
-            panelOverlay.classList.add("open");
-            document.body.style.overflow = "hidden"; // Prevents background scrolling
-        });
-
-        // Close Panel via Back Arrow
-        closeReaderBtn.addEventListener("click", closePanel);
-
-        // Close Panel by clicking the dark overlay outside the menu
-        panelOverlay.addEventListener("click", closePanel);
-
-        function closePanel() {
-            sidePanel.classList.remove("open");
-            panelOverlay.classList.remove("open");
-            document.body.style.overflow = "auto"; // Restores background scrolling
+    // Map buttons to their specific panels
+    const readerPanels = {
+        orthodox: { 
+            btn: document.getElementById("open-orthodox-reader"), 
+            panel: document.getElementById("orthodox-reader-panel") 
+        },
+        catholic: { 
+            btn: document.getElementById("open-catholic-reader"), 
+            panel: document.getElementById("catholic-reader-panel") 
+        },
+        protestant: { 
+            btn: document.getElementById("open-protestant-reader"), 
+            panel: document.getElementById("protestant-reader-panel") 
         }
+    };
+
+    // Helper to close all panels
+    function closeAllPanels() {
+        Object.values(readerPanels).forEach(p => {
+            if (p.panel) p.panel.classList.remove("open");
+        });
+        if (panelOverlay) panelOverlay.classList.remove("open");
+        document.body.style.overflow = "auto"; // Restore background scrolling
     }
+
+    // Attach click events to open specific panels
+    Object.values(readerPanels).forEach(p => {
+        if (p.btn && p.panel) {
+            p.btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                p.panel.classList.add("open");
+                if (panelOverlay) panelOverlay.classList.add("open");
+                document.body.style.overflow = "hidden"; // Prevent background scrolling
+            });
+        }
+    });
+
+    // Close logic
+    closeBtns.forEach(btn => btn.addEventListener("click", closeAllPanels));
+    if (panelOverlay) panelOverlay.addEventListener("click", closeAllPanels);
 });
