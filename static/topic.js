@@ -3,20 +3,23 @@ document.addEventListener("DOMContentLoaded", () => {
     loadForumData();
 });
 
-const BACKEND_URL = "https://jesusbackend.onrender.com";
+/* NOTE: We do NOT declare BACKEND_URL, normalUser, or guestUser here 
+  because they are already declared globally in script.js! 
+  We will just safely read them.
+*/
 
-// Determine user identity
-const normalUser = localStorage.getItem("jct_logged_in_user");
-const guestUser = localStorage.getItem("jct_guest_user");
-const rawUser = normalUser || guestUser;
+// Identify the user safely without re-declaring global constants
+const loggedInUser = localStorage.getItem("jct_logged_in_user");
+const guestUserLocal = localStorage.getItem("jct_guest_user");
+const activeUser = loggedInUser || guestUserLocal;
 
-// SET ADMIN LOGIC
-let currentUser = rawUser;
-let currentAuthorType = normalUser ? 'user' : 'guest';
+// SET ADMIN LOGIC: If AaronNg123 logs in, make him the Admin!
+let forumUser = activeUser;
+let forumAuthorType = loggedInUser ? 'user' : 'guest';
 
-if (rawUser === 'AaronNg123') {
-    currentUser = 'Admin / Owner';
-    currentAuthorType = 'admin';
+if (activeUser === 'AaronNg123') {
+    forumUser = 'Admin / Owner';
+    forumAuthorType = 'admin';
 }
 
 // Helper: Time Ago Formatter
@@ -58,12 +61,12 @@ async function loadForumData() {
     }, 3000);
 
     try {
+        // BACKEND_URL is pulled from script.js automatically
         const res = await fetch(`${BACKEND_URL}/api/forum`);
         clearTimeout(wakeUpTimeout); 
 
         const data = await res.json();
 
-        // Safety check: Did the backend return an error?
         if (!res.ok || data.error) {
             throw new Error(data.error || `Server returned HTTP ${res.status}`);
         }
@@ -146,7 +149,7 @@ async function loadForumData() {
             `;
         }).join('');
         
-        topicsContainer.innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52;">No topics yet.</p>';
+        topicsContainer.innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52; font-family: \'Cinzel\', serif; font-size: 1.2rem;">No topics yet. Be the first to start a discussion!</p>';
 
         // RENDER TESTIMONIES
         const testimoniesHtml = testimoniesArray.map(testimony => {
@@ -169,12 +172,11 @@ async function loadForumData() {
             `;
         }).join('');
         
-        testimoniesContainer.innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center;">Be the first to share a testimony!</p>';
+        testimoniesContainer.innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center; font-family: \'Cinzel\', serif; font-size: 1.2rem;">Be the first to share a testimony!</p>';
 
     } catch (err) {
         clearTimeout(wakeUpTimeout);
         console.error("Error loading forum data:", err);
-        // Display the EXACT error on the screen so we can fix it!
         topicsContainer.innerHTML = `
             <div style="background: rgba(255,0,0,0.1); border: 1px solid red; padding: 20px; border-radius: 8px; text-align: center;">
                 <h3 style="color: #ff4d4d; margin-bottom: 10px;">Connection Error</h3>
@@ -185,17 +187,18 @@ async function loadForumData() {
 
 // 2. Submit Handlers
 window.submitTopic = async function() {
-    if (!rawUser) return alert("Please login or continue as a guest to post.");
+    if (!activeUser) return alert("Please login or continue as a guest to post.");
     const title = document.getElementById("new-topic-title").value.trim();
     if (!title) return alert("Topic title cannot be empty.");
 
     const btn = document.querySelector("#new-topic-title").nextElementSibling;
+    const originalText = btn.innerHTML;
     btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Posting...";
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/add-topic`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, author_name: currentUser, author_type: currentAuthorType })
+            body: JSON.stringify({ title, author_name: forumUser, author_type: forumAuthorType })
         });
         
         const data = await res.json();
@@ -206,19 +209,19 @@ window.submitTopic = async function() {
     } catch (err) {
         alert("Error posting topic: " + err.message);
     } finally {
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Topic';
+        btn.innerHTML = originalText;
     }
 }
 
 window.submitResponse = async function(topicId) {
-    if (!rawUser) return alert("Please login or continue as a guest to post.");
+    if (!activeUser) return alert("Please login or continue as a guest to post.");
     const content = document.getElementById(`res-text-${topicId}`).value.trim();
     if (!content) return alert("Response cannot be empty.");
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/add-response`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic_id: topicId, author_name: currentUser, author_type: currentAuthorType, content })
+            body: JSON.stringify({ topic_id: topicId, author_name: forumUser, author_type: forumAuthorType, content })
         });
         if (!res.ok) throw new Error("Failed to post");
         loadForumData(); 
@@ -228,14 +231,14 @@ window.submitResponse = async function(topicId) {
 }
 
 window.submitComment = async function(responseId) {
-    if (!rawUser) return alert("Please login to comment.");
+    if (!activeUser) return alert("Please login to comment.");
     const content = document.getElementById(`text-${responseId}`).value.trim();
     if (!content) return;
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/add-comment`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ response_id: responseId, author_name: currentUser, author_type: currentAuthorType, content })
+            body: JSON.stringify({ response_id: responseId, author_name: forumUser, author_type: forumAuthorType, content })
         });
         if (!res.ok) throw new Error("Failed to post comment");
         loadForumData();
@@ -245,14 +248,14 @@ window.submitComment = async function(responseId) {
 }
 
 window.submitTestimony = async function() {
-    if (!rawUser) return alert("Please login to share your testimony.");
+    if (!activeUser) return alert("Please login to share your testimony.");
     const content = document.getElementById("testimony-text").value.trim();
     if (!content) return;
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/add-testimony`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ author_name: currentUser, author_type: currentAuthorType, content })
+            body: JSON.stringify({ author_name: forumUser, author_type: forumAuthorType, content })
         });
         if (!res.ok) throw new Error("Failed to post testimony");
         document.getElementById("testimony-text").value = "";
