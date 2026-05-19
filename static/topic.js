@@ -3,23 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
     loadForumData();
 });
 
-/* NOTE: We do NOT declare BACKEND_URL, normalUser, or guestUser here 
-  because they are already declared globally in script.js! 
-  We will just safely read them.
-*/
+const BACKEND_URL = "https://jesusbackend.onrender.com";
 
-// Identify the user safely without re-declaring global constants
-const loggedInUser = localStorage.getItem("jct_logged_in_user");
-const guestUserLocal = localStorage.getItem("jct_guest_user");
-const activeUser = loggedInUser || guestUserLocal;
+// Determine user identity
+const normalUser = localStorage.getItem("jct_logged_in_user");
+const guestUser = localStorage.getItem("jct_guest_user");
+const rawUser = normalUser || guestUser;
 
-// SET ADMIN LOGIC: If AaronNg123 logs in, make him the Admin!
-let forumUser = activeUser;
-let forumAuthorType = loggedInUser ? 'user' : 'guest';
+// SET ADMIN LOGIC
+let currentUser = rawUser;
+let currentAuthorType = normalUser ? 'user' : 'guest';
 
-if (activeUser === 'AaronNg123') {
-    forumUser = 'Admin / Owner';
-    forumAuthorType = 'admin';
+if (rawUser === 'AaronNg123') {
+    currentUser = 'Admin / Owner';
+    currentAuthorType = 'admin';
 }
 
 // Helper: Time Ago Formatter
@@ -38,6 +35,13 @@ function timeAgo(dateString) {
     interval = seconds / 60;
     if (interval > 1) return Math.floor(interval) + " minutes ago";
     return Math.floor(seconds) + " seconds ago";
+}
+
+// Helper: Format text to preserve line breaks from textareas
+function formatText(text) {
+    if (!text) return "";
+    // Replaces all "Enter" keystrokes with HTML line breaks so paragraphs stay intact!
+    return text.replace(/\n/g, '<br>');
 }
 
 // Helper: Toggle reply textareas
@@ -61,12 +65,12 @@ async function loadForumData() {
     }, 3000);
 
     try {
-        // BACKEND_URL is pulled from script.js automatically
         const res = await fetch(`${BACKEND_URL}/api/forum`);
         clearTimeout(wakeUpTimeout); 
 
         const data = await res.json();
 
+        // Safety check: Did the backend return an error?
         if (!res.ok || data.error) {
             throw new Error(data.error || `Server returned HTTP ${res.status}`);
         }
@@ -92,7 +96,7 @@ async function loadForumData() {
                                     <span class="post-time">${timeAgo(comment.created_at)}</span>
                                 </div>
                             </div>
-                            <div class="post-content"><p>${comment.content}</p></div>
+                            <div class="post-content"><p>${formatText(comment.content)}</p></div>
                             <div class="post-actions">
                                 <button class="action-btn" onclick="interact('comments', '${comment.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${comment.likes_count || 0}</span></button>
                                 <button class="action-btn" onclick="interact('comments', '${comment.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${comment.favorites_count || 0}</span></button>
@@ -110,7 +114,7 @@ async function loadForumData() {
                                 <span class="post-time">${timeAgo(response.created_at)}</span>
                             </div>
                         </div>
-                        <div class="post-content"><p>${response.content}</p></div>
+                        <div class="post-content"><p>${formatText(response.content)}</p></div>
                         <div class="post-actions">
                             <button class="action-btn" onclick="interact('responses', '${response.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${response.likes_count || 0}</span></button>
                             <button class="action-btn" onclick="interact('responses', '${response.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${response.favorites_count || 0}</span></button>
@@ -149,7 +153,7 @@ async function loadForumData() {
             `;
         }).join('');
         
-        topicsContainer.innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52; font-family: \'Cinzel\', serif; font-size: 1.2rem;">No topics yet. Be the first to start a discussion!</p>';
+        topicsContainer.innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52;">No topics yet.</p>';
 
         // RENDER TESTIMONIES
         const testimoniesHtml = testimoniesArray.map(testimony => {
@@ -163,7 +167,7 @@ async function loadForumData() {
                         <span class="post-time">${timeAgo(testimony.created_at)}</span>
                     </div>
                 </div>
-                <div class="post-content"><p>${testimony.content}</p></div>
+                <div class="post-content"><p>${formatText(testimony.content)}</p></div>
                 <div class="post-actions">
                     <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${testimony.likes_count || 0}</span></button>
                     <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${testimony.favorites_count || 0}</span></button>
@@ -172,7 +176,7 @@ async function loadForumData() {
             `;
         }).join('');
         
-        testimoniesContainer.innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center; font-family: \'Cinzel\', serif; font-size: 1.2rem;">Be the first to share a testimony!</p>';
+        testimoniesContainer.innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center;">Be the first to share a testimony!</p>';
 
     } catch (err) {
         clearTimeout(wakeUpTimeout);
