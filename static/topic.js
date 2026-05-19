@@ -50,12 +50,33 @@ window.toggleInput = function(id) {
 
 // 1. Fetch & Render All Data
 async function loadForumData() {
+    const topicsContainer = document.getElementById('topics-container');
+    const testimoniesContainer = document.getElementById('testimonies-container');
+
+    // Notify user if Render is taking a while to wake up
+    const wakeUpTimeout = setTimeout(() => {
+        if(topicsContainer.innerHTML.includes('Loading')) {
+            topicsContainer.innerHTML = '<p style="text-align: center; color: #ffd700; font-family: \'Cinzel\', serif; font-size: 1.2rem;"><i class="fas fa-spinner fa-spin"></i> Waking up the server... (this can take up to 50 seconds)</p>';
+        }
+    }, 3000);
+
     try {
         const res = await fetch(`${BACKEND_URL}/api/forum`);
+        clearTimeout(wakeUpTimeout); // Clear the loading message if it responded fast
+
         const data = await res.json();
 
+        // Safety check: Did the backend return an error instead of data?
+        if (!res.ok || data.error) {
+            throw new Error(data.error || "Failed to load database.");
+        }
+
+        // Safety check: Fallback to empty arrays if data is missing to prevent script crashes
+        const topicsArray = data.topics || [];
+        const testimoniesArray = data.testimonies || [];
+
         // RENDER TOPICS & NESTED RESPONSES
-        const topicsHtml = data.topics.map(topic => {
+        const topicsHtml = topicsArray.map(topic => {
             const responsesList = topic.responses || [];
             
             // Map the responses inside this topic
@@ -76,8 +97,8 @@ async function loadForumData() {
                             </div>
                             <div class="post-content"><p>${comment.content}</p></div>
                             <div class="post-actions">
-                                <button class="action-btn" onclick="interact('comments', '${comment.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${comment.likes_count}</span></button>
-                                <button class="action-btn" onclick="interact('comments', '${comment.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${comment.favorites_count}</span></button>
+                                <button class="action-btn" onclick="interact('comments', '${comment.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${comment.likes_count || 0}</span></button>
+                                <button class="action-btn" onclick="interact('comments', '${comment.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${comment.favorites_count || 0}</span></button>
                             </div>
                         </div>
                     </div>
@@ -94,8 +115,8 @@ async function loadForumData() {
                         </div>
                         <div class="post-content"><p>${response.content}</p></div>
                         <div class="post-actions">
-                            <button class="action-btn" onclick="interact('responses', '${response.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${response.likes_count}</span></button>
-                            <button class="action-btn" onclick="interact('responses', '${response.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${response.favorites_count}</span></button>
+                            <button class="action-btn" onclick="interact('responses', '${response.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${response.likes_count || 0}</span></button>
+                            <button class="action-btn" onclick="interact('responses', '${response.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${response.favorites_count || 0}</span></button>
                             <button class="action-btn reply-trigger-btn" onclick="toggleInput('reply-box-${response.id}')"><i class="fas fa-comment-alt"></i> <span class="count">${commentsList.length}</span></button>
                         </div>
                         
@@ -112,7 +133,7 @@ async function loadForumData() {
             return `
                 <div class="topic-container">
                     <div class="topic-header" style="flex-direction: column; align-items: flex-start;">
-                        <span class="post-time" style="color: #a67c52; margin-bottom: 5px;">Posted by <strong style="color:${topic.author_type === 'admin' ? '#ffd700' : '#e6e6e6'}">${topic.author_name}</strong> • ${timeAgo(topic.created_at)}</span>
+                        <span class="post-time" style="color: #a67c52; margin-bottom: 5px;">Posted by <strong style="color:${topic.author_type === 'admin' ? '#ffd700' : '#e6e6e6'}">${topic.author_name || 'Admin / Owner'}</strong> • ${timeAgo(topic.created_at)}</span>
                         <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                             <h2><i class="fas fa-book-open"></i> ${topic.title}</h2>
                             <button class="add-reply-btn main-reply-btn" onclick="toggleInput('response-box-${topic.id}')"><i class="fas fa-plus"></i> Add Response</button>
@@ -131,10 +152,10 @@ async function loadForumData() {
             `;
         }).join('');
         
-        document.getElementById('topics-container').innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52;">No topics yet.</p>';
+        topicsContainer.innerHTML = topicsHtml || '<p style="text-align: center; color: #a67c52;">No topics yet.</p>';
 
         // RENDER TESTIMONIES
-        const testimoniesHtml = data.testimonies.map(testimony => {
+        const testimoniesHtml = testimoniesArray.map(testimony => {
             const isOwner = testimony.author_type === 'admin';
             return `
             <div class="post testimony-post ${isOwner ? 'owner-post' : ''}">
@@ -147,17 +168,19 @@ async function loadForumData() {
                 </div>
                 <div class="post-content"><p>${testimony.content}</p></div>
                 <div class="post-actions">
-                    <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${testimony.likes_count}</span></button>
-                    <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${testimony.favorites_count}</span></button>
+                    <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'likes_count', this)"><i class="fas fa-heart"></i> <span class="count">${testimony.likes_count || 0}</span></button>
+                    <button class="action-btn" onclick="interact('testimonies', '${testimony.id}', 'favorites_count', this)"><i class="fas fa-star"></i> <span class="count">${testimony.favorites_count || 0}</span></button>
                 </div>
             </div>
             `;
         }).join('');
         
-        document.getElementById('testimonies-container').innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center;">Be the first to share a testimony!</p>';
+        testimoniesContainer.innerHTML = testimoniesHtml || '<p style="color:#a67c52; text-align:center;">Be the first to share a testimony!</p>';
 
     } catch (err) {
+        clearTimeout(wakeUpTimeout);
         console.error("Error loading forum data:", err);
+        topicsContainer.innerHTML = `<p style="text-align: center; color: #ff4d4d; font-family: 'Cardo', serif;">Server Error: ${err.message}<br>Please ensure your backend is running and the database tables are created.</p>`;
     }
 }
 
@@ -167,10 +190,14 @@ window.submitTopic = async function() {
     const title = document.getElementById("new-topic-title").value.trim();
     if (!title) return alert("Topic title cannot be empty.");
 
+    // Update UI immediately to show it's working
+    document.getElementById("new-topic-title").value = "Posting...";
+
     await fetch(`${BACKEND_URL}/api/add-topic`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, author_name: currentUser, author_type: currentAuthorType })
     });
+    
     document.getElementById("new-topic-title").value = "";
     loadForumData();
 }
