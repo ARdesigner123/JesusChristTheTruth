@@ -59,80 +59,14 @@
 
     <section class="forum-section">
         
-        <div class="topic-container">
-            <div class="topic-header">
-                <h2><i class="fas fa-book-open"></i> What are the steps to Salvation?</h2>
-                <button class="add-reply-btn main-reply-btn"><i class="fas fa-plus"></i> Add Response</button>
-            </div>
+        <div class="add-testimony-box" style="margin-bottom: 50px;">
+            <h3 style="color:#ffd700; font-family:'Cinzel', serif; margin-bottom: 15px;"><i class="fas fa-plus-circle"></i> Start a New Topic</h3>
+            <input type="text" id="new-topic-title" placeholder="What is your biblical question or topic?" style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #8b5a2b; border-radius: 8px; color: #fff; font-family: 'Cardo', serif; font-size: 1.2rem; padding: 15px; outline: none; margin-bottom: 15px;">
+            <button onclick="submitTopic()" class="submit-testimony-btn"><i class="fas fa-paper-plane"></i> Post Topic</button>
+        </div>
 
-            <div class="comment-thread">
-                <div class="post owner-post">
-                    <div class="post-user-info">
-                        <div class="avatar owner-avatar"><i class="fas fa-crown"></i></div>
-                        <div class="user-details">
-                            <span class="username">Admin / Owner</span>
-                            <span class="post-time">Posted 2 days ago</span>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <p>Salvation is the greatest gift God offers to humanity. It is not earned through our own good works, but is received entirely by grace through faith. Here are the biblical steps, often referred to as the "Romans Road":</p>
-                        <br>
-                        <p><strong>1. Acknowledge our Sin:</strong> "For all have sinned and fall short of the glory of God." (Romans 3:23). We must first realize we need saving.</p>
-                        <p><strong>2. Understand the Consequence:</strong> "For the wages of sin is death, but the gift of God is eternal life in Christ Jesus our Lord." (Romans 6:23).</p>
-                        <p><strong>3. Believe in Christ's Sacrifice:</strong> "But God demonstrates his own love for us in this: While we were still sinners, Christ died for us." (Romans 5:8).</p>
-                        <p><strong>4. Confess and Surrender:</strong> "If you declare with your mouth, 'Jesus is Lord,' and believe in your heart that God raised him from the dead, you will be saved." (Romans 10:9).</p>
-                        <br>
-                        <p><em>Real-Life Example:</em> Imagine you are drowning in the middle of the ocean. No matter how hard you swim, you cannot save yourself; you are exhausted. A rescue helicopter drops a lifeline right to you. The lifeline is Jesus. You don't "earn" the rescue by swimming harder; you simply have to grab the rope and trust the rescuer to pull you up. That is faith!</p>
-                    </div>
-                    <div class="post-actions">
-                        <button class="action-btn like-btn"><i class="fas fa-heart"></i> <span class="count">142</span></button>
-                        <button class="action-btn fav-btn"><i class="fas fa-star"></i> <span class="count">56</span></button>
-                        <button class="action-btn reply-trigger-btn"><i class="fas fa-comment-alt"></i> <span class="count">2</span></button>
-                    </div>
-                </div>
-
-                <div class="replies-container">
-                    
-                    <div class="post user-reply">
-                        <div class="post-user-info">
-                            <div class="avatar"><i class="fas fa-user"></i></div>
-                            <div class="user-details">
-                                <span class="username">FaithWalker99</span>
-                                <span class="post-time">1 day ago</span>
-                            </div>
-                        </div>
-                        <div class="post-content">
-                            <p>Thank you for this! The analogy of the drowning person really put it into perspective for me. I used to think I had to "clean up my act" before God would accept me, but Ephesians 2:8-9 makes it clear it's a gift.</p>
-                        </div>
-                        <div class="post-actions">
-                            <button class="action-btn like-btn"><i class="fas fa-heart"></i> <span class="count">18</span></button>
-                            <button class="action-btn fav-btn"><i class="fas fa-star"></i> <span class="count">3</span></button>
-                            <button class="action-btn reply-trigger-btn"><i class="fas fa-comment-alt"></i> <span class="count">1</span></button>
-                        </div>
-                        
-                        <div class="replies-container">
-                            <div class="post user-reply">
-                                <div class="post-user-info">
-                                    <div class="avatar"><i class="fas fa-user"></i></div>
-                                    <div class="user-details">
-                                        <span class="username">GraceAndTruth</span>
-                                        <span class="post-time">12 hours ago</span>
-                                    </div>
-                                </div>
-                                <div class="post-content">
-                                    <p>Amen! We come to Him just as we are, and His spirit does the cleaning from the inside out.</p>
-                                </div>
-                                <div class="post-actions">
-                                    <button class="action-btn like-btn"><i class="fas fa-heart"></i> <span class="count">7</span></button>
-                                    <button class="action-btn fav-btn"><i class="fas fa-star"></i> <span class="count">0</span></button>
-                                    <button class="action-btn reply-trigger-btn"><i class="fas fa-comment-alt"></i> <span class="count">0</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+        <div id="topics-container">
+            <p style="text-align: center; color: #a67c52; font-family: 'Cinzel', serif; font-size: 1.2rem;">Loading discussions from the database...</p>
         </div>
 
     </section>
@@ -144,31 +78,12 @@
         </div>
 
         <div class="add-testimony-box">
-            <textarea placeholder="Share your testimony here..."></textarea>
-            <button class="submit-testimony-btn"><i class="fas fa-paper-plane"></i> Post Testimony</button>
+            <textarea id="testimony-text" placeholder="Share your testimony here..."></textarea>
+            <button onclick="submitTestimony()" class="submit-testimony-btn"><i class="fas fa-paper-plane"></i> Post Testimony</button>
         </div>
 
-        <div class="testimony-feed">
-            
-            <div class="post testimony-post">
-                <div class="post-user-info">
-                    <div class="avatar"><i class="fas fa-user"></i></div>
-                    <div class="user-details">
-                        <span class="username">JohnDoe_Believer</span>
-                        <span class="post-time">5 hours ago</span>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>For 10 years I struggled with severe anxiety and a feeling of emptiness. I chased success in my career thinking it would fill the void, but it only made it worse. One night, I finally fell to my knees and asked Jesus to take control. The overwhelming peace that washed over me is indescribable. My circumstances didn't change overnight, but my heart did. Christ is truly the Prince of Peace!</p>
-                </div>
-                <div class="post-actions">
-                    <button class="action-btn like-btn"><i class="fas fa-heart"></i> <span class="count">89</span></button>
-                    <button class="action-btn fav-btn"><i class="fas fa-star"></i> <span class="count">12</span></button>
-                    <button class="action-btn reply-trigger-btn"><i class="fas fa-comment-alt"></i> <span class="count">4</span></button>
-                </div>
+        <div class="testimony-feed" id="testimonies-container">
             </div>
-
-        </div>
     </section>
 
     <footer class="footer">
