@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("Topic JS loaded. Fetching data...");
     loadForumData();
 });
 
@@ -9,7 +10,7 @@ const normalUser = localStorage.getItem("jct_logged_in_user");
 const guestUser = localStorage.getItem("jct_guest_user");
 const rawUser = normalUser || guestUser;
 
-// SET ADMIN LOGIC: If AaronNg123 logs in, make him the Admin!
+// SET ADMIN LOGIC
 let currentUser = rawUser;
 let currentAuthorType = normalUser ? 'user' : 'guest';
 
@@ -40,11 +41,7 @@ function timeAgo(dateString) {
 window.toggleInput = function(id) {
     const box = document.getElementById(id);
     if(box) {
-        if (box.style.display === "block") {
-            box.style.display = "none";
-        } else {
-            box.style.display = "block";
-        }
+        box.style.display = (box.style.display === "block") ? "none" : "block";
     }
 }
 
@@ -62,16 +59,15 @@ async function loadForumData() {
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/forum`);
-        clearTimeout(wakeUpTimeout); // Clear the loading message if it responded fast
+        clearTimeout(wakeUpTimeout); 
 
         const data = await res.json();
 
-        // Safety check: Did the backend return an error instead of data?
+        // Safety check: Did the backend return an error?
         if (!res.ok || data.error) {
-            throw new Error(data.error || "Failed to load database.");
+            throw new Error(data.error || `Server returned HTTP ${res.status}`);
         }
 
-        // Safety check: Fallback to empty arrays if data is missing to prevent script crashes
         const topicsArray = data.topics || [];
         const testimoniesArray = data.testimonies || [];
 
@@ -79,12 +75,10 @@ async function loadForumData() {
         const topicsHtml = topicsArray.map(topic => {
             const responsesList = topic.responses || [];
             
-            // Map the responses inside this topic
             const responsesHtml = responsesList.sort((a,b) => new Date(a.created_at) - new Date(b.created_at)).map(response => {
                 const isOwner = response.author_type === 'admin';
                 const commentsList = response.comments || [];
                 
-                // Map the comments inside this response
                 const commentsHtml = commentsList.sort((a,b) => new Date(a.created_at) - new Date(b.created_at)).map(comment => `
                     <div class="replies-container">
                         <div class="post ${comment.author_type === 'admin' ? 'owner-post' : 'user-reply'}">
@@ -180,7 +174,12 @@ async function loadForumData() {
     } catch (err) {
         clearTimeout(wakeUpTimeout);
         console.error("Error loading forum data:", err);
-        topicsContainer.innerHTML = `<p style="text-align: center; color: #ff4d4d; font-family: 'Cardo', serif;">Server Error: ${err.message}<br>Please ensure your backend is running and the database tables are created.</p>`;
+        // Display the EXACT error on the screen so we can fix it!
+        topicsContainer.innerHTML = `
+            <div style="background: rgba(255,0,0,0.1); border: 1px solid red; padding: 20px; border-radius: 8px; text-align: center;">
+                <h3 style="color: #ff4d4d; margin-bottom: 10px;">Connection Error</h3>
+                <p style="color: white; font-family: 'Cardo', serif;">${err.message}</p>
+            </div>`;
     }
 }
 
@@ -190,16 +189,25 @@ window.submitTopic = async function() {
     const title = document.getElementById("new-topic-title").value.trim();
     if (!title) return alert("Topic title cannot be empty.");
 
-    // Update UI immediately to show it's working
-    document.getElementById("new-topic-title").value = "Posting...";
+    const btn = document.querySelector("#new-topic-title").nextElementSibling;
+    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Posting...";
 
-    await fetch(`${BACKEND_URL}/api/add-topic`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, author_name: currentUser, author_type: currentAuthorType })
-    });
-    
-    document.getElementById("new-topic-title").value = "";
-    loadForumData();
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/add-topic`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, author_name: currentUser, author_type: currentAuthorType })
+        });
+        
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        document.getElementById("new-topic-title").value = "";
+        loadForumData();
+    } catch (err) {
+        alert("Error posting topic: " + err.message);
+    } finally {
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Topic';
+    }
 }
 
 window.submitResponse = async function(topicId) {
@@ -207,11 +215,16 @@ window.submitResponse = async function(topicId) {
     const content = document.getElementById(`res-text-${topicId}`).value.trim();
     if (!content) return alert("Response cannot be empty.");
 
-    await fetch(`${BACKEND_URL}/api/add-response`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic_id: topicId, author_name: currentUser, author_type: currentAuthorType, content })
-    });
-    loadForumData(); 
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/add-response`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic_id: topicId, author_name: currentUser, author_type: currentAuthorType, content })
+        });
+        if (!res.ok) throw new Error("Failed to post");
+        loadForumData(); 
+    } catch (err) {
+        alert("Error posting response: " + err.message);
+    }
 }
 
 window.submitComment = async function(responseId) {
@@ -219,11 +232,16 @@ window.submitComment = async function(responseId) {
     const content = document.getElementById(`text-${responseId}`).value.trim();
     if (!content) return;
 
-    await fetch(`${BACKEND_URL}/api/add-comment`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response_id: responseId, author_name: currentUser, author_type: currentAuthorType, content })
-    });
-    loadForumData();
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/add-comment`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ response_id: responseId, author_name: currentUser, author_type: currentAuthorType, content })
+        });
+        if (!res.ok) throw new Error("Failed to post comment");
+        loadForumData();
+    } catch (err) {
+        alert("Error posting comment: " + err.message);
+    }
 }
 
 window.submitTestimony = async function() {
@@ -231,12 +249,17 @@ window.submitTestimony = async function() {
     const content = document.getElementById("testimony-text").value.trim();
     if (!content) return;
 
-    await fetch(`${BACKEND_URL}/api/add-testimony`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ author_name: currentUser, author_type: currentAuthorType, content })
-    });
-    document.getElementById("testimony-text").value = "";
-    loadForumData();
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/add-testimony`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ author_name: currentUser, author_type: currentAuthorType, content })
+        });
+        if (!res.ok) throw new Error("Failed to post testimony");
+        document.getElementById("testimony-text").value = "";
+        loadForumData();
+    } catch (err) {
+        alert("Error posting testimony: " + err.message);
+    }
 }
 
 // 3. Interactions (Likes/Favs)
@@ -245,13 +268,11 @@ window.interact = async function(table, id, column, btnElement) {
     const span = btnElement.querySelector('.count');
     span.textContent = parseInt(span.textContent) + (isActive ? 1 : -1);
     
-    // Add visual pop
     const icon = btnElement.querySelector('i');
     icon.style.transform = "scale(1.4)";
     setTimeout(() => icon.style.transform = "", 200);
 
-    // Send to DB
-    await fetch(`${BACKEND_URL}/api/interact`, {
+    fetch(`${BACKEND_URL}/api/interact`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ table, id, column, increment: isActive })
     });
