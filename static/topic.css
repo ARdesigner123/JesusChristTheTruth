@@ -292,6 +292,88 @@
     cursor: pointer;
 }
 
+/* ================= RICH TEXT EDITOR STYLES ================= */
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(15, 8, 3, 0.95);
+    padding: 10px;
+    border: 1px solid #5c3a21;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.editor-toolbar button {
+    background: #1a0a03;
+    color: #cbb27d;
+    border: 1px solid #5c3a21;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.editor-toolbar button:hover {
+    background: #3b2206;
+    color: #ffd700;
+    border-color: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.editor-toolbar select {
+    background: #1a0a03;
+    color: #cbb27d;
+    border: 1px solid #5c3a21;
+    border-radius: 4px;
+    padding: 5px;
+    font-family: 'Cinzel', serif;
+    outline: none;
+    cursor: pointer;
+}
+
+.rich-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #8b5a2b;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    color: #fff;
+    font-family: 'Cardo', serif;
+    font-size: 1.1rem;
+    padding: 15px;
+    min-height: 120px;
+    outline: none;
+    margin-bottom: 15px;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.rich-input:focus {
+    border-color: #ffd700;
+    box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.1);
+}
+
+/* Custom Placeholder for Divs */
+.rich-input:empty:before {
+    content: attr(data-placeholder);
+    color: #888;
+    font-style: italic;
+    pointer-events: none;
+}
+
+/* Fix bullet point styling inside the editor and posts */
+.rich-input ul, .rich-input ol, .post-content ul, .post-content ol {
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+.rich-input li, .post-content li {
+    margin-bottom: 5px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .topic-header { flex-direction: column; gap: 15px; text-align: center; }
