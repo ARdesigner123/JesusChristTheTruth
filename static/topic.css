@@ -251,6 +251,47 @@
 /* Clear float */
 .add-testimony-box::after { content: ""; display: table; clear: both; }
 
+/* ================= EDIT & DELETE BUTTONS (NEW) ================= */
+.edit-btn:hover { color: #4da6ff; text-shadow: 0 0 10px rgba(77, 166, 255, 0.6); }
+.delete-btn:hover { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
+
+/* Edit Input Boxes */
+.edit-input {
+    width: 100%;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid #4da6ff;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Cardo', serif;
+    font-size: 1.1rem;
+    outline: none;
+    margin-bottom: 10px;
+    min-height: 80px;
+    resize: vertical;
+}
+
+.save-edit-btn {
+    background: linear-gradient(135deg, #4da6ff, #0059b3);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.cancel-edit-btn {
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid #cccccc;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .topic-header { flex-direction: column; gap: 15px; text-align: center; }
