@@ -1,186 +1,8 @@
 /* ================= TOPICS & FORUM LAYOUT ================= */
-.forum-section {
-    max-width: 1000px;
+.forum-section, .testimony-section {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px 60px;
-}
-
-/* Topic Container */
-.topic-container {
-    background: rgba(15, 8, 3, 0.85);
-    border: 1px solid #5c3a21;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    margin-bottom: 50px;
-}
-
-.topic-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid rgba(212, 175, 55, 0.4);
-    padding-bottom: 15px;
-    margin-bottom: 25px;
-}
-
-.topic-header h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.8rem;
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-}
-
-.topic-header h2 i {
-    color: #a67c52;
-    margin-right: 10px;
-}
-
-.add-reply-btn {
-    background: linear-gradient(135deg, #d4af37, #8b5a2b);
-    color: #1a0a03;
-    border: none;
-    padding: 10px 20px;
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-.add-reply-btn:hover {
-    background: linear-gradient(135deg, #ffd700, #a67c52);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-    transform: translateY(-2px);
-}
-
-/* ================= POST STYLING ================= */
-.post {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(166, 124, 82, 0.2);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.post:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(212, 175, 55, 0.4);
-}
-
-/* Owner Post Special Styling */
-.owner-post {
-    border: 1px solid #d4af37;
-    background: rgba(212, 175, 55, 0.05);
-    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
-}
-
-.post-user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.avatar {
-    width: 45px;
-    height: 45px;
-    background: #2b1a03;
-    border: 2px solid #a67c52;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    color: #d4af37;
-}
-
-.owner-avatar {
-    background: linear-gradient(135deg, #8b5a2b, #4b2e05);
-    border-color: #ffd700;
-    color: #ffd700;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-}
-
-.user-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.username {
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: #fffdf5;
-}
-
-.owner-post .username { color: #ffd700; }
-
-.post-time {
-    font-family: 'Cardo', serif;
-    font-size: 0.85rem;
-    color: #a67c52;
-}
-
-.post-content p {
-    font-family: 'Cardo', serif;
-    font-size: 1.1rem;
-    color: #e6e6e6;
-    line-height: 1.7;
-    margin-bottom: 10px;
-}
-
-.post-content strong { color: #ffd700; }
-.post-content em { color: #d4af37; font-style: italic; }
-
-/* ================= ACTION BAR (Likes/Favs) ================= */
-.post-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 15px;
-    border-top: 1px dashed rgba(166, 124, 82, 0.3);
-    padding-top: 12px;
-}
-
-.action-btn {
-    background: transparent;
-    border: none;
-    color: #a67c52;
-    font-size: 1rem;
-    font-family: 'Cinzel', serif;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-}
-
-.action-btn i { font-size: 1.1rem; transition: transform 0.3s cubic-bezier(0.2, 2, 0.4, 1); }
-
-/* Hover Effects */
-.like-btn:hover, .like-btn.active { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
-.like-btn:hover i { transform: scale(1.3); }
-
-.fav-btn:hover, .fav-btn.active { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
-.fav-btn:hover i { transform: scale(1.3) rotate(20deg); }
-
-.reply-trigger-btn:hover { color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
-
-/* ================= NESTED REPLIES ================= */
-.replies-container {
-    margin-top: 15px;
-    margin-left: 40px; /* Indents replies to show threading */
-    border-left: 2px solid rgba(166, 124, 82, 0.3);
-    padding-left: 20px;
-}
-
-/* ================= TESTIMONY SECTION ================= */
-.testimony-section {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 20px 80px;
+    padding: 20px 20px 60px;
 }
 
 .testimony-header {
@@ -202,180 +24,195 @@
     margin-top: 10px;
 }
 
-.add-testimony-box {
-    background: rgba(15, 8, 3, 0.6);
-    border: 1px solid #5c3a21;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 40px;
-}
-
-.add-testimony-box textarea {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid #8b5a2b;
-    border-radius: 8px;
-    color: #fff;
-    font-family: 'Cardo', serif;
-    font-size: 1.1rem;
-    padding: 15px;
-    min-height: 100px;
-    resize: vertical;
-    outline: none;
-    margin-bottom: 15px;
-}
-
-.add-testimony-box textarea:focus {
-    border-color: #ffd700;
-    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
-}
-
-.submit-testimony-btn {
-    background: transparent;
-    color: #d4af37;
-    border: 1px solid #d4af37;
-    padding: 10px 25px;
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    border-radius: 6px;
-    float: right;
-    transition: all 0.3s ease;
-}
-
-.submit-testimony-btn:hover {
-    background: #d4af37;
-    color: #000;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-}
-
-/* Clear float */
-.add-testimony-box::after { content: ""; display: table; clear: both; }
-
-/* ================= EDIT & DELETE BUTTONS (NEW) ================= */
-.edit-btn:hover { color: #4da6ff; text-shadow: 0 0 10px rgba(77, 166, 255, 0.6); }
-.delete-btn:hover { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
-
-/* Edit Input Boxes */
-.edit-input {
-    width: 100%;
-    background: rgba(0,0,0,0.8);
-    border: 1px solid #4da6ff;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: 'Cardo', serif;
-    font-size: 1.1rem;
-    outline: none;
-    margin-bottom: 10px;
-    min-height: 80px;
-    resize: vertical;
-}
-
-.save-edit-btn {
-    background: linear-gradient(135deg, #4da6ff, #0059b3);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-family: 'Cinzel', serif;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.cancel-edit-btn {
-    background: transparent;
-    color: #cccccc;
-    border: 1px solid #cccccc;
-    padding: 8px 15px;
-    border-radius: 5px;
-    font-family: 'Cinzel', serif;
-    cursor: pointer;
-}
-
-/* ================= RICH TEXT EDITOR STYLES ================= */
-.editor-toolbar {
+/* ================= CONTROLS (SEARCH & SORT) ================= */
+.controls-bar {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    background: rgba(15, 8, 3, 0.95);
-    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: rgba(15, 8, 3, 0.7);
+    padding: 15px 20px;
+    border-radius: 12px;
     border: 1px solid #5c3a21;
-    border-bottom: none;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
 }
 
-.editor-toolbar button {
-    background: #1a0a03;
-    color: #cbb27d;
-    border: 1px solid #5c3a21;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: all 0.2s ease;
+.search-wrapper {
+    position: relative;
+    flex-grow: 1;
 }
 
-.editor-toolbar button:hover {
-    background: #3b2206;
+.search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
     color: #ffd700;
-    border-color: #ffd700;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
 }
 
-.editor-toolbar select {
-    background: #1a0a03;
-    color: #cbb27d;
-    border: 1px solid #5c3a21;
-    border-radius: 4px;
-    padding: 5px;
-    font-family: 'Cinzel', serif;
-    outline: none;
-    cursor: pointer;
-}
-
-.rich-input {
+.search-wrapper input {
     width: 100%;
     background: rgba(0, 0, 0, 0.6);
     border: 1px solid #8b5a2b;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     color: #fff;
     font-family: 'Cardo', serif;
     font-size: 1.1rem;
-    padding: 15px;
-    min-height: 120px;
+    padding: 12px 15px 12px 40px;
     outline: none;
-    margin-bottom: 15px;
-    overflow-y: auto;
-    line-height: 1.6;
+    transition: all 0.3s ease;
 }
 
-.rich-input:focus {
+.search-wrapper input:focus {
     border-color: #ffd700;
-    box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
-/* Custom Placeholder for Divs */
-.rich-input:empty:before {
-    content: attr(data-placeholder);
-    color: #888;
-    font-style: italic;
-    pointer-events: none;
+.sort-dropdown {
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffd700;
+    border: 1px solid #8b5a2b;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    outline: none;
+    cursor: pointer;
 }
 
-/* Fix bullet point styling inside the editor and posts */
-.rich-input ul, .rich-input ol, .post-content ul, .post-content ol {
-    margin-left: 25px;
-    margin-bottom: 10px;
+/* ================= HORIZONTAL CAROUSEL FEED ================= */
+.horizontal-feed {
+    display: flex;
+    overflow-x: auto;
+    gap: 30px;
+    padding-bottom: 25px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    align-items: flex-start;
 }
 
-.rich-input li, .post-content li {
-    margin-bottom: 5px;
+/* Custom Horizontal Scrollbar */
+.horizontal-feed::-webkit-scrollbar { height: 12px; }
+.horizontal-feed::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); border-radius: 10px; }
+.horizontal-feed::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; border: 2px solid #000; }
+.horizontal-feed::-webkit-scrollbar-thumb:hover { background: #ffd700; }
+
+/* The Fixed Card Container */
+.horizontal-card {
+    flex: 0 0 80vw; /* Takes up 80% of screen width */
+    max-width: 800px;
+    height: 650px; /* Fixed Height */
+    overflow-y: auto; /* Scroll down to see responses inside */
+    scroll-snap-align: center;
+    background: rgba(15, 8, 3, 0.95);
+    border: 1px solid #5c3a21;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
 }
+
+/* Custom Vertical Scrollbar inside Cards */
+.horizontal-card::-webkit-scrollbar { width: 8px; }
+.horizontal-card::-webkit-scrollbar-track { background: transparent; }
+.horizontal-card::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 4px; }
+
+/* ================= TOPIC STYLING INSIDE CARD ================= */
+.topic-header {
+    border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+.topic-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+.topic-header h2 i { color: #a67c52; margin-right: 10px; }
+
+.add-reply-btn, .submit-testimony-btn {
+    background: linear-gradient(135deg, #d4af37, #8b5a2b);
+    color: #1a0a03;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+.add-reply-btn:hover, .submit-testimony-btn:hover {
+    background: linear-gradient(135deg, #ffd700, #a67c52);
+    transform: translateY(-2px);
+}
+
+/* ================= POST STYLING ================= */
+.post {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(166, 124, 82, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+.post:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(212, 175, 55, 0.4); }
+
+.owner-post {
+    border: 1px solid #d4af37;
+    background: rgba(212, 175, 55, 0.05);
+    box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.post-user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.avatar { width: 45px; height: 45px; background: #2b1a03; border: 2px solid #a67c52; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; color: #d4af37; }
+.owner-avatar { background: linear-gradient(135deg, #8b5a2b, #4b2e05); border-color: #ffd700; color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
+.user-details { display: flex; flex-direction: column; }
+.username { font-family: 'Cinzel', serif; font-weight: bold; font-size: 1.1rem; color: #fffdf5; }
+.owner-post .username { color: #ffd700; }
+.post-time { font-family: 'Cardo', serif; font-size: 0.85rem; color: #a67c52; }
+
+/* ================= ACTION BAR ================= */
+.post-actions {
+    display: flex; justify-content: flex-end; gap: 15px; margin-top: 15px;
+    border-top: 1px dashed rgba(166, 124, 82, 0.3); padding-top: 12px;
+}
+.action-btn { background: transparent; border: none; color: #a67c52; font-size: 1rem; font-family: 'Cinzel', serif; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.3s ease; }
+.action-btn i { font-size: 1.1rem; transition: transform 0.3s cubic-bezier(0.2, 2, 0.4, 1); }
+
+.like-btn:hover, .like-btn.active { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
+.fav-btn:hover, .fav-btn.active { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
+.edit-btn:hover { color: #4da6ff; text-shadow: 0 0 10px rgba(77, 166, 255, 0.6); }
+.delete-btn:hover { color: #ff4d4d; text-shadow: 0 0 10px rgba(255, 77, 77, 0.6); }
+
+/* ================= NESTED REPLIES ================= */
+.replies-container { margin-top: 15px; margin-left: 40px; border-left: 2px solid rgba(166, 124, 82, 0.3); padding-left: 20px; }
+
+/* ================= INPUT BOXES & RICH TEXT ================= */
+.add-testimony-box { background: rgba(15, 8, 3, 0.6); border: 1px solid #5c3a21; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.add-testimony-box::after { content: ""; display: table; clear: both; }
+
+.editor-toolbar { display: flex; flex-wrap: wrap; gap: 8px; background: rgba(15, 8, 3, 0.95); padding: 10px; border: 1px solid #5c3a21; border-bottom: none; border-top-left-radius: 8px; border-top-right-radius: 8px; }
+.editor-toolbar button { background: #1a0a03; color: #cbb27d; border: 1px solid #5c3a21; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 1rem; transition: all 0.2s ease; }
+.editor-toolbar button:hover { background: #3b2206; color: #ffd700; border-color: #ffd700; }
+.editor-toolbar select { background: #1a0a03; color: #cbb27d; border: 1px solid #5c3a21; border-radius: 4px; padding: 5px; font-family: 'Cinzel', serif; outline: none; cursor: pointer; }
+
+.rich-input, .edit-input {
+    width: 100%; background: rgba(0, 0, 0, 0.6); border: 1px solid #8b5a2b; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; color: #fff; font-family: 'Cardo', serif; font-size: 1.1rem; padding: 15px; min-height: 120px; outline: none; margin-bottom: 15px; overflow-y: auto; line-height: 1.6;
+}
+.rich-input:focus, .edit-input:focus { border-color: #ffd700; box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.1); }
+.rich-input:empty:before { content: attr(data-placeholder); color: #888; font-style: italic; pointer-events: none; }
+.rich-input ul, .rich-input ol, .post-content ul, .post-content ol { margin-left: 25px; margin-bottom: 10px; }
+.rich-input li, .post-content li { margin-bottom: 5px; }
+
+.save-edit-btn { background: linear-gradient(135deg, #4da6ff, #0059b3); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-family: 'Cinzel', serif; cursor: pointer; margin-right: 10px; }
+.cancel-edit-btn { background: transparent; color: #cccccc; border: 1px solid #cccccc; padding: 8px 15px; border-radius: 5px; font-family: 'Cinzel', serif; cursor: pointer; }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .topic-header { flex-direction: column; gap: 15px; text-align: center; }
+    .controls-bar { flex-direction: column; }
+    .horizontal-card { flex: 0 0 95vw; padding: 20px; }
     .replies-container { margin-left: 15px; padding-left: 10px; }
 }
