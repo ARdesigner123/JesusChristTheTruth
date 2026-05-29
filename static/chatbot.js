@@ -1,10 +1,14 @@
-const BACKEND_URL = "https://jesusbackend.onrender.com";
-const activeUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user");
+// Renamed variables to avoid crashing with script.js!
+const chatApiUrl = "https://jesusbackend.onrender.com";
+
+const loggedUser = localStorage.getItem("jct_logged_in_user");
+const guestUserLocal = localStorage.getItem("jct_guest_user");
+const chatActiveUser = loggedUser || guestUserLocal;
 
 let currentSessionId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (activeUser) {
+    if (chatActiveUser) {
         loadChatHistory();
     } else {
         document.getElementById("chat-history-list").innerHTML = "<p style='color:#ff4d4d; text-align:center;'>Please log in to save chats.</p>";
@@ -14,36 +18,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // --- SIDEBAR LOGIC ---
 async function loadChatHistory() {
+    const list = document.getElementById("chat-history-list");
     try {
-        const res = await fetch(`${BACKEND_URL}/api/chats/${activeUser}`);
+        const res = await fetch(`${chatApiUrl}/api/chats/${chatActiveUser}`);
+        if (!res.ok) throw new Error("Server error");
+        
         const chats = await res.json();
         
-        const list = document.getElementById("chat-history-list");
         if (chats.length === 0) {
             list.innerHTML = "<p style='color:#a67c52; text-align:center;'>No saved chats yet.</p>";
-            showGreeting();
+            // Only show greeting if the chat box is totally empty
+            if (document.getElementById("chat-box").innerHTML.trim() === "") {
+                showGreeting();
+            }
             return;
         }
 
         list.innerHTML = chats.map(chat => `
-            <div class="history-item ${chat.id === currentSessionId ? 'active' : ''}" onclick="openChat('${chat.id}', '${chat.title}')">
+            <div class="history-item ${chat.id === currentSessionId ? 'active' : ''}" onclick="openChat('${chat.id}', '${chat.title.replace(/'/g, "\\'")}')">
                 <div class="history-title">${chat.title}</div>
                 <div class="history-actions">
                     <i class="fas fa-star ${chat.is_favorite ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${chat.id}', ${!chat.is_favorite})"></i>
-                    <i class="fas fa-edit" onclick="event.stopPropagation(); renameChat('${chat.id}', '${chat.title}')"></i>
+                    <i class="fas fa-edit" onclick="event.stopPropagation(); renameChat('${chat.id}', '${chat.title.replace(/'/g, "\\'")}')"></i>
                     <i class="fas fa-trash" onclick="event.stopPropagation(); deleteChat('${chat.id}')"></i>
                 </div>
             </div>
         `).join('');
 
-        // Automatically open the most recent chat on load
+        // Automatically open the most recent chat on load if none is selected
         if (!currentSessionId && chats.length > 0) {
             openChat(chats[0].id, chats[0].title);
         }
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+        console.error("Chat History Error:", err); 
+        list.innerHTML = `<p style="color:#ff4d4d; text-align:center; font-size:0.9rem;">Server is waking up... Please refresh the page in 30 seconds.</p>`;
+        showGreeting();
+    }
 }
 
-function createNewChat() {
+window.createNewChat = function() {
     currentSessionId = null;
     document.getElementById("current-chat-title").innerText = "New Conversation";
     document.getElementById("chat-box").innerHTML = "";
@@ -52,35 +65,38 @@ function createNewChat() {
     loadChatHistory(); // Removes active highlight
 }
 
-async function openChat(id, title) {
+window.openChat = async function(id, title) {
     currentSessionId = id;
     document.getElementById("current-chat-title").innerText = title;
     document.getElementById("starter-btns").style.display = "none";
     document.getElementById("chat-box").innerHTML = `<p style="text-align:center; color:#a67c52;">Loading messages...</p>`;
-    loadChatHistory(); // Update active highlight
+    loadChatHistory(); // Update active highlight in sidebar
 
     try {
-        const res = await fetch(`${BACKEND_URL}/api/messages/${id}`);
+        const res = await fetch(`${chatApiUrl}/api/messages/${id}`);
         const messages = await res.json();
         
         document.getElementById("chat-box").innerHTML = "";
         messages.forEach(msg => appendMessage(msg.content, msg.sender));
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+        console.error(err); 
+        document.getElementById("chat-box").innerHTML = `<p style="text-align:center; color:#ff4d4d;">Failed to load messages.</p>`;
+    }
 }
 
-async function toggleFavorite(id, isFav) {
-    await fetch(`${BACKEND_URL}/api/chats/${id}`, {
+window.toggleFavorite = async function(id, isFav) {
+    await fetch(`${chatApiUrl}/api/chats/${id}`, {
         method: 'PUT', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ is_favorite: isFav })
     });
     loadChatHistory();
 }
 
-async function renameChat(id, oldTitle) {
+window.renameChat = async function(id, oldTitle) {
     const newTitle = prompt("Enter new chat name:", oldTitle);
     if (!newTitle || newTitle.trim() === "") return;
     
-    await fetch(`${BACKEND_URL}/api/chats/${id}`, {
+    await fetch(`${chatApiUrl}/api/chats/${id}`, {
         method: 'PUT', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ title: newTitle.trim() })
     });
@@ -88,9 +104,9 @@ async function renameChat(id, oldTitle) {
     loadChatHistory();
 }
 
-async function deleteChat(id) {
+window.deleteChat = async function(id) {
     if (!confirm("Delete this conversation?")) return;
-    await fetch(`${BACKEND_URL}/api/chats/${id}`, { method: 'DELETE' });
+    await fetch(`${chatApiUrl}/api/chats/${id}`, { method: 'DELETE' });
     if (currentSessionId === id) createNewChat();
     else loadChatHistory();
 }
@@ -106,11 +122,11 @@ function containsProfanity(text) {
     return false;
 }
 
-function handleEnter(e) {
+window.handleEnter = function(e) {
     if (e.key === "Enter") sendMessage();
 }
 
-function sendStarter(text) {
+window.sendStarter = function(text) {
     document.getElementById("chat-input").value = text;
     sendMessage();
 }
@@ -120,7 +136,7 @@ function showGreeting() {
     appendMessage("Greetings! I am GuideBot. I am here to help you navigate your spiritual journey using the truth of God's Word. How can I assist you today?", "bot");
 }
 
-async function sendMessage() {
+window.sendMessage = async function() {
     const inputField = document.getElementById("chat-input");
     const text = inputField.value.trim();
     if (!text) return;
@@ -130,11 +146,11 @@ async function sendMessage() {
     document.getElementById("starter-btns").style.display = "none";
 
     // 1. Create a session if none exists
-    if (!currentSessionId && activeUser) {
+    if (!currentSessionId && chatActiveUser) {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/chats`, {
+            const res = await fetch(`${chatApiUrl}/api/chats`, {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: activeUser, title: text.substring(0, 25) + "..." })
+                body: JSON.stringify({ username: chatActiveUser, title: text.substring(0, 25) + "..." })
             });
             const session = await res.json();
             currentSessionId = session.id;
@@ -145,7 +161,7 @@ async function sendMessage() {
 
     // 2. Save User Message
     if (currentSessionId) {
-        fetch(`${BACKEND_URL}/api/messages`, {
+        fetch(`${chatApiUrl}/api/messages`, {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ session_id: currentSessionId, sender: 'user', content: text })
         });
@@ -163,7 +179,8 @@ async function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     setTimeout(() => {
-        document.getElementById(typingId).remove();
+        const typingIndicator = document.getElementById(typingId);
+        if(typingIndicator) typingIndicator.remove();
         generateBotResponse(text);
     }, 1200);
 }
@@ -174,7 +191,7 @@ function appendMessage(text, sender) {
     msgDiv.className = `message ${sender}-message`;
 
     if (sender === "bot") {
-        msgDiv.innerHTML = `<img src="static/image/botLogo.png" class="msg-bot-icon"> <div class="msg-bubble">${text}</div>`;
+        msgDiv.innerHTML = `<img src="static/image/botLogo.png" class="msg-bot-icon" alt="Bot"> <div class="msg-bubble">${text}</div>`;
     } else {
         msgDiv.innerHTML = `<div class="msg-bubble">${text}</div>`;
     }
@@ -215,7 +232,7 @@ function generateBotResponse(userInput) {
 
     // Save Bot Message to DB
     if (currentSessionId) {
-        fetch(`${BACKEND_URL}/api/messages`, {
+        fetch(`${chatApiUrl}/api/messages`, {
             method: 'POST', headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ session_id: currentSessionId, sender: 'bot', content: response })
         });
