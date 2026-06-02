@@ -77,9 +77,10 @@ document.addEventListener("mousemove", (e) => {
 const normalUser = localStorage.getItem("jct_logged_in_user");
 const guestUser = localStorage.getItem("jct_guest_user");
 
-// 2. Identify who is playing, and if they are a guest
+// 2. Identify who is playing, and STRICTLY prioritize normal users
 const currentUser = normalUser || guestUser;
-const isGuest = !!guestUser; 
+// CRITICAL FIX: You are only a guest if you have a guest cookie AND you don't have a normal user cookie.
+const isGuest = !normalUser && !!guestUser; 
 
 const BACKEND_URL = "https://jesusbackend.onrender.com";
 let sessionSeconds = 0;

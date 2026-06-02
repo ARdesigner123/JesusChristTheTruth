@@ -241,195 +241,196 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ================= AUTHENTICATION LOGIC =================
-    const BACKEND_URL = "https://jesusbackend.onrender.com"; 
+const BACKEND_URL = "https://jesusbackend.onrender.com"; 
 
-    let isLoginMode = true; 
-    const btnLogin = document.getElementById("btn-login");
-    const btnRegister = document.getElementById("btn-register");
-    const formTitle = document.getElementById("form-title");
-    const submitBtn = document.getElementById("submit-btn");
-    const authForm = document.getElementById("auth-form");
-    const authMessage = document.getElementById("auth-message");
+let isLoginMode = true; 
+const btnLogin = document.getElementById("btn-login");
+const btnRegister = document.getElementById("btn-register");
+const formTitle = document.getElementById("form-title");
+const submitBtn = document.getElementById("submit-btn");
+const authForm = document.getElementById("auth-form");
+const authMessage = document.getElementById("auth-message");
 
-    const userField = document.getElementById("username");
-    const passField = document.getElementById("password");
+const userField = document.getElementById("username");
+const passField = document.getElementById("password");
 
-    btnLogin.addEventListener("click", (e) => {
-        e.preventDefault();
-        isLoginMode = true;
-        btnLogin.classList.add("active");
-        btnRegister.classList.remove("active");
-        formTitle.textContent = "Login to Your Account";
-        submitBtn.textContent = "Login";
-        authMessage.textContent = ""; 
-    });
+btnLogin.addEventListener("click", (e) => {
+    e.preventDefault();
+    isLoginMode = true;
+    btnLogin.classList.add("active");
+    btnRegister.classList.remove("active");
+    formTitle.textContent = "Login to Your Account";
+    submitBtn.textContent = "Login";
+    authMessage.textContent = ""; 
+});
 
-    btnRegister.addEventListener("click", (e) => {
-        e.preventDefault();
-        isLoginMode = false;
-        btnRegister.classList.add("active");
-        btnLogin.classList.remove("active");
-        formTitle.textContent = "Create an Account";
-        submitBtn.textContent = "Register";
-        authMessage.textContent = ""; 
-    });
+btnRegister.addEventListener("click", (e) => {
+    e.preventDefault();
+    isLoginMode = false;
+    btnRegister.classList.add("active");
+    btnLogin.classList.remove("active");
+    formTitle.textContent = "Create an Account";
+    submitBtn.textContent = "Register";
+    authMessage.textContent = ""; 
+});
 
-    function validateUsername(user) {
-        if (user.length < 8 || user.length > 20) return "Username must be 8 to 20 characters.";
-        if (!/^[A-Za-z0-9]/.test(user)) return "Username cannot start with a special character.";
-        if (!/[A-Z]/.test(user)) return "Username must contain at least one uppercase letter.";
-        if (!/[a-z]/.test(user)) return "Username must contain at least one lowercase letter.";
-        if (!/\d/.test(user)) return "Username must contain at least one number.";
-        return null; 
+function validateUsername(user) {
+    if (user.length < 8 || user.length > 20) return "Username must be 8 to 20 characters.";
+    if (!/^[A-Za-z0-9]/.test(user)) return "Username cannot start with a special character.";
+    if (!/[A-Z]/.test(user)) return "Username must contain at least one uppercase letter.";
+    if (!/[a-z]/.test(user)) return "Username must contain at least one lowercase letter.";
+    if (!/\d/.test(user)) return "Username must contain at least one number.";
+    return null; 
+}
+
+function validatePassword(pass) {
+    if (pass.length < 8 || pass.length > 30) return "Password must be 8 to 30 characters.";
+    if (!/^[A-Za-z0-9]/.test(pass)) return "Password cannot start with a special character.";
+    if (!/[A-Z]/.test(pass)) return "Password must contain at least one uppercase letter.";
+    if (!/[a-z]/.test(pass)) return "Password must contain at least one lowercase letter.";
+    if (!/\d/.test(pass)) return "Password must contain at least one number.";
+    if (!/[^a-zA-Z0-9]/.test(pass)) return "Password must contain at least one special character.";
+    return null; 
+}
+
+// Single Form Submission handling Real Backend
+authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    authMessage.classList.remove("success");
+    authMessage.style.color = "#ff4d4d"; 
+    authMessage.textContent = "Processing..."; 
+
+    const username = userField.value.trim();
+    const password = passField.value.trim();
+
+    if (isLoginMode) {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                authMessage.textContent = data.error;
+                return;
+            }
+
+            // CRITICAL FIX: Save normal user and DESTROY any old guest cookies!
+            localStorage.setItem("jct_logged_in_user", username);
+            localStorage.removeItem("jct_guest_user");
+
+            authMessage.classList.add("success");
+            authMessage.style.color = "#4caf50";
+            authMessage.textContent = "Login successful! Redirecting...";
+            setTimeout(() => window.location.href = "main.html", 1000);
+
+        } catch (err) {
+            authMessage.textContent = "Failed to connect to the server.";
+        }
+
+    } else {
+        const userError = validateUsername(username);
+        if (userError) {
+            authMessage.textContent = userError;
+            return;
+        }
+
+        const passError = validatePassword(password);
+        if (passError) {
+            authMessage.textContent = passError;
+            return;
+        }
+
+        // --- FETCH COUNTRY IP BEFORE REGISTERING ---
+        let userCountry = "Unknown";
+        try {
+            const geoRes = await fetch("https://ipapi.co/json/");
+            const geoData = await geoRes.json();
+            if (geoData.country_name) userCountry = geoData.country_name;
+        } catch (err) {
+            console.warn("Could not fetch location data.");
+        }
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, country: userCountry }) 
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                authMessage.textContent = data.error; 
+                return;
+            }
+
+            // CRITICAL FIX: Save normal user and DESTROY any old guest cookies!
+            localStorage.setItem("jct_logged_in_user", username);
+            localStorage.removeItem("jct_guest_user");
+
+            authMessage.classList.add("success");
+            authMessage.style.color = "#4caf50";
+            authMessage.textContent = "Registration successful! Redirecting...";
+            setTimeout(() => window.location.href = "main.html", 1000);
+
+        } catch (err) {
+            authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
+        }
     }
+});
 
-    function validatePassword(pass) {
-        if (pass.length < 8 || pass.length > 30) return "Password must be 8 to 30 characters.";
-        if (!/^[A-Za-z0-9]/.test(pass)) return "Password cannot start with a special character.";
-        if (!/[A-Z]/.test(pass)) return "Password must contain at least one uppercase letter.";
-        if (!/[a-z]/.test(pass)) return "Password must contain at least one lowercase letter.";
-        if (!/\d/.test(pass)) return "Password must contain at least one number.";
-        if (!/[^a-zA-Z0-9]/.test(pass)) return "Password must contain at least one special character.";
-        return null; 
-    }
+// ================= GUEST LOGIN LOGIC =================
+const btnGuest = document.getElementById("btn-guest");
 
-    // Single Form Submission handling Real Backend
-    authForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+if (btnGuest) {
+    btnGuest.addEventListener("click", async () => {
         authMessage.classList.remove("success");
-        authMessage.style.color = "#ff4d4d"; 
-        authMessage.textContent = "Processing..."; 
+        authMessage.style.color = "#ffd700"; 
+        authMessage.textContent = "Entering as Guest..."; 
 
-        const username = userField.value.trim();
-        const password = passField.value.trim();
+        // 1. Get Country
+        let userCountry = "Unknown";
+        try {
+            const geoRes = await fetch("https://ipapi.co/json/");
+            const geoData = await geoRes.json();
+            if (geoData.country_name) userCountry = geoData.country_name;
+        } catch (err) {}
 
-        if (isLoginMode) {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+        // 2. Check if they were already a guest before
+        const savedGuest = localStorage.getItem("jct_guest_user");
 
-                const data = await response.json();
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/guest-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ guestName: savedGuest, country: userCountry }) 
+            });
 
-                if (!response.ok) {
-                    authMessage.textContent = data.error;
-                    return;
-                }
+            const data = await response.json();
 
-                // CRITICAL: Tells the timer script WHO is logged in!
-                localStorage.setItem("jct_logged_in_user", username);
-
-                authMessage.classList.add("success");
-                authMessage.style.color = "#4caf50";
-                authMessage.textContent = "Login successful! Redirecting...";
-                setTimeout(() => window.location.href = "main.html", 1000);
-
-            } catch (err) {
-                authMessage.textContent = "Failed to connect to the server.";
-            }
-
-        } else {
-            const userError = validateUsername(username);
-            if (userError) {
-                authMessage.textContent = userError;
+            if (!response.ok) {
+                authMessage.style.color = "#ff4d4d";
+                authMessage.textContent = data.error; 
                 return;
             }
 
-            const passError = validatePassword(password);
-            if (passError) {
-                authMessage.textContent = passError;
-                return;
-            }
+            // 3. Save guest identity and CLEAR normal user identity to prevent overlap
+            localStorage.setItem("jct_guest_user", data.guestName);
+            localStorage.removeItem("jct_logged_in_user");
 
-            // --- FETCH COUNTRY IP BEFORE REGISTERING ---
-            let userCountry = "Unknown";
-            try {
-                const geoRes = await fetch("https://ipapi.co/json/");
-                const geoData = await geoRes.json();
-                if (geoData.country_name) userCountry = geoData.country_name;
-            } catch (err) {
-                console.warn("Could not fetch location data.");
-            }
+            authMessage.classList.add("success");
+            authMessage.style.color = "#4caf50";
+            authMessage.textContent = `Welcome, ${data.guestName}! Redirecting...`;
+            setTimeout(() => window.location.href = "main.html", 1000);
 
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    // ADDED COUNTRY HERE
-                    body: JSON.stringify({ username, password, country: userCountry }) 
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    authMessage.textContent = data.error; 
-                    return;
-                }
-
-                // CRITICAL: Tells the timer script WHO is logged in!
-                localStorage.setItem("jct_logged_in_user", username);
-
-                authMessage.classList.add("success");
-                authMessage.style.color = "#4caf50";
-                authMessage.textContent = "Registration successful! Redirecting...";
-                setTimeout(() => window.location.href = "main.html", 1000);
-
-            } catch (err) {
-                authMessage.textContent = "Failed to connect to the server. Note: Render free tier can take 50 seconds to wake up.";
-            }
+        } catch (err) {
+            authMessage.style.color = "#ff4d4d";
+            authMessage.textContent = "Failed to connect to the server.";
         }
     });
-
-    // ================= GUEST LOGIN LOGIC =================
-    const btnGuest = document.getElementById("btn-guest");
-    
-    if (btnGuest) {
-        btnGuest.addEventListener("click", async () => {
-            authMessage.classList.remove("success");
-            authMessage.style.color = "#ffd700"; 
-            authMessage.textContent = "Entering as Guest..."; 
-
-            // 1. Get Country
-            let userCountry = "Unknown";
-            try {
-                const geoRes = await fetch("https://ipapi.co/json/");
-                const geoData = await geoRes.json();
-                if (geoData.country_name) userCountry = geoData.country_name;
-            } catch (err) { }
-
-            // 2. Check if they were already a guest before
-            const savedGuest = localStorage.getItem("jct_guest_user");
-
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/guest-login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ guestName: savedGuest, country: userCountry }) 
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    authMessage.style.color = "#ff4d4d";
-                    authMessage.textContent = data.error; 
-                    return;
-                }
-
-                // 3. Save guest identity and CLEAR normal user identity to prevent overlap
-                localStorage.setItem("jct_guest_user", data.guestName);
-                localStorage.removeItem("jct_logged_in_user");
-
-                authMessage.classList.add("success");
-                authMessage.style.color = "#4caf50";
-                authMessage.textContent = `Welcome, ${data.guestName}! Redirecting...`;
-                setTimeout(() => window.location.href = "main.html", 1000);
-
-            } catch (err) {
-                authMessage.style.color = "#ff4d4d";
-                authMessage.textContent = "Failed to connect to the server.";
-            }
-        });
-    }
+}
 });
