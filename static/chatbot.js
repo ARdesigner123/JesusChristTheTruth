@@ -3,10 +3,12 @@ window.chatApiEndpoint = "https://jesusbackend.onrender.com";
 window.activeChatUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user");
 window.currentChatSession = null;
 
+// Track clicked starter buttons
+window.clickedStarters = [];
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("GuideBot Initialized safely.");
     if (window.activeChatUser) {
-        // Pass 'true' to auto-open the latest chat only when the page first loads
         window.loadChatHistory(true);
     } else {
         document.getElementById("chat-history-list").innerHTML = "<p style='color:#ff4d4d; text-align:center;'>Please log in to save chats.</p>";
@@ -51,7 +53,6 @@ window.loadChatHistory = async function(autoOpen = false) {
             </div>
         `).join('');
 
-        // Only auto-open if autoOpen is true (e.g. on page load or after a deletion)
         if (autoOpen && !window.currentChatSession && chats.length > 0) {
             window.openChat(chats[0].id, chats[0].title);
         }
@@ -73,8 +74,6 @@ window.createNewChat = function() {
     // Reset starter buttons when creating a new chat
     window.clickedStarters = [];
     document.getElementById("starter-btns").style.display = "flex";
-    const buttons = document.querySelectorAll(".starter-btn");
-    buttons.forEach(btn => btn.style.display = "block");
 
     window.showGreeting();
     window.loadChatHistory(false); 
@@ -83,7 +82,6 @@ window.createNewChat = function() {
 window.openChat = async function(id, title) {
     window.currentChatSession = id;
     document.getElementById("current-chat-title").innerText = title;
-    // Hide starter buttons when opening an existing chat
     document.getElementById("starter-btns").style.display = "none";
     document.getElementById("chat-box").innerHTML = `<p style="text-align:center; color:#a67c52;">Loading messages...</p>`;
     
@@ -147,23 +145,23 @@ window.handleEnter = function(e) {
     if (e.key === "Enter") window.sendMessage();
 }
 
-// Updated sendStarter logic
 window.sendStarter = function(buttonElement, text) {
     document.getElementById("chat-input").value = text;
     
-    // Hide the specific button that was clicked
-    buttonElement.style.display = "none";
-    
     // Ensure array exists
     if (!window.clickedStarters) window.clickedStarters = [];
-    window.clickedStarters.push(text);
+    
+    // Track unique clicks. Do NOT hide the individual button yet.
+    if (!window.clickedStarters.includes(text)) {
+        window.clickedStarters.push(text);
+    }
 
     // If all 3 starters have been clicked, hide the entire container
     if (window.clickedStarters.length >= 3) {
         document.getElementById("starter-btns").style.display = "none";
     }
 
-    // Call sendMessage, passing true to indicate it came from a starter button
+    // Send the message
     window.sendMessage(true);
 }
 
@@ -255,12 +253,13 @@ window.generateBotResponse = function(userInput) {
         <strong>What about Judas?</strong><br>
         Judas Iscariot is a tragic figure. He walked with Jesus, saw the miracles, and yet his heart remained hard. For 30 pieces of silver, he betrayed Jesus to the religious leaders (Matthew 26:15). Judas shows us a terrifying reality: You can be physically close to Jesus, go to church, and know the theology, but if you never truly surrender your heart, you are not saved.`;
 
-    // 3. TRUE BELIEVER / REAL CHRISTIAN
-    } else if (text.includes("true believer") || text.includes("real christian") || text.includes("fake christian")) {
-        response = `Going to a church doesn't make you a Christian any more than standing in a garage makes you a car. A true believer is someone who has recognized their sin, surrendered entirely to Jesus Christ, and is indwelt by the Holy Spirit.<br><br>
-        <strong>How do you recognize a true believer? By their fruit.</strong><br>
-        Jesus said in Matthew 7:20, <em>"Thus, by their fruit you will recognize them."</em> A real Christian isn't perfect—they will still stumble—but their life's direction changes. They will display the "Fruit of the Spirit": love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control (Galatians 5:22-23).<br><br>
-        A true believer obeys Jesus not out of fear of Hell, but out of immense love and gratitude. Jesus said, <em>"If you love me, keep my commands." (John 14:15)</em>.`;
+    // 3. TRUE BELIEVER / FAKE CHRISTIAN / EVIL DEEDS
+    } else if (text.includes("true believer") || text.includes("real christian") || text.includes("fake christian") || text.includes("hypocrite") || text.includes("evil people")) {
+        response = `Going to a church doesn't make you a Christian any more than standing in a garage makes you a car.<br><br>
+        <strong>What a Real Christian Does:</strong><br>
+        A true believer recognizes their sin, surrenders entirely to Jesus, and is indwelt by the Holy Spirit. They aren't perfect, but their life's direction changes toward repentance. Jesus said, <em>"By their fruit you will recognize them." (Matthew 7:20)</em>. They display love, joy, peace, patience, and kindness (Galatians 5:22). They forgive others and obey Jesus out of immense love and gratitude.<br><br>
+        <strong>What a Fake Christian or Evil Person Does:</strong><br>
+        Fake Christians (hypocrites) might say the right religious words or do "good deeds" for public attention, but their hearts remain unchanged. Jesus warned in Matthew 7:21, <em>"Not everyone who says to me, 'Lord, Lord,' will enter the kingdom of heaven."</em> Evil people plot deceit, harbor unrepentant hatred, use others for selfish gain, and reject God's authority. God sees the true heart, not just the outward appearance (1 Samuel 16:7).`;
 
     // 4. ONCE SAVED ALWAYS SAVED / LOSING SALVATION
     } else if (text.includes("once saved always saved") || text.includes("lose my salvation") || text.includes("can i lose salvation") || text.includes("falling away")) {
@@ -305,7 +304,7 @@ window.generateBotResponse = function(userInput) {
         • God is perfectly just. Every wrong will eventually be made right at the Final Judgment. Those who prospered in wickedness on earth will face an eternity without God, while those who trusted Him will inherit eternal, unending joy.`;
 
     // 9. TWO MASTERS / DOUBLE STANDARDS / IDOLATRY
-    } else if (text.includes("double standard") || text.includes("two masters") || text.includes("money and god") || text.includes("idol") || text.includes("lukewarm")) {
+    } else if (text.includes("double standard") || text.includes("two masters") || text.includes("double life") || text.includes("money and god") || text.includes("idol") || text.includes("lukewarm")) {
         response = `Living a "double life" or trying to serve God while chasing after the world is a dangerous place to be. Jesus was exceptionally clear in Matthew 6:24: <em>"No one can serve two masters. Either you will hate the one and love the other, or you will be devoted to the one and despise the other. You cannot serve both God and money."</em><br><br>
         Idolatry isn't just bowing to a golden statue; it is anything (money, career, relationships, approval) that we place above God in our hearts.<br><br>
         In Revelation 3:16, Jesus warns the "lukewarm" church that He would rather they be fully cold or fully hot. God gave His entire life for you on the cross, and He desires your whole heart in return, not a divided one!`;
@@ -480,7 +479,19 @@ window.generateBotResponse = function(userInput) {
         <strong>2. Believe:</strong> Believe that Jesus died on the cross to pay the penalty for your sins. (Romans 5:8)<br>
         <strong>3. Surrender:</strong> "If you declare with your mouth, 'Jesus is Lord,' and believe in your heart that God raised him from the dead, you will be saved." (Romans 10:9)`;
 
-    // 35. CLOSER TO GOD / ROUTINE
+    // 35. MARK OF THE BEAST / END TIMES PROPHECY
+    } else if (text.includes("mark of the beast") || text.includes("end time") || text.includes("prophecy") || text.includes("revelation") || text.includes("antichrist") || text.includes("666")) {
+        response = `The <strong>Mark of the Beast</strong> and End Times prophecies are profound topics found primarily in the Book of Revelation.<br><br>
+        Revelation 13 describes a future global leader (the Antichrist) who will demand total worship and require people to take a mark (often associated with the number 666) on their right hand or forehead in order to buy or sell. Taking this mark is not something you can do "by accident"—it is a deliberate, conscious rejection of God and a pledged allegiance to evil.<br><br>
+        <strong>Should Christians be afraid?</strong> Absolutely not! End time prophecy isn't given to scare us, but to prepare us. Jesus promised He will return in glory to defeat evil once and for all, wipe away every tear, and make all things new (Revelation 21). Jesus said, <em>"Therefore keep watch, because you do not know on what day your Lord will come." (Matthew 24:42)</em>. Our job is to live faithfully and share the Gospel today!`;
+
+    // 36. MEANINGFUL BIBLE STORIES
+    } else if (text.includes("meaningful story") || text.includes("bible story") || text.includes("stories in the bible") || text.includes("favorite bible story") || text.includes("parable")) {
+        response = `The Bible is full of incredible, true stories that reveal God's character. Here are two of the most meaningful:<br><br>
+        <strong>1. The Prodigal Son (Luke 15):</strong> A son takes his inheritance early, runs away, and wastes it all on wild living. Broken and starving, he returns home, expecting to be treated as a slave. Instead, his father runs to him, hugs him, and throws a massive party! It beautifully illustrates God's relentless, pursuing grace when we mess up and return to Him.<br><br>
+        <strong>2. David and Goliath (1 Samuel 17):</strong> A young shepherd boy named David faces a massive, heavily armed giant that an entire army was terrified of. David doesn't trust his own strength; he trusts God, saying, <em>"The battle is the Lord's."</em> With one stone, the giant falls. It reminds us that no matter how big our obstacles are, God is infinitely bigger.`;
+
+    // 37. CLOSER TO GOD / ROUTINE
     } else if (text.includes("closer to god") || text.includes("daily routine") || text.includes("healthy follower")) {
         response = `Drawing closer to God is about cultivating a daily relationship. James 4:8 says, <em>"Come near to God and he will come near to you."</em><br><br>
         A healthy daily routine might look like this:<br>
@@ -488,11 +499,11 @@ window.generateBotResponse = function(userInput) {
         • <strong>Throughout the Day:</strong> Talk to God while driving, cooking, or working. Include Him in your normal day.<br>
         • <strong>Weekly:</strong> Gather with a local, Bible-believing church community for growth and accountability.`;
 
-    // 36. GREETINGS
+    // 38. GREETINGS
     } else if (text.includes("hello") || text.includes("hi ") || text === "hi" || text.includes("hey")) {
         response = `Hello there! Peace be with you. How can I assist you with your spiritual questions or biblical studies today?`;
         
-    // 37. FUNCTIONAL FALLBACK
+    // 39. FUNCTIONAL FALLBACK
     } else {
         response = `That is a very deep and meaningful question. <br><br>
         In times of uncertainty or when seeking answers, Proverbs 3:5-6 reminds us: <em>"Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight."</em><br><br>
