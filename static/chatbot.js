@@ -54,7 +54,7 @@ window.loadChatHistory = async function(autoOpen = false) {
             </div>
         `).join('');
 
-        // Only auto-open if autoOpen is true (e.g. on page load or after a deletion)
+        // Only auto-open if autoOpen is true
         if (autoOpen && !window.currentChatSession && chats.length > 0) {
             window.openChat(chats[0].id, chats[0].title);
         }
@@ -76,6 +76,8 @@ window.createNewChat = function() {
     // Reset starter buttons when creating a new chat
     window.clickedStarters = [];
     document.getElementById("starter-btns").style.display = "flex";
+    const buttons = document.querySelectorAll(".starter-btn");
+    buttons.forEach(btn => btn.style.display = "block");
 
     window.showGreeting();
     window.loadChatHistory(false); 
@@ -148,25 +150,32 @@ window.handleEnter = function(e) {
     if (e.key === "Enter") window.sendMessage();
 }
 
-// FIXED: Now properly handles the single text string from your HTML
+// FIXED: Now properly handles the single text string and finds the button to hide it!
 window.sendStarter = function(text) {
-    // 1. Put the text into the input field
     document.getElementById("chat-input").value = text;
     
-    // 2. Ensure array exists
+    // Find the specific button that was clicked by matching its text, and hide it
+    const buttons = document.querySelectorAll(".starter-btn");
+    buttons.forEach(btn => {
+        if (btn.innerText === text) {
+            btn.style.display = "none";
+        }
+    });
+    
+    // Ensure array exists
     if (!window.clickedStarters) window.clickedStarters = [];
     
-    // 3. Track unique clicks without hiding the individual button
+    // Track unique clicks
     if (!window.clickedStarters.includes(text)) {
         window.clickedStarters.push(text);
     }
 
-    // 4. If all 3 starters have been clicked, hide the entire container
+    // If all 3 starters have been clicked, hide the entire container
     if (window.clickedStarters.length >= 3) {
         document.getElementById("starter-btns").style.display = "none";
     }
 
-    // 5. Send the message
+    // Send the message
     window.sendMessage(true);
 }
 
