@@ -9,6 +9,7 @@ window.clickedStarters = [];
 document.addEventListener("DOMContentLoaded", () => {
     console.log("GuideBot Initialized safely.");
     if (window.activeChatUser) {
+        // Pass 'true' to auto-open the latest chat only when the page first loads
         window.loadChatHistory(true);
     } else {
         document.getElementById("chat-history-list").innerHTML = "<p style='color:#ff4d4d; text-align:center;'>Please log in to save chats.</p>";
@@ -53,6 +54,7 @@ window.loadChatHistory = async function(autoOpen = false) {
             </div>
         `).join('');
 
+        // Only auto-open if autoOpen is true (e.g. on page load or after a deletion)
         if (autoOpen && !window.currentChatSession && chats.length > 0) {
             window.openChat(chats[0].id, chats[0].title);
         }
@@ -82,6 +84,7 @@ window.createNewChat = function() {
 window.openChat = async function(id, title) {
     window.currentChatSession = id;
     document.getElementById("current-chat-title").innerText = title;
+    // Hide starter buttons when opening an existing chat
     document.getElementById("starter-btns").style.display = "none";
     document.getElementById("chat-box").innerHTML = `<p style="text-align:center; color:#a67c52;">Loading messages...</p>`;
     
@@ -145,23 +148,25 @@ window.handleEnter = function(e) {
     if (e.key === "Enter") window.sendMessage();
 }
 
-window.sendStarter = function(buttonElement, text) {
+// FIXED: Now properly handles the single text string from your HTML
+window.sendStarter = function(text) {
+    // 1. Put the text into the input field
     document.getElementById("chat-input").value = text;
     
-    // Ensure array exists
+    // 2. Ensure array exists
     if (!window.clickedStarters) window.clickedStarters = [];
     
-    // Track unique clicks. Do NOT hide the individual button yet.
+    // 3. Track unique clicks without hiding the individual button
     if (!window.clickedStarters.includes(text)) {
         window.clickedStarters.push(text);
     }
 
-    // If all 3 starters have been clicked, hide the entire container
+    // 4. If all 3 starters have been clicked, hide the entire container
     if (window.clickedStarters.length >= 3) {
         document.getElementById("starter-btns").style.display = "none";
     }
 
-    // Send the message
+    // 5. Send the message
     window.sendMessage(true);
 }
 
