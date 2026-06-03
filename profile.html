@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile - Jesus Christ The Truth</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="static/image/jesusLogo.png" alt="Jesus Logo" class="logo">
+            <a href="profile.html" class="nav-profile-icon active-profile" title="My Profile"><i class="fas fa-user-shield"></i></a>
+        </div>
+
+        <ul class="nav-links">
+            <div class="nav-indicator"></div>
+            <li><a href="main.html">Home</a></li>
+            <li><a href="bible.html">Bible</a></li>
+            <li><a href="church.html">Church</a></li>
+            <li><a href="topic.html">Topics</a></li>
+            <li><a href="#">About Me</a></li>
+            <li><a href="#">Games</a></li> <li><a href="#">Store</a></li>
+        </ul>
+
+        <div class="nav-right">
+            <a href="chatbot.html" class="nav-icon" title="Chatbot"><i class="fas fa-robot"></i></a>
+            <a href="index.html" class="nav-icon logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+        
+        <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <section class="profile-section">
+        <div class="profile-container">
+            
+            <h1 class="main-title" style="font-size: 2.2rem;">Spiritual Profile</h1>
+
+            <div class="profile-tabs">
+                <button class="profile-tab active">Profile</button>
+                <button class="profile-tab">Leaderboard</button>
+            </div>
+
+            <div class="profile-arch-frame">
+                <img src="static/image/defaultAvatar.jpg" alt="Default Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'"> </div>
+            <h2 class="profile-username" id="profile-username">Loading...</h2>
+            <p class="profile-rank-title">Current Rank: <strong style="color: #ffd700;">Seeker</strong></p>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div class="stat-value" id="stat-active-time">0m</div>
+                    <div class="stat-label">Active Time</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-coins" style="color: #ffd700;"></i>
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Holy Power</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-fire" style="color: #ff6600;"></i>
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Daily Streak</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-scroll"></i>
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Quizzes Done</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-shield-alt" style="color: #4da6ff;"></i>
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Quests Done</div>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="rank.html" class="profile-btn"><i class="fas fa-crown"></i> Your Rank</a>
+                <a href="#" class="profile-btn"><i class="fas fa-question-circle"></i> Daily Quiz</a>
+                <a href="#" class="profile-btn"><i class="fas fa-map-marked-alt"></i> Quests</a>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

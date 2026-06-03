@@ -166,6 +166,199 @@ li,
     display: none; /* Hidden on desktop */
 }
 
+/* ================= PROFILE NAVBAR ICON ================= */
+.nav-profile-icon {
+    color: #cbb27d;
+    font-size: 1.8rem;
+    margin-left: 20px;
+    transition: all 0.3s ease;
+    text-shadow: 1px 1px 0 #3b2206;
+}
+
+.nav-profile-icon:hover, .nav-profile-icon.active-profile {
+    color: #ffd700;
+    text-shadow: 0 0 15px gold;
+    transform: scale(1.1);
+}
+
+/* ================= PROFILE LAYOUT ================= */
+.profile-section {
+    padding: 20px 20px 80px;
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(15, 8, 3, 0.9);
+    border: 2px solid #8b5a2b;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 175, 55, 0.1);
+    text-align: center;
+}
+
+/* Tabs */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.4);
+    padding-bottom: 15px;
+}
+
+.profile-tab {
+    background: transparent;
+    border: none;
+    color: #a67c52;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-tab.active, .profile-tab:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.5);
+}
+
+/* Arch Frame Avatar */
+.profile-arch-frame {
+    width: 130px;
+    height: 170px;
+    margin: 0 auto 20px;
+    background: #2b1a03;
+    border: 3px solid #d4af37;
+    border-top-left-radius: 65px;
+    border-top-right-radius: 65px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.profile-arch-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-username {
+    font-size: 2.2rem;
+    color: #fffdf5;
+    font-family: 'Cinzel', serif;
+    text-shadow: 2px 2px 0 #3b2206;
+}
+
+.profile-rank-title {
+    color: #a67c52;
+    font-family: 'Cardo', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid #5c3a21;
+    border-radius: 12px;
+    padding: 20px 10px;
+    transition: all 0.3s ease;
+}
+
+.stat-box:hover {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.stat-box i { font-size: 1.8rem; margin-bottom: 10px; }
+.stat-value { font-size: 1.6rem; color: #fff; font-family: 'Cinzel', serif; margin-bottom: 5px; }
+.stat-label { font-size: 0.9rem; color: #a67c52; font-family: 'Cardo', serif; }
+
+/* Buttons */
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.profile-btn {
+    background: linear-gradient(135deg, #d4af37, #8b5a2b);
+    border: none;
+    color: #1a0a03;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.profile-btn:hover {
+    background: linear-gradient(135deg, #ffd700, #a67c52);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+/* ================= RANK TIMELINE ================= */
+.current-rank-display {
+    background: rgba(0, 229, 255, 0.1);
+    border: 1px solid #00e5ff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+    box-shadow: inset 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.rank-path {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.rank-step {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid #5c3a21;
+    border-radius: 10px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #888;
+    transition: all 0.3s ease;
+}
+
+.rank-step.current {
+    border-color: #00e5ff;
+    color: #fff;
+    background: rgba(0, 229, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0,229,255,0.3);
+}
+
+.rank-step.current .rank-icon { color: #00e5ff; }
+
+.rank-step.locked .rank-info strong { color: #888; }
+.rank-step.locked .rank-icon { color: #555; }
+
+.rank-info strong { font-family: 'Cinzel', serif; font-size: 1.2rem; color: #fffdf5; }
+.rank-info span { font-family: 'Cardo', serif; font-size: 0.9rem; }
+
 /* ================= DROPDOWN (Mobile Menu) ================= */
 .dropdown {
     position: absolute;

@@ -269,6 +269,45 @@ function createParticle() {
     }, duration * 1000);
 }
 
+// ================= PROFILE PAGE LOGIC =================
+const profileUsernameEl = document.getElementById("profile-username");
+
+if (profileUsernameEl) {
+    // 1. Get the current logged-in identity
+    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown Believer";
+    
+    // 2. Set the username on the screen
+    profileUsernameEl.textContent = displayUser;
+
+    // 3. Format active time visually for the stats box
+    const activeTimeEl = document.getElementById("stat-active-time");
+    if (activeTimeEl) {
+        // Just a frontend display trick: If sessionSeconds is high enough, we show it, 
+        // otherwise we will eventually hook this up to a real GET request from the backend.
+        activeTimeEl.textContent = "Updating...";
+        
+        // Fast backend fetch just for profile view
+        const isGuestProfile = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
+        const table = isGuestProfile ? 'guests' : 'users';
+        const col = isGuestProfile ? 'name' : 'username';
+
+        fetch(`https://jesusbackend.onrender.com/api/update-time`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: displayUser, time_added: 0, isGuest: isGuestProfile })
+        })
+        .then(res => res.json())
+        .catch(err => {
+            activeTimeEl.textContent = "? min";
+        });
+        
+        // For now, we will let it display 0m until you build the GET route
+        setTimeout(() => {
+            activeTimeEl.textContent = "Active"; 
+        }, 1000);
+    }
+}
+
 // ================= DIVINE SCROLL REVEAL =================
 const revealElements = () => {
     const observerOptions = {
