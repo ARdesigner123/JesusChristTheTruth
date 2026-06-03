@@ -269,7 +269,7 @@ window.generateBotResponse = function(userInput) {
         Colossians 1:16 states clearly about Jesus: <em>"For in him all things were created: things in heaven and on earth, visible and invisible... all things have been created through him and for him."</em> A created being cannot be the creator of all things.`;
 
     // 4. THE 12 DISCIPLES & JUDAS
-    } else if (text.includes("12 disciple") || text.includes("twelve disciple") || text.includes("apostle") || text.includes("judas")) {
+    } else if (text.includes("12 disciple") || text.includes("twelve disciple") || text.includes("twelve disciples") || text.includes("disciple") || text.includes("disciples") || text.includes("apostle") || text.includes("12 apostle") || text.includes("12 apostles") || text.includes("apostles") || text.includes("judas")) {
         response = `Jesus called twelve ordinary, flawed men to be His closest followers and build His church: Simon Peter, Andrew, James, John, Philip, Bartholomew, Matthew (the tax collector), Thomas, James son of Alphaeus, Thaddaeus, Simon the Zealot, and Judas Iscariot.<br><br>
         These men weren't religious elites; they were fishermen and outcasts. Yet, through the Holy Spirit, they changed the world. Almost all of them (except John) were ultimately martyred for their faith.<br><br>
         <strong>What about Judas?</strong><br>
