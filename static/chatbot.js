@@ -3,9 +3,6 @@ window.chatApiEndpoint = "https://jesusbackend.onrender.com";
 window.activeChatUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user");
 window.currentChatSession = null;
 
-// Track clicked starter buttons
-window.clickedStarters = [];
-
 document.addEventListener("DOMContentLoaded", () => {
     console.log("GuideBot Initialized safely.");
     if (window.activeChatUser) {
@@ -72,13 +69,7 @@ window.createNewChat = function() {
     window.currentChatSession = null;
     document.getElementById("current-chat-title").innerText = "New Conversation";
     document.getElementById("chat-box").innerHTML = "";
-    
-    // Reset starter buttons when creating a new chat
-    window.clickedStarters = [];
     document.getElementById("starter-btns").style.display = "flex";
-    const buttons = document.querySelectorAll(".starter-btn");
-    buttons.forEach(btn => btn.style.display = "block");
-
     window.showGreeting();
     
     window.loadChatHistory(false); 
@@ -87,7 +78,6 @@ window.createNewChat = function() {
 window.openChat = async function(id, title) {
     window.currentChatSession = id;
     document.getElementById("current-chat-title").innerText = title;
-    // Hide starter buttons when opening an existing chat
     document.getElementById("starter-btns").style.display = "none";
     document.getElementById("chat-box").innerHTML = `<p style="text-align:center; color:#a67c52;">Loading messages...</p>`;
     
@@ -151,21 +141,10 @@ window.handleEnter = function(e) {
     if (e.key === "Enter") window.sendMessage();
 }
 
-// Updated sendStarter logic
-window.sendStarter = function(buttonElement, text) {
+window.sendStarter = function(text) {
     document.getElementById("chat-input").value = text;
-    
-    // Hide the specific button that was clicked
-    buttonElement.style.display = "none";
-    window.clickedStarters.push(text);
-
-    // If all 3 starters have been clicked, hide the entire container
-    if (window.clickedStarters.length >= 3) {
-        document.getElementById("starter-btns").style.display = "none";
-    }
-
-    // Call sendMessage, passing true to indicate it came from a starter button
-    window.sendMessage(true);
+    document.getElementById("starter-btns").style.display = "none";
+    window.sendMessage();
 }
 
 window.showGreeting = function() {
@@ -173,19 +152,14 @@ window.showGreeting = function() {
     window.appendMessage("Greetings! I am GuideBot. I am here to help you navigate your spiritual journey using the truth of God's Word. How can I assist you today?", "bot");
 }
 
-// Added isStarter flag
-window.sendMessage = async function(isStarter = false) {
+window.sendMessage = async function() {
     const inputField = document.getElementById("chat-input");
     const text = inputField.value.trim();
     if (!text) return;
 
     window.appendMessage(text, "user");
     inputField.value = "";
-    
-    // If the user types a custom message, completely hide the starter buttons
-    if (!isStarter) {
-        document.getElementById("starter-btns").style.display = "none";
-    }
+    document.getElementById("starter-btns").style.display = "none";
 
     if (!window.currentChatSession && window.activeChatUser) {
         try {
@@ -250,39 +224,21 @@ window.generateBotResponse = function(userInput) {
     if (window.containsProfanity(text)) {
         response = "I am designed to engage in respectful and uplifting spiritual conversations. Let's keep our language honorable. How can I help you with your faith today?";
     
-    // 2. MORMONISM / LATTER-DAY SAINTS (LDS)
-    } else if (text.includes("mormon") || text.includes("latter day saint") || text.includes("lds") || text.includes("book of mormon")) {
-        response = `Mormonism (The Church of Jesus Christ of Latter-day Saints) uses Christian terminology but holds fundamentally different beliefs from historic, biblical Christianity.<br><br>
-        <strong>Key Differences:</strong><br>
-        • <strong>Nature of God:</strong> Historic Christianity teaches that God has always been God. Mormonism teaches that God the Father was once a mortal man on another planet who progressed to become a god.<br>
-        • <strong>Additional Scriptures:</strong> They believe the Bible is incomplete or corrupted, adding the <em>Book of Mormon</em>, <em>Doctrine and Covenants</em>, and <em>Pearl of Great Price</em>.<br>
-        • <strong>Salvation:</strong> They teach salvation requires faith <em>plus</em> works and obedience to LDS ordinances.<br><br>
-        The Apostle Paul warned heavily against adding to the Gospel in Galatians 1:8: <em>"But even if we or an angel from heaven should preach a gospel other than the one we preached to you, let them be under God’s curse."</em>`;
-
-    // 3. JEHOVAH'S WITNESSES
-    } else if (text.includes("jehovah witness") || text.includes("jw") || text.includes("watchtower") || text.includes("new world translation")) {
-        response = `Jehovah's Witnesses have several core doctrines that separate them from biblical Christianity, primarily regarding the identity of Jesus.<br><br>
-        <strong>Key Differences:</strong><br>
-        • <strong>Who is Jesus?</strong> They deny the Trinity and believe Jesus is not God, but rather the Archangel Michael, a created being.<br>
-        • <strong>The Holy Spirit:</strong> They believe the Holy Spirit is just an impersonal "active force," not a Person of the Trinity.<br>
-        • <strong>Altered Bible:</strong> They use their own translation (the New World Translation) which alters verses that point to Jesus' divinity (like John 1:1).<br><br>
-        Colossians 1:16 states clearly about Jesus: <em>"For in him all things were created: things in heaven and on earth, visible and invisible... all things have been created through him and for him."</em> A created being cannot be the creator of all things.`;
-
-    // 4. THE 12 DISCIPLES & JUDAS
-    } else if (text.includes("12 disciple") || text.includes("twelve disciple") || text.includes("twelve disciples") || text.includes("disciple") || text.includes("disciples") || text.includes("apostle") || text.includes("12 apostle") || text.includes("12 apostles") || text.includes("apostles") || text.includes("judas")) {
+    // 2. THE 12 DISCIPLES & JUDAS
+    } else if (text.includes("12 disciple") || text.includes("twelve disciple") || text.includes("disciples") || text.includes("apostle") || text.includes("judas")) {
         response = `Jesus called twelve ordinary, flawed men to be His closest followers and build His church: Simon Peter, Andrew, James, John, Philip, Bartholomew, Matthew (the tax collector), Thomas, James son of Alphaeus, Thaddaeus, Simon the Zealot, and Judas Iscariot.<br><br>
         These men weren't religious elites; they were fishermen and outcasts. Yet, through the Holy Spirit, they changed the world. Almost all of them (except John) were ultimately martyred for their faith.<br><br>
         <strong>What about Judas?</strong><br>
         Judas Iscariot is a tragic figure. He walked with Jesus, saw the miracles, and yet his heart remained hard. For 30 pieces of silver, he betrayed Jesus to the religious leaders (Matthew 26:15). Judas shows us a terrifying reality: You can be physically close to Jesus, go to church, and know the theology, but if you never truly surrender your heart, you are not saved.`;
 
-    // 5. TRUE BELIEVER / REAL CHRISTIAN
+    // 3. TRUE BELIEVER / REAL CHRISTIAN
     } else if (text.includes("true believer") || text.includes("real christian") || text.includes("fake christian")) {
         response = `Going to a church doesn't make you a Christian any more than standing in a garage makes you a car. A true believer is someone who has recognized their sin, surrendered entirely to Jesus Christ, and is indwelt by the Holy Spirit.<br><br>
         <strong>How do you recognize a true believer? By their fruit.</strong><br>
         Jesus said in Matthew 7:20, <em>"Thus, by their fruit you will recognize them."</em> A real Christian isn't perfect—they will still stumble—but their life's direction changes. They will display the "Fruit of the Spirit": love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control (Galatians 5:22-23).<br><br>
         A true believer obeys Jesus not out of fear of Hell, but out of immense love and gratitude. Jesus said, <em>"If you love me, keep my commands." (John 14:15)</em>.`;
 
-    // 6. BIBLE TRANSLATIONS
+    // 4. BIBLE TRANSLATIONS
     } else if (text.includes("translation") || text.includes("esv") || text.includes("niv") || text.includes("nkjv") || text.includes("kjv")) {
         response = `There are many English Bible translations, and they generally fall into three categories:<br><br>
         1. <strong>Word-for-Word (Formal Equivalence):</strong> Very accurate to the original Hebrew/Greek grammar. Great for deep study. <em>Examples: ESV (English Standard Version), NASB, NKJV.</em><br>
@@ -290,7 +246,7 @@ window.generateBotResponse = function(userInput) {
         3. <strong>Paraphrase:</strong> Very loose translation designed to capture the emotion of the text. <em>Example: The Message.</em><br><br>
         The <strong>NKJV</strong> updates the beautiful poetic language of the classic 1611 King James Version into modern English. The best translation is the one you will actually read daily!`;
 
-    // 7. BIBLE CANONS (Protestant, Catholic, Orthodox)
+    // 5. BIBLE CANONS (Protestant, Catholic, Orthodox)
     } else if (text.includes("protestant bible") || text.includes("catholic bible") || text.includes("orthodox bible") || text.includes("apocrypha")) {
         response = `All three branches of Christianity share the exact same 27 books of the New Testament. The difference is in the Old Testament!<br><br>
         • <strong>Protestant Bible (66 Books):</strong> Uses the 39 books of the Old Testament based on the Hebrew canon recognized by ancient Jews.<br>
@@ -298,7 +254,7 @@ window.generateBotResponse = function(userInput) {
         • <strong>Orthodox Bible (81 Books):</strong> Includes the Catholic books plus a few more historical and poetic texts (like 3 Maccabees and Psalm 151).<br><br>
         Protestants view the extra books as helpful historical reading, but not divinely inspired "God-breathed" Scripture, because Jesus and the Apostles never explicitly quoted them as Scripture.`;
 
-    // 8. DENOMINATIONAL TEACHINGS (Protestant, Catholic, Orthodox)
+    // 6. DENOMINATIONAL TEACHINGS (Protestant, Catholic, Orthodox)
     } else if (text.includes("what do protestant") || text.includes("what do catholic") || text.includes("what do orthodox") || text.includes("catholicism")) {
         response = `Here is a high-level overview of the three major branches of Christianity:<br><br>
         • <strong>Protestantism:</strong> Teaches that Scripture alone (Sola Scriptura) is the ultimate authority, and salvation is by Grace alone through Faith alone (Sola Fide) in Christ. There is no Pope; every believer has direct access to God.<br>
@@ -306,7 +262,7 @@ window.generateBotResponse = function(userInput) {
         • <strong>Eastern Orthodoxy:</strong> Very similar to Catholicism in tradition, but they do not follow the Pope. They focus heavily on the mystery of God, ancient liturgies, and the use of Icons in worship.<br><br>
         While we differ on these points, orthodox believers in all three branches agree on the core Gospel: Jesus is the Son of God who died and rose again.`;
 
-    // 9. FALSE GOSPELS (Prosperity, Modalism)
+    // 7. FALSE GOSPELS (Prosperity, Modalism)
     } else if (text.includes("false gospel") || text.includes("false prophet") || text.includes("prosperity") || text.includes("modalism") || text.includes("cult")) {
         response = `Jesus warned us: <em>"Watch out for false prophets. They come to you in sheep’s clothing, but inwardly they are ferocious wolves." (Matthew 7:15)</em><br><br>
         Here are two dangerous false teachings today:<br>
@@ -314,48 +270,65 @@ window.generateBotResponse = function(userInput) {
         • <strong>Modalism:</strong> A heresy denying the Trinity. It teaches that God is just one person who "switches masks" (sometimes acting as Father, sometimes as Jesus, sometimes as Spirit). The Bible clearly shows all three interacting simultaneously, like at Jesus' baptism.<br><br>
         We must test everything against Scripture (Acts 17:11) to spot the counterfeits!`;
 
-    // 10. FAMOUS INFLUENCERS & PASTORS
+    // 8. FAMOUS INFLUENCERS & PASTORS
     } else if (text.includes("influencer") || text.includes("famous pastor") || text.includes("who are the real christian") || text.includes("apologet") || text.includes("preacher")) {
         response = `There are many wonderful Christian apologists, pastors, and influencers today who defend the faith brilliantly. <br><br>
         People like <strong>Cliffe Knechtle</strong> boldly answer college students' questions, <strong>Mike Winger</strong> does deep, uncompromised biblical theology, and <strong>Frank Turek</strong> shows how science and logic point directly to God.<br><br>
         Historically, preachers like <strong>Charles Spurgeon</strong> or <strong>Billy Graham</strong> reached millions. <br><br>
         However, the Bible reminds us not to put our ultimate faith in human leaders. <em>"It is better to take refuge in the Lord than to trust in humans." (Psalm 118:8)</em>. Always compare what a pastor or influencer says against the Bible. If it aligns with God's Word, listen to it!`;
 
-    // 11. COMPARING RELIGIONS (Why Christianity stands out)
+    // 9. COMPARING RELIGIONS (Why Christianity stands out)
     } else if (text.includes("compare religion") || text.includes("other religions") || text.includes("buddhism") || text.includes("hinduism") || text.includes("which one stands out") || text.includes("all religions")) {
         response = `That is an excellent question. When you look closely at world religions (like Buddhism, Hinduism, or Islam), you will find that almost all of them are spelled with two letters: <strong>D-O</strong>. They are based on what you must <em>do</em> (human effort, karma, five pillars, meditation) to earn your way to God or enlightenment.<br><br>
         Christianity is entirely unique. It is spelled with four letters: <strong>D-O-N-E</strong>. It is not about our flawed human effort reaching up to God; it is about God reaching down to us.<br><br>
         Jesus stepped into our brokenness because we could never climb our way up to Him. Ephesians 2:8-9 reminds us that salvation is a <em>free gift</em> of grace. Jesus said in John 14:6, <em>"I am the way and the truth and the life. No one comes to the Father except through me."</em>`;
 
-    // 12. UNFORGIVABLE SIN / BIGGEST SIN
+    // 10. UNFORGIVABLE SIN / BIGGEST SIN
     } else if (text.includes("unforgivable sin") || text.includes("biggest sin") || text.includes("blasphemy against the holy spirit") || text.includes("can god forgive me")) {
         response = `Many believers worry they have committed the "unforgivable sin" (Blasphemy against the Holy Spirit). Let me give you profound comfort: <strong>If you are worried that you have committed it, you haven't.</strong><br><br>
         The unforgivable sin is not a single bad word, a fleeting angry thought, or a terrible mistake. It is a continuous, hardened, lifelong rejection of the Holy Spirit's conviction. It is looking at the obvious saving work of Jesus Christ and calling it evil until the day you die.<br><br>
         1 John 1:9 says, <em>"If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness."</em> There is no sin you have committed that is greater than the blood Jesus shed on the cross.`;
 
-    // 13. BORN AGAIN
+    // 11. BORN AGAIN
     } else if (text.includes("born again") || text.includes("what does born again mean") || text.includes("nicodemus")) {
         response = `In John 3, Jesus tells a religious leader named Nicodemus, <em>"Very truly I tell you, no one can see the kingdom of God unless they are born again."</em><br><br>
         Being "born again" isn't about physical birth; it is a spiritual resurrection. Before Christ, our spirits are dead in sin. When we surrender to Jesus, the Holy Spirit comes to live inside us, bringing our dead spirits to life!<br><br>
         <em>Real-Life Example:</em> Think of a caterpillar entering a chrysalis and becoming a butterfly. The butterfly isn't just a "better version" of a caterpillar—it is a completely new creation. 2 Corinthians 5:17 says, <em>"Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!"</em>`;
 
-    // 14. HEAVEN & ANIMALS
+    // 12. HEAVEN & ANIMALS
     } else if (text.includes("heaven") && (text.includes("animal") || text.includes("pet") || text.includes("dog") || text.includes("cat"))) {
         response = `Will our pets be in Heaven? The Bible doesn't explicitly mention our personal pets, but it gives us beautiful clues!<br><br>
         In Isaiah 11:6-9, the Bible describes the future restored Earth: <em>"The wolf will live with the lamb, the leopard will lie down with the goat..."</em> Animals are a beautiful part of God's original, perfect creation, and they will be part of the restored heaven and earth.<br><br>
         C.S. Lewis famously suggested that just as humans are made alive through Christ, perhaps beloved pets are resurrected through their relationship with their human masters. Above all, we know Heaven is a place of perfect joy (Revelation 21:4), and God knows exactly what it takes to fulfill that joy!`;
 
-    // 15. HEAVEN (General)
+    // 13. HEAVEN (General)
     } else if (text.includes("heaven") || text.includes("what does heaven look like")) {
         response = `Heaven is not just floating on clouds playing harps—it is a physical, restored reality! <br><br>
         Revelation 21 paints a breathtaking picture of the "New Heavens and New Earth." It describes a city of gold and precious stones, where God Himself dwells among us. The most beautiful promise is in verse 4: <em>"He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away."</em><br><br>
         It will be a place of perfect relationships, meaningful work without exhaustion, exploring the universe, and worshiping our Creator face to face.`;
 
-    // 16. HELL & PUNISHMENT
+    // 14. HELL & PUNISHMENT
     } else if (text.includes("hell") || text.includes("punishment") || text.includes("lake of fire")) {
         response = `Hell is a sobering reality. The Bible describes it as a place of outer darkness, a lake of fire, and ultimate separation from God (2 Thessalonians 1:9).<br><br>
         A common question is: <em>"Why would a loving God send someone to Hell?"</em><br><br>
         The truth is, God doesn't "send" people to Hell out of malice. Hell is the ultimate respecting of human free will. If a person spends their entire life pushing God away and saying, "I don't want You in my life," God will eventually say, "Thy will be done." God is the source of all light, love, and joy. To be completely separated from Him is to be left with absolute darkness. This is exactly why Jesus came—to save us from this fate!`;
+
+    // 15. MORMONISM / LATTER-DAY SAINTS (LDS)
+    } else if (text.includes("mormon") || text.includes("latter day saint") || text.includes("lds") || text.includes("book of mormon")) {
+        response = `Mormonism (The Church of Jesus Christ of Latter-day Saints) uses Christian terminology but holds fundamentally different beliefs from historic Christianity.<br><br>
+        <strong>Key Differences:</strong><br>
+        • <strong>Nature of God:</strong> Christianity teaches God has always been God. Mormonism teaches God the Father was once a mortal man who progressed to become a god.<br>
+        • <strong>Additional Scriptures:</strong> They add the <em>Book of Mormon</em>, believing the Bible is incomplete.<br>
+        • <strong>Salvation:</strong> They teach salvation requires faith <em>plus</em> works and obedience to LDS ordinances.<br><br>
+        Galatians 1:8 warns: <em>"But even if we or an angel from heaven should preach a gospel other than the one we preached to you, let them be under God’s curse."</em>`;
+
+    // 16. JEHOVAH'S WITNESSES
+    } else if (text.includes("jehovah witness") || text.includes("jw") || text.includes("watchtower")) {
+        response = `Jehovah's Witnesses have core doctrines separating them from biblical Christianity, primarily regarding Jesus.<br><br>
+        <strong>Key Differences:</strong><br>
+        • <strong>Who is Jesus?</strong> They deny the Trinity and believe Jesus is the Archangel Michael, a created being.<br>
+        • <strong>Altered Bible:</strong> They use their own translation (the New World Translation) which alters verses pointing to Jesus' divinity.<br><br>
+        Colossians 1:16 says of Jesus: <em>"For in him all things were created... all things have been created through him and for him."</em> A created being cannot be the creator of all things.`;
 
     // 17. COMMUNITY & FRIENDS
     } else if (text.includes("friends") || text.includes("lonely") || text.includes("community") || text.includes("church family")) {
