@@ -277,17 +277,28 @@ if (profileUsernameEl) {
     profileUsernameEl.textContent = displayUser;
 
     const activeTimeEl = document.getElementById("stat-active-time");
+    const holyPowerEl = document.getElementById("stat-holy-power");
     const currentActiveDisplay = document.getElementById("current-active-display");
     const milestoneFill = document.getElementById("milestone-fill");
     const nextTarget = document.getElementById("next-milestone-target");
     const nextReward = document.getElementById("next-milestone-reward");
+    const milestoneContainer = document.querySelector(".milestone-container");
+
+    const isGuestProfile = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
+
+    // Handle Guests Gracefully
+    if (isGuestProfile && milestoneContainer) {
+        milestoneContainer.innerHTML = `
+            <h3 style="color:#ff4d4d; font-family:'Cinzel', serif;">Guests Cannot Earn Holy Power</h3>
+            <p style="color:#a67c52; font-family:'Cardo', serif;">Please register an official account to unlock Holy Power, milestones, and ranks!</p>
+        `;
+        if (holyPowerEl) holyPowerEl.textContent = "0";
+    }
 
     if (activeTimeEl) {
         activeTimeEl.textContent = "Updating...";
         
-        const isGuestProfile = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
-
-        // Ping backend with 0 time just to get the current total_time
+        // Ping backend with 0 time just to fetch the current synced stats
         fetch(`${BACKEND_URL}/api/update-time`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -298,56 +309,27 @@ if (profileUsernameEl) {
             const totalTime = data.total_time || 0;
             activeTimeEl.textContent = totalTime;
             
-            if (currentActiveDisplay) {
-                currentActiveDisplay.textContent = totalTime;
-                calculateMilestone(totalTime);
+            if (!isGuestProfile) {
+                // Update UI safely for normal users
+                if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
+                if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
+                
+                if (nextTarget) nextTarget.textContent = data.next_milestone;
+                if (nextReward) nextReward.innerHTML = `${data.next_reward} Holy Power <i class="fas fa-coins"></i>`;
+                
+                // Animate Progress Bar
+                if (milestoneFill) {
+                    const range = data.next_milestone - data.prev_milestone;
+                    const progress = totalTime - data.prev_milestone;
+                    const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
+                    milestoneFill.style.width = percentage + "%";
+                }
             }
         })
         .catch(err => {
             activeTimeEl.textContent = "?";
-            if(currentActiveDisplay) currentActiveDisplay.textContent = "?";
+            if(currentActiveDisplay && !isGuestProfile) currentActiveDisplay.textContent = "?";
         });
-    }
-
-    // Dynamic Milestone Algorithm
-    function calculateMilestone(currentScore) {
-        // Base milestones & rewards you defined
-        let milestones = [100, 400, 700, 1000, 1600, 2500, 3500, 5000, 8000, 15000, 24000, 40000];
-        let rewards = [5, 15, 30, 50, 70, 100, 140, 180, 300, 500, 750, 1000];
-
-        let m = 0;
-        let r = 0;
-        let prevM = 0;
-        let idx = 0;
-
-        // Loop forward until we find a milestone that is greater than the user's current score
-        while(true) {
-            if (idx < milestones.length) {
-                m = milestones[idx];
-                r = rewards[idx];
-            } else {
-                // If they surpassed 40,000, multiply the previous target and reward by 1.2
-                m = Math.ceil(m * 1.2);
-                r = Math.ceil(r * 1.2);
-            }
-
-            if (m > currentScore) {
-                // We found the next goal! Update UI
-                if(nextTarget) nextTarget.textContent = m;
-                if(nextReward) nextReward.innerHTML = `${r} Holy Power <i class="fas fa-coins"></i>`;
-                
-                // Calculate progress bar percentage
-                const range = m - prevM;
-                const progress = currentScore - prevM;
-                const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
-                
-                if(milestoneFill) milestoneFill.style.width = percentage + "%";
-                break;
-            }
-            // Move to next milestone
-            prevM = m;
-            idx++;
-        }
     }
 }
 
