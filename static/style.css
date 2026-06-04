@@ -159,6 +159,31 @@ li,
     transform: scale(1.1);
 }
 
+/* ================= LIVE USER COUNTER ================= */
+.live-user-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid #4da6ff;
+    box-shadow: inset 0 0 10px rgba(77, 166, 255, 0.2);
+}
+
+.live-user-container i {
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(77, 166, 255, 0.8);
+}
+
+.live-count-badge {
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 0 #000;
+}
+
 /* Menu Icon */
 .menu-icon {
     font-size: 30px;

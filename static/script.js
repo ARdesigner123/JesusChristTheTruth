@@ -116,16 +116,47 @@ function syncTime(isAsync = true) {
     }
 }
 
+// Master function to send heartbeat and get live count
+function sendHeartbeat() {
+    if (!currentUser) return;
+    
+    // 1. Send Ping to tell server we are alive
+    fetch(`${BACKEND_URL}/api/ping`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: currentUser })
+    }).catch(() => {});
+
+    // 2. Fetch the total number of live users
+    fetch(`${BACKEND_URL}/api/live-count`)
+        .then(res => res.json())
+        .then(data => {
+            const liveCountBadge = document.getElementById("live-user-count");
+            if (liveCountBadge) {
+                liveCountBadge.textContent = data.count;
+            }
+        })
+        .catch(() => {});
+}
+
 if (currentUser) {
-    // Tick up every 1 second
+    // Fire immediately upon load
+    sendHeartbeat();
+
+    // Tick up every 1 second for active time
     setInterval(() => {
         sessionSeconds++;
     }, 1000);
 
-    // Background sync every 5 seconds (frequent to prevent data loss)
+    // Background sync active time every 5 seconds
     setInterval(() => {
         syncTime(true);
     }, 5000);
+
+    // NEW: Send heartbeat every 10 seconds to keep user "Live"
+    setInterval(() => {
+        sendHeartbeat();
+    }, 10000);
 
     // Sync if they close the browser tab, refresh, or click a link to another page
     window.addEventListener("beforeunload", () => {

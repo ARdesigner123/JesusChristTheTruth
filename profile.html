@@ -31,11 +31,33 @@
         </ul>
 
         <div class="nav-right">
+            <div class="live-user-container" title="Live Believers Online">
+                <i class="fas fa-users" style="color: #4da6ff;"></i>
+                <span id="live-user-count" class="live-count-badge">1</span>
+            </div>
+            
             <a href="chatbot.html" class="nav-icon" title="Chatbot"><i class="fas fa-robot"></i></a>
             <a href="index.html" class="nav-icon logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
         </div>
         
-        <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
+        <div class="dropdown" id="dropdownMenu">
+            <ul class="mobile-nav-links">
+                <li><a href="main.html" class="active">Home</a></li>
+                <li><a href="bible.html">Bible</a></li>
+                <li><a href="church.html">Church</a></li>
+                <li><a href="topic.html">Topics</a></li>
+                <li><a href="#">About Me</a></li>
+                <li><a href="#">Games</a></li> 
+                <li><a href="#">Store</a></li>
+                <hr class="mobile-divider">
+                <li><a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot</a></li>
+                <li><a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <div class="menu-icon" id="menuIcon">
+            <i class="fas fa-bars"></i>
+        </div>
     </nav>
 
     <section class="profile-section">
