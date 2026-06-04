@@ -273,38 +273,93 @@ function createParticle() {
 const profileUsernameEl = document.getElementById("profile-username");
 
 if (profileUsernameEl) {
-    // 1. Get the current logged-in identity
     const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown Believer";
-    
-    // 2. Set the username on the screen
     profileUsernameEl.textContent = displayUser;
 
-    // 3. Format active time visually for the stats box
     const activeTimeEl = document.getElementById("stat-active-time");
+    const currentActiveDisplay = document.getElementById("current-active-display");
+    const milestoneFill = document.getElementById("milestone-fill");
+    const nextTarget = document.getElementById("next-milestone-target");
+    const nextReward = document.getElementById("next-milestone-reward");
+
     if (activeTimeEl) {
-        // Just a frontend display trick: If sessionSeconds is high enough, we show it, 
-        // otherwise we will eventually hook this up to a real GET request from the backend.
         activeTimeEl.textContent = "Updating...";
         
-        // Fast backend fetch just for profile view
         const isGuestProfile = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
-        const table = isGuestProfile ? 'guests' : 'users';
-        const col = isGuestProfile ? 'name' : 'username';
 
-        fetch(`https://jesusbackend.onrender.com/api/update-time`, {
+        // Ping backend with 0 time just to get the current total_time
+        fetch(`${BACKEND_URL}/api/update-time`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username: displayUser, time_added: 0, isGuest: isGuestProfile })
         })
         .then(res => res.json())
+        .then(data => {
+            const totalTime = data.total_time || 0;
+            activeTimeEl.textContent = totalTime;
+            
+            if (currentActiveDisplay) {
+                currentActiveDisplay.textContent = totalTime;
+                calculateMilestone(totalTime);
+            }
+        })
         .catch(err => {
-            activeTimeEl.textContent = "? min";
+            activeTimeEl.textContent = "?";
+            if(currentActiveDisplay) currentActiveDisplay.textContent = "?";
         });
-        
-        // For now, we will let it display 0m until you build the GET route
-        setTimeout(() => {
-            activeTimeEl.textContent = "Active"; 
-        }, 1000);
+    }
+
+    // Dynamic Milestone Algorithm
+    function calculateMilestone(currentScore) {
+        // Base milestones & rewards you defined
+        let milestones = [100, 400, 700, 1000, 1600, 2500, 3500, 5000, 8000, 15000, 24000, 40000];
+        let rewards = [5, 15, 30, 50, 70, 100, 140, 180, 300, 500, 750, 1000];
+
+        let m = 0;
+        let r = 0;
+        let prevM = 0;
+        let idx = 0;
+
+        // Loop forward until we find a milestone that is greater than the user's current score
+        while(true) {
+            if (idx < milestones.length) {
+                m = milestones[idx];
+                r = rewards[idx];
+            } else {
+                // If they surpassed 40,000, multiply the previous target and reward by 1.2
+                m = Math.ceil(m * 1.2);
+                r = Math.ceil(r * 1.2);
+            }
+
+            if (m > currentScore) {
+                // We found the next goal! Update UI
+                if(nextTarget) nextTarget.textContent = m;
+                if(nextReward) nextReward.innerHTML = `${r} Holy Power <i class="fas fa-coins"></i>`;
+                
+                // Calculate progress bar percentage
+                const range = m - prevM;
+                const progress = currentScore - prevM;
+                const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
+                
+                if(milestoneFill) milestoneFill.style.width = percentage + "%";
+                break;
+            }
+            // Move to next milestone
+            prevM = m;
+            idx++;
+        }
+    }
+}
+
+// Button Placeholders
+window.changeAvatar = function() {
+    alert("Avatar selection is coming soon! You will be able to unlock new avatars with Holy Power.");
+}
+
+window.addFriend = function() {
+    const friend = prompt("Enter the username of the brother/sister you want to add:");
+    if(friend && friend.trim() !== "") {
+        alert("Friend request sent to " + friend + "!");
     }
 }
 

@@ -49,14 +49,35 @@
             </div>
 
             <div class="profile-arch-frame">
-                <img src="static/image/defaultAvatar.png" alt="Default Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'"> </div>
+                <img src="static/image/defaultAvatar.png" alt="Default Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
+            </div>
+            <button class="change-avatar-btn" onclick="changeAvatar()"><i class="fas fa-camera"></i> Change Avatar</button>
+
             <h2 class="profile-username" id="profile-username">Loading...</h2>
             <p class="profile-rank-title">Current Rank: <strong style="color: #ffd700;">Seeker</strong></p>
+
+            <button class="add-friend-btn" onclick="addFriend()"><i class="fas fa-user-plus"></i> Add Friend</button>
+
+            <div class="milestone-container">
+                <h3><i class="fas fa-road" style="color: #cbb27d;"></i> Active Time Milestones</h3>
+                <p class="milestone-subtitle">Current Time: <strong id="current-active-display" style="color:#ffd700; font-size:1.3rem;">0</strong></p>
+                
+                <div class="milestone-progress-wrap">
+                    <div class="milestone-bar-bg">
+                        <div class="milestone-bar-fill" id="milestone-fill" style="width: 0%;"></div>
+                    </div>
+                    <p class="milestone-target-text">
+                        Next Goal: <span id="next-milestone-target">100</span> 
+                        <br>
+                        Reward: <strong id="next-milestone-reward" style="color:#ffd700;">5 Holy Power <i class="fas fa-coins"></i></strong>
+                    </p>
+                </div>
+            </div>
 
             <div class="stats-grid">
                 <div class="stat-box">
                     <i class="fas fa-hourglass-half"></i>
-                    <div class="stat-value" id="stat-active-time">0m</div>
+                    <div class="stat-value" id="stat-active-time">0</div>
                     <div class="stat-label">Active Time</div>
                 </div>
                 <div class="stat-box">
