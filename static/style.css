@@ -168,17 +168,30 @@ li,
 
 /* ================= PROFILE NAVBAR ICON ================= */
 .nav-profile-icon {
-    color: #cbb27d;
-    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
     margin-left: 20px;
-    transition: all 0.3s ease;
-    text-shadow: 1px 1px 0 #3b2206;
+    text-decoration: none;
+    outline: none;
 }
 
-.nav-profile-icon:hover, .nav-profile-icon.active-profile {
-    color: #ffd700;
-    text-shadow: 0 0 15px gold;
-    transform: scale(1.1);
+.profile-img-icon {
+    width: 40px; /* Adjust this to match your logo size */
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%; /* Makes the image a perfect circle */
+    border: 2px solid #cbb27d;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth snapping effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Hover and Active Glowing Effect */
+.nav-profile-icon:hover .profile-img-icon, 
+.nav-profile-icon.active-profile .profile-img-icon {
+    border-color: #ffd700;
+    transform: scale(1.15); /* Slightly enlarges the image */
+    box-shadow: 0 0 15px gold, inset 0 0 10px rgba(255, 215, 0, 0.5);
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
 
 /* ================= PROFILE LAYOUT ================= */
