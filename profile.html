@@ -66,68 +66,106 @@
             <h1 class="main-title" style="font-size: 2.2rem;">Spiritual Profile</h1>
 
             <div class="profile-tabs">
-                <button class="profile-tab active">Profile</button>
-                <button class="profile-tab">Leaderboard</button>
+                <button class="profile-tab active" id="tab-profile" onclick="switchView('profile')">Profile</button>
+                <button class="profile-tab" id="tab-leaderboard" onclick="switchView('leaderboard')">Leaderboard</button>
             </div>
 
-            <div class="profile-arch-frame">
-                <img src="static/image/defaultAvatar.png" alt="Default Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
-            </div>
-            <button class="change-avatar-btn" onclick="changeAvatar()"><i class="fas fa-camera"></i> Change Avatar</button>
+            <div id="view-profile">
+                <div class="profile-arch-frame">
+                    <img src="static/image/defaultAvatar.png" alt="Default Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
+                </div>
+                <button class="change-avatar-btn" onclick="changeAvatar()"><i class="fas fa-camera"></i> Change Avatar</button>
 
-            <h2 class="profile-username" id="profile-username">Loading...</h2>
-            <p class="profile-rank-title">Current Rank: <strong style="color: #ffd700;">Seeker</strong></p>
+                <h2 class="profile-username" id="profile-username">Loading...</h2>
+                <p class="profile-rank-title">Current Rank: <strong style="color: #ffd700;">Seeker</strong></p>
 
-            <button class="add-friend-btn" onclick="addFriend()"><i class="fas fa-user-plus"></i> Add Friend</button>
+                <button class="add-friend-btn" onclick="addFriend()"><i class="fas fa-user-plus"></i> Add Friend</button>
 
-            <div class="milestone-container">
-                <h3><i class="fas fa-road" style="color: #cbb27d;"></i> Active Time Milestones</h3>
-                <p class="milestone-subtitle">Current Time: <strong id="current-active-display" style="color:#ffd700; font-size:1.3rem;">0</strong></p>
-                
-                <div class="milestone-progress-wrap">
-                    <div class="milestone-bar-bg">
-                        <div class="milestone-bar-fill" id="milestone-fill" style="width: 0%;"></div>
+                <div class="milestone-container">
+                    <h3><i class="fas fa-road" style="color: #cbb27d;"></i> Active Time Milestones</h3>
+                    <p class="milestone-subtitle">Current Time: <strong id="current-active-display" style="color:#ffd700; font-size:1.3rem;">0</strong></p>
+                    
+                    <div class="milestone-progress-wrap">
+                        <div class="milestone-bar-bg">
+                            <div class="milestone-bar-fill" id="milestone-fill" style="width: 0%;"></div>
+                        </div>
+                        <p class="milestone-target-text">
+                            Next Goal: <span id="next-milestone-target">100</span> <br>
+                            Reward: <strong id="next-milestone-reward" style="color:#ffd700;">5 Holy Power <i class="fas fa-coins"></i></strong>
+                        </p>
                     </div>
-                    <p class="milestone-target-text">
-                        Next Goal: <span id="next-milestone-target">100</span> 
-                        <br>
-                        Reward: <strong id="next-milestone-reward" style="color:#ffd700;">5 Holy Power <i class="fas fa-coins"></i></strong>
-                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <i class="fas fa-hourglass-half"></i>
+                        <div class="stat-value" id="stat-active-time">0</div>
+                        <div class="stat-label">Active Time</div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-coins" style="color: #ffd700;"></i>
+                        <div class="stat-value" id="stat-holy-power">0</div>
+                        <div class="stat-label">Holy Power</div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-fire" style="color: #ff6600;"></i>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Daily Streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-scroll"></i>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Quizzes Done</div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-shield-alt" style="color: #4da6ff;"></i>
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Quests Done</div>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <a href="rank.html" class="profile-btn"><i class="fas fa-crown"></i> Your Rank</a>
+                    <a href="#" class="profile-btn"><i class="fas fa-question-circle"></i> Daily Quiz</a>
+                    <a href="#" class="profile-btn"><i class="fas fa-map-marked-alt"></i> Quests</a>
                 </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <i class="fas fa-hourglass-half"></i>
-                    <div class="stat-value" id="stat-active-time">0</div>
-                    <div class="stat-label">Active Time</div>
+            <div id="view-leaderboard" style="display: none;">
+                <h2 style="color: #ffd700; font-family: 'Cinzel', serif; margin-bottom: 5px;">Leaderboard</h2>
+                <p style="color: #a67c52; margin-bottom: 20px; font-family: 'Cardo', serif;">Total Signed-In Believers: <strong id="lb-total-users" style="color: #4da6ff;">0</strong></p>
+                
+                <div class="lb-category-tabs">
+                    <button class="lb-cat-btn active">Time</button>
+                    <button class="lb-cat-btn">Holy Power</button>
+                    <button class="lb-cat-btn">Quizzes</button>
+                    <button class="lb-cat-btn">Quests</button>
                 </div>
-                <div class="stat-box">
-                    <i class="fas fa-coins" style="color: #ffd700;"></i>
-                    <div class="stat-value" id="stat-holy-power">0</div>
-                    <div class="stat-label">Holy Power</div>
-                </div>
-                <div class="stat-box">
-                    <i class="fas fa-fire" style="color: #ff6600;"></i>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Daily Streak</div>
-                </div>
-                <div class="stat-box">
-                    <i class="fas fa-scroll"></i>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Quizzes Done</div>
-                </div>
-                <div class="stat-box">
-                    <i class="fas fa-shield-alt" style="color: #4da6ff;"></i>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Quests Done</div>
-                </div>
-            </div>
 
-            <div class="profile-actions">
-                <a href="rank.html" class="profile-btn"><i class="fas fa-crown"></i> Your Rank</a>
-                <a href="#" class="profile-btn"><i class="fas fa-question-circle"></i> Daily Quiz</a>
-                <a href="#" class="profile-btn"><i class="fas fa-map-marked-alt"></i> Quests</a>
+                <div class="lb-period-tabs">
+                    <button class="lb-period-btn active" onclick="loadLeaderboard('daily')">Daily</button>
+                    <button class="lb-period-btn" onclick="loadLeaderboard('weekly')">Weekly</button>
+                    <button class="lb-period-btn" onclick="loadLeaderboard('monthly')">Monthly</button>
+                    <button class="lb-period-btn" onclick="loadLeaderboard('all_time')">All Time</button>
+                </div>
+
+                <div class="lb-timer-container">
+                    <i class="fas fa-clock"></i> Resets In: <strong id="lb-countdown" style="color: #ff4d4d;">00:00:00</strong>
+                </div>
+
+                <div class="lb-table-container">
+                    <table class="lb-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Username</th>
+                                <th>Active Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lb-tbody">
+                            </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>

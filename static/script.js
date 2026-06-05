@@ -171,6 +171,86 @@ if (currentUser) {
     });
 }
 
+// ================= LEADERBOARD LOGIC =================
+let lbTimerInterval;
+
+window.switchView = function(viewName) {
+    document.getElementById("view-profile").style.display = viewName === 'profile' ? 'block' : 'none';
+    document.getElementById("view-leaderboard").style.display = viewName === 'leaderboard' ? 'block' : 'none';
+    
+    document.getElementById("tab-profile").classList.toggle("active", viewName === 'profile');
+    document.getElementById("tab-leaderboard").classList.toggle("active", viewName === 'leaderboard');
+
+    if (viewName === 'leaderboard') {
+        loadLeaderboard('daily'); // Load daily by default
+    }
+}
+
+window.loadLeaderboard = function(period) {
+    // Highlight correct button
+    document.querySelectorAll('.lb-period-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase().replace(" ", "_") === period);
+    });
+
+    const tbody = document.getElementById("lb-tbody");
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#cbb27d;">Loading Leaders...</td></tr>`;
+
+    fetch(`${BACKEND_URL}/api/leaderboard?period=${period}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("lb-total-users").innerText = data.totalUsers;
+            tbody.innerHTML = "";
+
+            if (data.users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;">No data yet.</td></tr>`;
+                return;
+            }
+
+            data.users.forEach((user, index) => {
+                const rankClass = index === 0 ? "rank-1" : index === 1 ? "rank-2" : index === 2 ? "rank-3" : "rank-other";
+                const rankIcon = index === 0 ? "🏆 1st" : index === 1 ? "🥈 2nd" : index === 2 ? "🥉 3rd" : `${index + 1}th`;
+                
+                const timeScore = user[data.timeCol] || 0;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="${rankClass}">${rankIcon}</td>
+                        <td style="font-weight:bold;">${user.username}</td>
+                        <td style="color:#a67c52;">${timeScore}</td>
+                    </tr>
+                `;
+            });
+
+            // Handle Countdown Timer
+            clearInterval(lbTimerInterval);
+            if (period === 'all_time') {
+                document.getElementById("lb-countdown").innerText = "Never (Lifetime)";
+            } else {
+                let targetTime = 0;
+                if (period === 'daily') targetTime = data.timers.daily_reset;
+                if (period === 'weekly') targetTime = data.timers.weekly_reset;
+                if (period === 'monthly') targetTime = data.timers.monthly_reset;
+
+                lbTimerInterval = setInterval(() => {
+                    const now = Date.now();
+                    const diff = targetTime - now;
+
+                    if (diff <= 0) {
+                        document.getElementById("lb-countdown").innerText = "Resetting...";
+                        clearInterval(lbTimerInterval);
+                        setTimeout(() => loadLeaderboard(period), 3000); // Reload board
+                    } else {
+                        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        const s = Math.floor((diff % (1000 * 60)) / 1000);
+                        document.getElementById("lb-countdown").innerText = 
+                            `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+            }
+        });
+}
+
 // ================= SECURE LOGOUT =================
 const logoutBtns = document.querySelectorAll(".logout-btn");
 

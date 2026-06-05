@@ -301,6 +301,79 @@ li,
     margin-bottom: 30px;
 }
 
+/* ================= LEADERBOARD VIEW ================= */
+.lb-category-tabs, .lb-period-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.lb-cat-btn, .lb-period-btn {
+    background: rgba(0,0,0,0.6);
+    border: 1px solid #5c3a21;
+    color: #cbb27d;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lb-cat-btn.active, .lb-period-btn.active {
+    background: linear-gradient(135deg, #d4af37, #8b5a2b);
+    color: #1a0a03;
+    font-weight: bold;
+    border-color: #ffd700;
+}
+
+.lb-timer-container {
+    background: rgba(15, 8, 3, 0.9);
+    border: 1px dashed #ff4d4d;
+    color: #e6e6e6;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-family: 'Cardo', serif;
+    font-size: 1.1rem;
+    display: inline-block;
+}
+
+.lb-table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #5c3a21;
+    border-radius: 10px;
+}
+
+.lb-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fffdf5;
+    font-family: 'Cardo', serif;
+}
+
+.lb-table th {
+    background: linear-gradient(135deg, #4b2e05, #1a0a03);
+    padding: 12px;
+    font-family: 'Cinzel', serif;
+    color: #ffd700;
+    border-bottom: 2px solid #8b5a2b;
+}
+
+.lb-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(139, 90, 43, 0.3);
+}
+
+/* Rank Colors */
+.rank-1 { color: #ffd700; font-weight: bold; font-size: 1.2rem; text-shadow: 0 0 10px gold; } /* Gold */
+.rank-2 { color: #c0c0c0; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 8px silver; } /* Silver */
+.rank-3 { color: #cd7f32; font-weight: bold; font-size: 1.1rem; text-shadow: 0 0 8px #cd7f32; } /* Bronze */
+.rank-other { color: #8b5a2b; } /* Dull Brown */
+
 /* ================= NEW PROFILE FEATURES ================= */
 .profile-arch-frame {
     margin-bottom: 10px; /* Reduced to bring button closer */
