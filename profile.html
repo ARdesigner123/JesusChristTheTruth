@@ -70,6 +70,7 @@
                 <button class="profile-tab" id="tab-leaderboard" onclick="switchView('leaderboard')">Leaderboard</button>
             </div>
 
+            <!-- ================= VIEW: PROFILE ================= -->
             <div id="view-profile">
                 <div class="profile-arch-frame">
                     <img src="static/image/defaultAvatar.jpg" id="main-profile-avatar" alt="User Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
@@ -79,7 +80,21 @@
                 <h2 class="profile-username" id="profile-username">Loading...</h2>
                 <p class="profile-rank-title">Current Rank: <strong style="color: #ffd700;">Seeker</strong></p>
 
-                <button class="add-friend-btn" onclick="addFriend()"><i class="fas fa-user-plus"></i> Add Friend</button>
+                <button class="add-friend-btn" onclick="openAddFriendModal()"><i class="fas fa-search"></i> Search & Add Friend</button>
+
+                <!-- NEW: Friend Requests List -->
+                <div id="friend-requests-wrapper" class="friend-list-wrapper" style="display: none;">
+                    <h3 class="list-title">Friend Requests</h3>
+                    <div id="friend-requests-list"></div>
+                </div>
+
+                <!-- NEW: Friend List -->
+                <div class="friend-list-wrapper">
+                    <h3 class="list-title">Friend List</h3>
+                    <div id="friend-list">
+                        <p style="color:#a67c52; font-family:'Cardo', serif; text-align:center;">You have no friends yet. Add someone!</p>
+                    </div>
+                </div>
 
                 <div class="milestone-container">
                     <h3><i class="fas fa-road" style="color: #cbb27d;"></i> Active Time Milestones</h3>
@@ -131,6 +146,7 @@
                 </div>
             </div>
 
+            <!-- ================= VIEW: LEADERBOARD ================= -->
             <div id="view-leaderboard" style="display: none;">
                 <h2 style="color: #ffd700; font-family: 'Cinzel', serif; margin-bottom: 5px;">Leaderboard</h2>
                 <p style="color: #a67c52; margin-bottom: 20px; font-family: 'Cardo', serif;">Total Signed-In Believers: <strong id="lb-total-users" style="color: #4da6ff;">0</strong></p>
@@ -173,6 +189,8 @@
         </div>
     </section>
 
+    <!-- ================= MODALS ================= -->
+
     <div id="avatar-modal" class="avatar-modal">
         <div class="avatar-modal-content">
             <i class="fas fa-arrow-left close-avatar-btn" onclick="closeAvatarModal()" title="Go Back"></i>
@@ -193,6 +211,62 @@
                     <button class="profile-btn save-avatar-btn" onclick="saveAvatar()"><i class="fas fa-save"></i> Save Selection</button>
                     <button class="discard-avatar-btn" onclick="discardCustomPhoto()" style="display: none;" id="discard-btn"><i class="fas fa-trash"></i> Discard Custom Photo</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD FRIEND MODAL -->
+    <div id="add-friend-modal" class="custom-popup-modal">
+        <div class="popup-modal-content" style="max-width: 500px;">
+            <i class="fas fa-arrow-left close-modal-icon" onclick="closeModal('add-friend-modal')"></i>
+            <h2 class="popup-title">Add a Friend</h2>
+            
+            <div class="search-bar-wrap">
+                <input type="text" id="friend-search-input" placeholder="Search username...">
+                <button onclick="searchFriend()"><i class="fas fa-search"></i></button>
+            </div>
+            
+            <div id="friend-search-results"></div>
+        </div>
+    </div>
+
+    <!-- UNFRIEND MODAL -->
+    <div id="unfriend-modal" class="custom-popup-modal">
+        <div class="popup-modal-content" style="max-width: 400px; text-align:center;">
+            <h2 class="popup-title" style="color: #ff4d4d;">Unfriend <span id="unfriend-name">User</span>?</h2>
+            <p style="color:#a67c52; font-family:'Cardo'; margin-bottom: 20px;">Are you sure you want to remove them from your friends list?</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button class="danger-btn" onclick="confirmUnfriend()">Unfriend</button>
+                <button class="safe-btn" onclick="closeModal('unfriend-modal')">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT MODAL (WHATSAPP STYLE) -->
+    <div id="chat-modal" class="custom-popup-modal">
+        <div class="popup-modal-content chat-box-content">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <i class="fas fa-arrow-left close-chat-icon" onclick="closeModal('chat-modal')"></i>
+                <img src="" id="chat-friend-avatar" class="chat-avatar-small">
+                <div class="chat-header-info">
+                    <h3 id="chat-friend-name">Friend</h3>
+                    <span>Online</span>
+                </div>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div class="chat-messages-area" id="chat-messages-area">
+                <div class="chat-date-divider">Today</div>
+                <!-- JS will inject messages here -->
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="chat-input-wrapper">
+                <label for="chat-file-upload" class="chat-attach-btn"><i class="fas fa-paperclip"></i></label>
+                <input type="file" id="chat-file-upload" style="display:none;" onchange="handleChatUpload(event)">
+                <input type="text" id="chat-msg-input" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+                <button class="chat-send-btn" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>

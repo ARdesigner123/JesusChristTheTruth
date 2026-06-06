@@ -679,6 +679,282 @@ window.addFriend = function() {
     }
 }
 
+// ================= FRIENDS & CHAT SYSTEM LOGIC =================
+let activeChatFriend = "";
+
+window.openModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if(modal) {
+        modal.classList.remove("closing");
+        modal.style.display = "flex";
+        setTimeout(() => modal.classList.add("show"), 10);
+    }
+}
+
+window.closeModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if(modal) {
+        modal.classList.add("closing");
+        modal.classList.remove("show");
+        setTimeout(() => modal.style.display = "none", 300);
+    }
+}
+
+// Initialize Friends on Profile Load
+function initFriendsSystem() {
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    if (!displayUser || isGuest) return; // Guests can't have friends
+
+    // 1. Fetch Requests
+    fetch(`${BACKEND_URL}/api/friends/requests/${displayUser}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.length > 0) {
+                document.getElementById("friend-requests-wrapper").style.display = "block";
+                const list = document.getElementById("friend-requests-list");
+                list.innerHTML = "";
+                data.forEach(req => {
+                    const avatar = localStorage.getItem('jct_avatar_' + req.sender_username) || "static/image/defaultAvatar.jpg";
+                    list.innerHTML += `
+                        <div class="friend-bar" id="req-${req.sender_username}">
+                            <div class="friend-info">
+                                <img src="${avatar}" class="friend-avatar">
+                                <span class="friend-name">${req.sender_username}</span>
+                            </div>
+                            <div class="friend-actions">
+                                <button class="safe-btn" style="background:#52c41a;" onclick="respondToRequest('${req.sender_username}', 'accept')">Accept</button>
+                                <button class="danger-btn" onclick="respondToRequest('${req.sender_username}', 'decline')">Decline</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        });
+
+    // 2. Fetch Friend List
+    fetch(`${BACKEND_URL}/api/friends/list/${displayUser}`)
+        .then(res => res.json())
+        .then(friends => {
+            const list = document.getElementById("friend-list");
+            if (friends.length > 0) list.innerHTML = "";
+            friends.forEach(friend => {
+                const avatar = localStorage.getItem('jct_avatar_' + friend) || "static/image/defaultAvatar.jpg";
+                addFriendToUI(friend, avatar);
+            });
+        });
+}
+
+// Run init on load
+document.addEventListener("DOMContentLoaded", initFriendsSystem);
+
+window.openAddFriendModal = function() {
+    openModal("add-friend-modal");
+    document.getElementById("friend-search-results").innerHTML = "";
+    document.getElementById("friend-search-input").value = "";
+}
+
+window.searchFriend = async function() {
+    const query = document.getElementById("friend-search-input").value.trim();
+    if(!query) return;
+    
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    const resultsDiv = document.getElementById("friend-search-results");
+    resultsDiv.innerHTML = `<p style="color:#cbb27d; text-align:center;">Searching...</p>`;
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/users/search?q=${query}&current_user=${displayUser}`);
+        const users = await res.json();
+        
+        resultsDiv.innerHTML = "";
+        if (users.length === 0) {
+            resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">No users found.</p>`;
+            return;
+        }
+
+        users.forEach(u => {
+            const avatar = localStorage.getItem('jct_avatar_' + u.username) || "static/image/defaultAvatar.jpg";
+            resultsDiv.innerHTML += `
+                <div class="friend-bar">
+                    <div class="friend-info">
+                        <img src="${avatar}" class="friend-avatar">
+                        <span class="friend-name">${u.username}</span>
+                    </div>
+                    <button class="profile-btn" style="padding: 5px 15px; font-size:0.9rem;" onclick="sendFriendRequest('${u.username}')"><i class="fas fa-user-plus"></i></button>
+                </div>
+            `;
+        });
+    } catch(err) {
+        resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">Search failed.</p>`;
+    }
+}
+
+window.sendFriendRequest = async function(receiver) {
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/friends/request`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ sender: displayUser, receiver })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            alert(`Friend request sent to ${receiver}!`);
+            closeModal("add-friend-modal");
+        } else {
+            alert(data.error);
+        }
+    } catch (err) { alert("Network error."); }
+}
+
+window.respondToRequest = async function(sender, action) {
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    await fetch(`${BACKEND_URL}/api/friends/respond`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ sender, receiver: displayUser, action })
+    });
+
+    document.getElementById(`req-${sender}`).remove();
+    if(document.getElementById("friend-requests-list").innerHTML.trim() === "") {
+        document.getElementById("friend-requests-wrapper").style.display = "none";
+    }
+
+    if (action === 'accept') {
+        const avatar = localStorage.getItem('jct_avatar_' + sender) || "static/image/defaultAvatar.jpg";
+        addFriendToUI(sender, avatar);
+    }
+}
+
+function addFriendToUI(username, avatarSrc) {
+    const list = document.getElementById("friend-list");
+    if(list.innerHTML.includes("no friends yet")) list.innerHTML = "";
+    
+    list.innerHTML += `
+        <div class="friend-bar" id="friend-bar-${username}">
+            <div class="friend-info">
+                <img src="${avatarSrc}" class="friend-avatar">
+                <span class="friend-name">${username}</span>
+            </div>
+            <div class="friend-actions">
+                <i class="fas fa-comment-dots f-icon f-chat" title="Chat" onclick="openChat('${username}', '${avatarSrc}')"></i>
+                <i class="fas fa-id-badge f-icon f-profile" title="View Profile"></i>
+                <i class="fas fa-user-minus f-icon f-unfriend" title="Unfriend" onclick="openUnfriendModal('${username}')"></i>
+            </div>
+        </div>
+    `;
+}
+
+let friendToRemove = "";
+window.openUnfriendModal = function(username) {
+    friendToRemove = username;
+    document.getElementById("unfriend-name").innerText = username;
+    openModal("unfriend-modal");
+}
+
+window.confirmUnfriend = async function() {
+    if(friendToRemove) {
+        const displayUser = localStorage.getItem("jct_logged_in_user");
+        await fetch(`${BACKEND_URL}/api/friends/remove`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ userA: displayUser, userB: friendToRemove })
+        });
+
+        document.getElementById(`friend-bar-${friendToRemove}`).remove();
+        friendToRemove = "";
+        
+        const list = document.getElementById("friend-list");
+        if(list.innerHTML.trim() === "") {
+            list.innerHTML = `<p style="color:#a67c52; font-family:'Cardo', serif; text-align:center;">You have no friends yet. Add someone!</p>`;
+        }
+    }
+    closeModal("unfriend-modal");
+}
+
+// 4. WhatsApp-Style Chat System (Connected to DB)
+window.openChat = function(username, avatarSrc) {
+    activeChatFriend = username;
+    document.getElementById("chat-friend-name").innerText = username;
+    document.getElementById("chat-friend-avatar").src = avatarSrc;
+    
+    loadChatHistory(username);
+    openModal("chat-modal");
+}
+
+window.handleChatEnter = function(e) {
+    if(e.key === "Enter") sendChatMessage();
+}
+
+window.sendChatMessage = async function(customImgSrc = null) {
+    const input = document.getElementById("chat-msg-input");
+    const text = input.value.trim();
+    if(!text && !customImgSrc) return;
+    
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    const myAvatar = localStorage.getItem('jct_avatar_' + displayUser) || 'static/image/defaultAvatar.jpg';
+
+    // Show it instantly in UI for good user experience
+    let contentHtml = text ? text : `<img src="${customImgSrc}">`;
+    appendChatBubble(contentHtml, "me", myAvatar);
+    input.value = "";
+    
+    // Save to Database
+    await fetch(`${BACKEND_URL}/api/chat/send`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            sender: displayUser,
+            receiver: activeChatFriend,
+            message: text || null,
+            file_url: customImgSrc || null
+        })
+    });
+}
+
+window.handleChatUpload = function(event) {
+    const file = event.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        sendChatMessage(e.target.result); // Base64 image
+    };
+    reader.readAsDataURL(file);
+}
+
+function appendChatBubble(content, side, avatarSrc) {
+    const area = document.getElementById("chat-messages-area");
+    area.innerHTML += `
+        <div class="chat-bubble-row ${side}">
+            <img src="${avatarSrc}" class="chat-avatar-small" style="width:30px; height:30px;">
+            <div class="chat-bubble">${content}</div>
+        </div>
+    `;
+    area.scrollTop = area.scrollHeight;
+}
+
+window.loadChatHistory = async function(friendName) {
+    const area = document.getElementById("chat-messages-area");
+    area.innerHTML = `<p style="color:#cbb27d; text-align:center;">Loading messages...</p>`;
+    
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${friendName}`);
+        const history = await res.json();
+        
+        area.innerHTML = `<div class="chat-date-divider">Chat History</div>`;
+        
+        history.forEach(msg => {
+            const side = msg.sender === displayUser ? "me" : "friend";
+            const avatar = localStorage.getItem('jct_avatar_' + msg.sender) || "static/image/defaultAvatar.jpg";
+            const content = msg.message ? msg.message : `<img src="${msg.file_url}">`;
+            appendChatBubble(content, side, avatar);
+        });
+    } catch(err) {
+        area.innerHTML = `<p style="color:#ff4d4d; text-align:center;">Failed to load chat.</p>`;
+    }
+}
+
 // ================= DIVINE SCROLL REVEAL =================
 const revealElements = () => {
     const observerOptions = {
