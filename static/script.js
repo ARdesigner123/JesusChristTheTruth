@@ -49,17 +49,15 @@ links.forEach(link => {
 function moveIndicator(element) {
     if(!indicator) return;
     
-    // Using offsetLeft provides perfectly accurate tracking inside the flex container
     const li = element.parentElement; 
-    
     const linkWidth = element.offsetWidth;
     const linkLeft = li.offsetLeft + element.offsetLeft;
     const linkTop = li.offsetTop + element.offsetTop;
     const linkHeight = element.offsetHeight;
 
-    indicator.style.width = `${linkWidth + 24}px`; // Adds padding around text
+    indicator.style.width = `${linkWidth + 24}px`;
     indicator.style.left = `${linkLeft - 12}px`;
-    indicator.style.top = `${linkTop - ((46 - linkHeight) / 2)}px`; // Centers vertically
+    indicator.style.top = `${linkTop - ((46 - linkHeight) / 2)}px`;
 }
 
 // ================= CURSOR GLOW =================
@@ -72,15 +70,25 @@ document.addEventListener("mousemove", (e) => {
     glow.style.top = e.clientY + "px";
 });
 
-// ================= BULLETPROOF ACTIVE TIME TRACKER =================
-// 1. Check for BOTH types of users
+// ================= BULLETPROOF ACTIVE TIME TRACKER & GUEST UI =================
 const normalUser = localStorage.getItem("jct_logged_in_user");
 const guestUser = localStorage.getItem("jct_guest_user");
-
-// 2. Identify who is playing, and STRICTLY prioritize normal users
 const currentUser = normalUser || guestUser;
-// CRITICAL FIX: You are only a guest if you have a guest cookie AND you don't have a normal user cookie.
 const isGuest = !normalUser && !!guestUser; 
+
+// HIDE PROFILE ICON IF GUEST
+document.addEventListener("DOMContentLoaded", () => {
+    if (isGuest || !currentUser) {
+        const navProfileIcon = document.querySelector('.nav-profile-icon');
+        if (navProfileIcon) navProfileIcon.style.display = 'none';
+
+        // Also hide it inside the mobile hamburger dropdown
+        const mobileProfileLink = document.querySelector('.mobile-nav-links a[href="profile.html"]');
+        if (mobileProfileLink && mobileProfileLink.parentElement) {
+            mobileProfileLink.parentElement.style.display = 'none';
+        }
+    }
+});
 
 const BACKEND_URL = "https://jesusbackend.onrender.com";
 let sessionSeconds = 0;
