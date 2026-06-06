@@ -173,6 +173,8 @@ if (currentUser) {
 
 // ================= LEADERBOARD LOGIC =================
 let lbTimerInterval;
+let currentLbCategory = 'time';
+let currentLbPeriod = 'daily';
 
 window.switchView = function(viewName) {
     document.getElementById("view-profile").style.display = viewName === 'profile' ? 'block' : 'none';
@@ -182,20 +184,56 @@ window.switchView = function(viewName) {
     document.getElementById("tab-leaderboard").classList.toggle("active", viewName === 'leaderboard');
 
     if (viewName === 'leaderboard') {
-        loadLeaderboard('daily'); // Load daily by default
+        setLbCategory('time'); // Default to Time -> Daily
     }
 }
 
-window.loadLeaderboard = function(period) {
-    // Highlight correct button
+// Switches between Time, Holy Power, Quizzes, Quests, Streak
+window.setLbCategory = function(cat) {
+    currentLbCategory = cat;
+    
+    // Highlight correct category button
+    document.querySelectorAll('.lb-cat-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`cat-btn-${cat}`).classList.add('active');
+
+    // UI Adjustments based on category
+    const periodTabs = document.getElementById('lb-period-container');
+    const timerWrapper = document.getElementById('lb-timer-wrapper');
+    const scoreHeader = document.getElementById('lb-score-header');
+
+    if (cat === 'time') {
+        periodTabs.style.display = 'flex';
+        timerWrapper.style.display = 'inline-block';
+        scoreHeader.innerText = "Active Time";
+        loadLeaderboard(currentLbPeriod); // Load the last used period (or daily)
+    } else {
+        periodTabs.style.display = 'none';
+        timerWrapper.style.display = 'none';
+        
+        // Update table header text
+        if (cat === 'holypower') scoreHeader.innerText = "Holy Power";
+        if (cat === 'quizzes') scoreHeader.innerText = "Quizzes Done";
+        if (cat === 'quests') scoreHeader.innerText = "Quests Done";
+        if (cat === 'streak') scoreHeader.innerText = "Daily Streak";
+        
+        loadLeaderboard('all_time'); // Non-time categories are absolute totals
+    }
+}
+
+// Loads the actual data into the table
+window.loadLeaderboard = function(periodOverride) {
+    if (periodOverride) currentLbPeriod = periodOverride;
+    
+    // Highlight correct period button (only matters if we are in 'time' category)
     document.querySelectorAll('.lb-period-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toLowerCase().replace(" ", "_") === period);
+        btn.classList.toggle('active', btn.innerText.toLowerCase().replace(" ", "_") === currentLbPeriod);
     });
 
     const tbody = document.getElementById("lb-tbody");
     tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#cbb27d;">Loading Leaders...</td></tr>`;
 
-    fetch(`${BACKEND_URL}/api/leaderboard?period=${period}`)
+    // Fetch using BOTH category and period
+    fetch(`${BACKEND_URL}/api/leaderboard?category=${currentLbCategory}&period=${currentLbPeriod}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById("lb-total-users").innerText = data.totalUsers;
@@ -206,21 +244,29 @@ window.loadLeaderboard = function(period) {
                 return;
             }
 
-            // Determine Rewards for the current period
+            // Determine Rewards (ONLY applies to Time Leaderboard)
             let periodRewards = [];
-            if (period === 'daily') periodRewards = [200, 100, 50];
-            else if (period === 'weekly') periodRewards = [2000, 1500, 1000];
-            else if (period === 'monthly') periodRewards = [15000, 10000, 7500];
+            if (currentLbCategory === 'time') {
+                if (currentLbPeriod === 'daily') periodRewards = [200, 100, 50];
+                else if (currentLbPeriod === 'weekly') periodRewards = [2000, 1500, 1000];
+                else if (currentLbPeriod === 'monthly') periodRewards = [15000, 10000, 7500];
+            }
 
             data.users.forEach((user, index) => {
                 const rankClass = index === 0 ? "rank-1" : index === 1 ? "rank-2" : index === 2 ? "rank-3" : "rank-other";
                 const rankIcon = index === 0 ? "🏆 1st" : index === 1 ? "🥈 2nd" : index === 2 ? "🥉 3rd" : `${index + 1}th`;
                 
-                const timeScore = user[data.timeCol] || 0;
+                // The backend tells us exactly which column it sorted by
+                const scoreValue = user[data.sortCol] || 0;
+                
+                // Formatting icons based on category
+                let scoreDisplay = scoreValue;
+                if (currentLbCategory === 'holypower') scoreDisplay = `${scoreValue} <i class="fas fa-coins" style="color:gold;"></i>`;
+                else if (currentLbCategory === 'streak') scoreDisplay = `${scoreValue} <i class="fas fa-fire" style="color:#ff6600;"></i>`;
                 
                 // Determine Reward Text
                 let rewardText = "-";
-                if (period !== 'all_time' && index < 3) {
+                if (currentLbCategory === 'time' && currentLbPeriod !== 'all_time' && index < 3) {
                     rewardText = `+${periodRewards[index]} <i class="fas fa-coins"></i>`;
                 }
 
@@ -228,43 +274,44 @@ window.loadLeaderboard = function(period) {
                     <tr>
                         <td class="${rankClass}">${rankIcon}</td>
                         <td style="font-weight:bold;">${user.username}</td>
-                        <td style="color:#a67c52;">${timeScore}</td>
+                        <td style="color:#a67c52; font-weight:bold;">${scoreDisplay}</td>
                         <td style="color:#ffd700;">${rewardText}</td>
                     </tr>
                 `;
             });
 
-            // Handle Countdown Timer
+            // Handle Countdown Timer (Only matters for 'time')
             clearInterval(lbTimerInterval);
-            if (period === 'all_time') {
-                document.getElementById("lb-countdown").innerText = "Never (Lifetime)";
-            } else {
-                let targetTime = 0;
-                if (period === 'daily') targetTime = data.timers.daily_reset;
-                if (period === 'weekly') targetTime = data.timers.weekly_reset;
-                if (period === 'monthly') targetTime = data.timers.monthly_reset;
+            if (currentLbCategory === 'time') {
+                if (currentLbPeriod === 'all_time') {
+                    document.getElementById("lb-countdown").innerText = "Never (Lifetime)";
+                } else {
+                    let targetTime = 0;
+                    if (currentLbPeriod === 'daily') targetTime = data.timers.daily_reset;
+                    if (currentLbPeriod === 'weekly') targetTime = data.timers.weekly_reset;
+                    if (currentLbPeriod === 'monthly') targetTime = data.timers.monthly_reset;
 
-                lbTimerInterval = setInterval(() => {
-                    const now = Date.now();
-                    const diff = targetTime - now;
+                    lbTimerInterval = setInterval(() => {
+                        const now = Date.now();
+                        const diff = targetTime - now;
 
-                    if (diff <= 0) {
-                        document.getElementById("lb-countdown").innerText = "Resetting...";
-                        clearInterval(lbTimerInterval);
-                        setTimeout(() => loadLeaderboard(period), 3000); // Reload board
-                    } else {
-                        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                        const s = Math.floor((diff % (1000 * 60)) / 1000);
-                        
-                        // Add Day calculations if it's over 24 hours
-                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                        const dayString = days > 0 ? `${days}d ` : "";
+                        if (diff <= 0) {
+                            document.getElementById("lb-countdown").innerText = "Resetting...";
+                            clearInterval(lbTimerInterval);
+                            setTimeout(() => loadLeaderboard(currentLbPeriod), 3000); // Reload board
+                        } else {
+                            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                            const s = Math.floor((diff % (1000 * 60)) / 1000);
+                            
+                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            const dayString = days > 0 ? `${days}d ` : "";
 
-                        document.getElementById("lb-countdown").innerText = 
-                            `${dayString}${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                    }
-                }, 1000);
+                            document.getElementById("lb-countdown").innerText = 
+                                `${dayString}${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                        }
+                    }, 1000);
+                }
             }
         });
 }

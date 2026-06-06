@@ -136,20 +136,21 @@
                 <p style="color: #a67c52; margin-bottom: 20px; font-family: 'Cardo', serif;">Total Signed-In Believers: <strong id="lb-total-users" style="color: #4da6ff;">0</strong></p>
                 
                 <div class="lb-category-tabs">
-                    <button class="lb-cat-btn active">Time</button>
-                    <button class="lb-cat-btn">Holy Power</button>
-                    <button class="lb-cat-btn">Quizzes</button>
-                    <button class="lb-cat-btn">Quests</button>
+                    <button class="lb-cat-btn active" id="cat-btn-time" onclick="setLbCategory('time')">Time</button>
+                    <button class="lb-cat-btn" id="cat-btn-holypower" onclick="setLbCategory('holypower')">Holy Power</button>
+                    <button class="lb-cat-btn" id="cat-btn-quizzes" onclick="setLbCategory('quizzes')">Quizzes</button>
+                    <button class="lb-cat-btn" id="cat-btn-quests" onclick="setLbCategory('quests')">Quests</button>
+                    <button class="lb-cat-btn" id="cat-btn-streak" onclick="setLbCategory('streak')">Daily Streak</button>
                 </div>
 
-                <div class="lb-period-tabs">
+                <div class="lb-period-tabs" id="lb-period-container">
                     <button class="lb-period-btn active" onclick="loadLeaderboard('daily')">Daily</button>
                     <button class="lb-period-btn" onclick="loadLeaderboard('weekly')">Weekly</button>
                     <button class="lb-period-btn" onclick="loadLeaderboard('monthly')">Monthly</button>
                     <button class="lb-period-btn" onclick="loadLeaderboard('all_time')">All Time</button>
                 </div>
 
-                <div class="lb-timer-container">
+                <div class="lb-timer-container" id="lb-timer-wrapper">
                     <i class="fas fa-clock"></i> Resets In: <strong id="lb-countdown" style="color: #ff4d4d;">00:00:00</strong>
                 </div>
 
@@ -159,8 +160,9 @@
                             <tr>
                                 <th>Rank</th>
                                 <th>Username</th>
-                                <th>Active Time</th>
-                                <th>Reward</th> </tr>
+                                <th id="lb-score-header">Active Time</th>
+                                <th>Reward</th>
+                            </tr>
                         </thead>
                         <tbody id="lb-tbody">
                             </tbody>
