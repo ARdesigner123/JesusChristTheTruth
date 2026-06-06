@@ -316,6 +316,156 @@ window.loadLeaderboard = function(periodOverride) {
         });
 }
 
+// ================= AVATAR LOGIC =================
+const AVATAR_LIST = [
+    'static/image/defaultAvatar.jpg',
+    'static/image/avatar2.jpg',
+    'static/image/avatar3.jpg',
+    'static/image/avatar4.jpg',
+    'static/image/avatar5.jpg',
+    'static/image/avatar6.jpg',
+    'static/image/avatar7.jpg'
+];
+
+let temporarySelectedAvatar = "";
+
+// 1. Initialize Avatar on Page Load
+function initializeUserAvatar() {
+    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+    const savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
+    
+    // Apply to Main Profile Arch
+    const mainProfileImg = document.getElementById("main-profile-avatar");
+    if (mainProfileImg) mainProfileImg.src = savedAvatar;
+    
+    // Apply to tiny Navbar Icon
+    const navProfileImg = document.getElementById("nav-avatar-img");
+    if (navProfileImg) navProfileImg.src = savedAvatar;
+}
+initializeUserAvatar();
+
+// 2. Open Modal and Generate Grid
+window.openAvatarModal = function() {
+    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+    const savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
+    temporarySelectedAvatar = savedAvatar;
+
+    const modal = document.getElementById("avatar-modal");
+    const grid = document.getElementById("avatar-grid");
+    const previewImg = document.getElementById("avatar-preview-img");
+    const discardBtn = document.getElementById("discard-btn");
+
+    if(!modal || !grid) return;
+
+    // Reset Grid
+    grid.innerHTML = "";
+
+    // Generate Default Avatars
+    AVATAR_LIST.forEach(src => {
+        const div = document.createElement("div");
+        div.className = `avatar-option ${src === savedAvatar ? 'selected' : ''}`;
+        div.onclick = () => selectAvatar(src, div);
+        div.innerHTML = `<img src="${src}" alt="Avatar Option">`;
+        grid.appendChild(div);
+    });
+
+    // Generate Custom Upload Box
+    const customSaved = localStorage.getItem('jct_custom_photo_' + displayUser);
+    
+    if (customSaved) {
+        // Show their custom photo as a clickable option in the grid!
+        const customDiv = document.createElement("div");
+        customDiv.className = `avatar-option ${customSaved === savedAvatar ? 'selected' : ''}`;
+        customDiv.onclick = () => selectAvatar(customSaved, customDiv);
+        customDiv.innerHTML = `<img src="${customSaved}" alt="Custom Avatar">`;
+        grid.appendChild(customDiv);
+        discardBtn.style.display = "block";
+    } else {
+        discardBtn.style.display = "none";
+    }
+
+    // Always add the Upload Button at the end
+    const uploadBtn = document.createElement("div");
+    uploadBtn.className = "avatar-option avatar-upload-box";
+    uploadBtn.onclick = () => document.getElementById("custom-avatar-upload").click();
+    uploadBtn.innerHTML = `<i class="fas fa-upload"></i> Upload`;
+    grid.appendChild(uploadBtn);
+
+    // Set preview
+    previewImg.src = temporarySelectedAvatar;
+
+    // Show Modal with Fade/Grow Animation
+    modal.style.display = "flex";
+    setTimeout(() => modal.classList.add("show"), 10);
+}
+
+// 3. Close Modal
+window.closeAvatarModal = function() {
+    const modal = document.getElementById("avatar-modal");
+    if(modal) {
+        modal.classList.remove("show");
+        setTimeout(() => modal.style.display = "none", 400); // Wait for fade-out animation
+    }
+}
+
+// 4. Handle Clicking a Grid Item
+window.selectAvatar = function(src, clickedElement) {
+    temporarySelectedAvatar = src;
+    document.getElementById("avatar-preview-img").src = src;
+
+    // Remove 'selected' class from all, add to clicked
+    document.querySelectorAll(".avatar-option").forEach(el => el.classList.remove("selected"));
+    clickedElement.classList.add("selected");
+}
+
+// 5. Handle Custom Photo Upload (Base64 conversion)
+window.handleCustomAvatar = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Optional: Size limit check (e.g., 2MB max for localStorage safety)
+    if (file.size > 2 * 1024 * 1024) {
+        alert("Image is too large! Please choose an image under 2MB.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+        
+        // Save the custom photo to storage
+        localStorage.setItem('jct_custom_photo_' + displayUser, dataUrl);
+        
+        // Automatically select it and refresh grid
+        localStorage.setItem('jct_avatar_' + displayUser, dataUrl); 
+        openAvatarModal(); 
+    };
+    reader.readAsDataURL(file);
+}
+
+// 6. Discard Custom Photo
+window.discardCustomPhoto = function() {
+    if(!confirm("Are you sure you want to delete your custom uploaded photo?")) return;
+    
+    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+    localStorage.removeItem('jct_custom_photo_' + displayUser);
+    
+    // Revert to default avatar
+    localStorage.setItem('jct_avatar_' + displayUser, AVATAR_LIST[0]);
+    openAvatarModal();
+}
+
+// 7. Save Final Selection
+window.saveAvatar = function() {
+    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+    localStorage.setItem('jct_avatar_' + displayUser, temporarySelectedAvatar);
+    
+    // Apply changes instantly
+    initializeUserAvatar();
+    closeAvatarModal();
+}
+
 // ================= SECURE LOGOUT =================
 const logoutBtns = document.querySelectorAll(".logout-btn");
 

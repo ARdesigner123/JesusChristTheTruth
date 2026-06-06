@@ -422,6 +422,173 @@ li,
     box-shadow: 0 0 15px rgba(77, 166, 255, 0.6);
 }
 
+/* ================= AVATAR MODAL ================= */
+.avatar-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.avatar-modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.avatar-modal-content {
+    background: linear-gradient(135deg, #2b1a03, #1a0a03);
+    border: 2px solid #8b5a2b;
+    border-radius: 20px;
+    width: 850px;
+    max-width: 95%;
+    position: relative;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(212, 175, 55, 0.2);
+    /* Pop-in growing effect */
+    transform: scale(0.8);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.avatar-modal.show .avatar-modal-content {
+    transform: scale(1);
+}
+
+/* Back Button */
+.close-avatar-btn {
+    position: absolute;
+    top: 20px; left: 25px;
+    font-size: 1.6rem;
+    color: #cbb27d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.close-avatar-btn:hover {
+    color: #ffd700;
+    text-shadow: 0 0 15px gold;
+    transform: translateX(-5px);
+}
+
+/* Modal Layout */
+.avatar-modal-layout {
+    display: flex;
+    padding: 40px;
+    gap: 40px;
+}
+
+.avatar-selection-area {
+    flex: 6;
+    border-right: 1px dashed rgba(166, 124, 82, 0.4);
+    padding-right: 30px;
+}
+
+.avatar-title {
+    font-family: 'Cinzel', serif;
+    color: #ffd700;
+    font-size: 1.8rem;
+    text-shadow: 1px 1px 0 #000;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Grid & Frames */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    gap: 15px;
+}
+
+.avatar-option {
+    width: 85px; height: 85px;
+    border-radius: 12px;
+    border: 3px solid #5c3a21;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.6);
+    background: #000;
+}
+
+.avatar-option img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.avatar-option:hover {
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    transform: translateY(-5px);
+}
+
+.avatar-option:hover img { transform: scale(1.1); }
+
+/* Highlight the selected avatar */
+.avatar-option.selected {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px gold;
+    transform: scale(1.05);
+}
+
+/* Upload Box */
+.avatar-upload-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #a67c52;
+    background: rgba(0,0,0,0.4);
+    color: #cbb27d;
+    font-family: 'Cardo', serif;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.avatar-upload-box i { font-size: 1.5rem; margin-bottom: 5px; color: #ffd700; }
+
+/* Right Preview Area */
+.avatar-preview-area {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.large-arch-frame {
+    width: 180px; height: 230px;
+    margin-bottom: 15px;
+    background: #2b1a03;
+    border: 4px solid #ffd700;
+    border-top-left-radius: 90px;
+    border-top-right-radius: 90px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
+    transition: all 0.3s ease;
+}
+
+.large-arch-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+.save-avatar-btn { width: 100%; justify-content: center; margin-bottom: 10px; }
+
+.discard-avatar-btn {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-family: 'Cardo', serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: 0.3s;
+}
+
+.discard-avatar-btn:hover { color: #ff1a1a; text-shadow: 0 0 8px rgba(255,0,0,0.5); }
+
 /* Milestone Container */
 .milestone-container {
     background: rgba(0, 0, 0, 0.6);
@@ -1796,6 +1963,9 @@ li,
     .modal-overlay.judas-theme .modal-info {
         border-top: 3px solid #c0c0c0;
     }
+    .avatar-modal-layout { flex-direction: column; padding: 30px 20px; gap: 20px; }
+    .avatar-selection-area { border-right: none; border-bottom: 1px dashed rgba(166, 124, 82, 0.4); padding-right: 0; padding-bottom: 20px; }
+    .large-arch-frame { width: 140px; height: 180px; }
 }
 
 /* Mobile Breakpoint (600px and below) */
