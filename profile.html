@@ -242,6 +242,48 @@
         </div>
     </div>
 
+    <div id="friend-profile-modal" class="custom-popup-modal">
+        <div class="popup-modal-content" style="max-width: 600px; text-align: center;">
+            <i class="fas fa-arrow-left close-modal-icon" onclick="closeModal('friend-profile-modal')"></i>
+            <h2 class="popup-title">Believer's Profile</h2>
+            
+            <div class="profile-arch-frame" style="margin: 0 auto 15px;">
+                <img src="" id="fp-avatar" alt="Friend Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
+            </div>
+            
+            <h2 class="profile-username" id="fp-username" style="font-size: 1.8rem;">Username</h2>
+            <p class="profile-rank-title">Rank: <strong id="fp-rank" style="color: #ffd700;">Seeker</strong></p>
+
+            <div class="stats-grid" style="margin-top: 30px;">
+                <div class="stat-box">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div class="stat-value" id="fp-time">0</div>
+                    <div class="stat-label">Active Time</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-coins" style="color: #ffd700;"></i>
+                    <div class="stat-value" id="fp-hp">0</div>
+                    <div class="stat-label">Holy Power</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-fire" style="color: #ff6600;"></i>
+                    <div class="stat-value" id="fp-streak">0</div>
+                    <div class="stat-label">Daily Streak</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-scroll"></i>
+                    <div class="stat-value" id="fp-quizzes">0</div>
+                    <div class="stat-label">Quizzes Done</div>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-shield-alt" style="color: #4da6ff;"></i>
+                    <div class="stat-value" id="fp-quests">0</div>
+                    <div class="stat-label">Quests Done</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- CHAT MODAL (WHATSAPP STYLE) -->
     <div id="chat-modal" class="custom-popup-modal">
         <div class="popup-modal-content chat-box-content">

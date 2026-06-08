@@ -837,11 +837,59 @@ function addFriendToUI(username, avatarSrc) {
             </div>
             <div class="friend-actions">
                 <i class="fas fa-comment-dots f-icon f-chat" title="Chat" onclick="openChat('${username}', '${avatarSrc}')"></i>
-                <i class="fas fa-id-badge f-icon f-profile" title="View Profile"></i>
+                <i class="fas fa-id-badge f-icon f-profile" title="View Profile" onclick="openFriendProfile('${username}', '${avatarSrc}')"></i>
                 <i class="fas fa-user-minus f-icon f-unfriend" title="Unfriend" onclick="openUnfriendModal('${username}')"></i>
             </div>
         </div>
     `;
+}
+
+// ================= NEW: VIEW FRIEND PROFILE =================
+window.openFriendProfile = async function(username, avatarSrc) {
+    document.getElementById("fp-username").innerText = username;
+    document.getElementById("fp-avatar").src = avatarSrc;
+    
+    // Reset defaults while loading
+    document.getElementById("fp-time").innerText = "...";
+    document.getElementById("fp-hp").innerText = "...";
+    document.getElementById("fp-streak").innerText = "...";
+    document.getElementById("fp-quizzes").innerText = "...";
+    document.getElementById("fp-quests").innerText = "...";
+    document.getElementById("fp-rank").innerText = "Loading...";
+
+    openModal("friend-profile-modal");
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/users/profile/${username}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        
+        const hp = data.holypower || 0;
+        document.getElementById("fp-time").innerText = data.active_time || 0;
+        document.getElementById("fp-hp").innerText = hp;
+        document.getElementById("fp-streak").innerText = data.daily_streak || 0;
+        document.getElementById("fp-quizzes").innerText = data.quizzes_done || 0;
+        document.getElementById("fp-quests").innerText = data.quests_done || 0;
+
+        // Rank Calculation Logic
+        let rank = "Seeker";
+        if (hp >= 50000) rank = "Apostle";
+        else if (hp >= 35000) rank = "Shepherd";
+        else if (hp >= 20000) rank = "Elder";
+        else if (hp >= 12000) rank = "Witness";
+        else if (hp >= 8000) rank = "Worker";
+        else if (hp >= 5000) rank = "Servant";
+        else if (hp >= 3000) rank = "Disciple";
+        else if (hp >= 1500) rank = "Sheep";
+        else if (hp >= 500) rank = "Follower";
+        else if (hp >= 100) rank = "Believer";
+        
+        document.getElementById("fp-rank").innerText = rank;
+
+    } catch (err) {
+        document.getElementById("fp-time").innerText = "?";
+        document.getElementById("fp-hp").innerText = "?";
+    }
 }
 
 let friendToRemove = "";
