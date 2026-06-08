@@ -612,6 +612,7 @@ if (profileUsernameEl) {
 
     const activeTimeEl = document.getElementById("stat-active-time");
     const holyPowerEl = document.getElementById("stat-holy-power");
+    const streakEl = document.getElementById("stat-streak"); // NEW
     const currentActiveDisplay = document.getElementById("current-active-display");
     const milestoneFill = document.getElementById("milestone-fill");
     const nextTarget = document.getElementById("next-milestone-target");
@@ -620,7 +621,6 @@ if (profileUsernameEl) {
 
     const isGuestProfile = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
 
-    // Handle Guests Gracefully
     if (isGuestProfile && milestoneContainer) {
         milestoneContainer.innerHTML = `
             <h3 style="color:#ff4d4d; font-family:'Cinzel', serif;">Guests Cannot Earn Holy Power</h3>
@@ -632,7 +632,6 @@ if (profileUsernameEl) {
     if (activeTimeEl) {
         activeTimeEl.textContent = "Updating...";
         
-        // Ping backend with 0 time just to fetch the current synced stats
         fetch(`${BACKEND_URL}/api/update-time`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -644,14 +643,13 @@ if (profileUsernameEl) {
             activeTimeEl.textContent = totalTime;
             
             if (!isGuestProfile) {
-                // Update UI safely for normal users
                 if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
                 if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
+                if (streakEl) streakEl.textContent = data.daily_streak || 0; // NEW: Update streak UI
                 
                 if (nextTarget) nextTarget.textContent = data.next_milestone;
                 if (nextReward) nextReward.innerHTML = `${data.next_reward} Holy Power <i class="fas fa-coins"></i>`;
                 
-                // Animate Progress Bar
                 if (milestoneFill) {
                     const range = data.next_milestone - data.prev_milestone;
                     const progress = totalTime - data.prev_milestone;
