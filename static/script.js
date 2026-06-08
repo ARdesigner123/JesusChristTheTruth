@@ -920,13 +920,39 @@ window.confirmUnfriend = async function() {
 }
 
 // 4. WhatsApp-Style Chat System (Connected to DB)
+let chatPollInterval;
+let cachedChatData = "";
+let currentFriendIsOnline = false;
+
 window.openChat = function(username, avatarSrc) {
     activeChatFriend = username;
     document.getElementById("chat-friend-name").innerText = username;
     document.getElementById("chat-friend-avatar").src = avatarSrc;
+    document.getElementById("emoji-picker").style.display = "none";
+    cachedChatData = ""; // Reset cache so it forces a render
     
-    loadChatHistory(username);
     openModal("chat-modal");
+
+    // Instantly load, then poll every 3 seconds for new messages/status
+    pollChatData(); 
+    chatPollInterval = setInterval(pollChatData, 3000);
+}
+
+// Custom close function to stop the polling when chat is closed
+window.closeChatModal = function() {
+    clearInterval(chatPollInterval);
+    closeModal('chat-modal');
+}
+
+window.toggleEmojiPicker = function() {
+    const picker = document.getElementById("emoji-picker");
+    picker.style.display = picker.style.display === "none" ? "grid" : "none";
+}
+
+window.addEmoji = function(emoji) {
+    const input = document.getElementById("chat-msg-input");
+    input.value += emoji;
+    input.focus();
 }
 
 window.handleChatEnter = function(e) {
@@ -939,12 +965,12 @@ window.sendChatMessage = async function(customImgSrc = null) {
     if(!text && !customImgSrc) return;
     
     const displayUser = localStorage.getItem("jct_logged_in_user");
-    const myAvatar = localStorage.getItem('jct_avatar_' + displayUser) || 'static/image/defaultAvatar.jpg';
-
-    // Show it instantly in UI for good user experience
+    
+    // Optimistic UI update (shows instantly before DB confirms)
     let contentHtml = text ? text : `<img src="${customImgSrc}">`;
-    appendChatBubble(contentHtml, "me", myAvatar);
+    appendChatBubble(contentHtml, "me", localStorage.getItem('jct_avatar_' + displayUser), "sent", currentFriendIsOnline);
     input.value = "";
+    document.getElementById("emoji-picker").style.display = "none";
     
     // Save to Database
     await fetch(`${BACKEND_URL}/api/chat/send`, {
@@ -957,49 +983,96 @@ window.sendChatMessage = async function(customImgSrc = null) {
             file_url: customImgSrc || null
         })
     });
+
+    pollChatData(); // Force immediate refresh to get correct DB status
 }
 
 window.handleChatUpload = function(event) {
     const file = event.target.files[0];
     if(!file) return;
+    if (file.size > 2 * 1024 * 1024) { alert("Image too large! Max 2MB."); return; }
+
     const reader = new FileReader();
     reader.onload = function(e) {
-        sendChatMessage(e.target.result); // Base64 image
+        sendChatMessage(e.target.result); 
     };
     reader.readAsDataURL(file);
 }
 
-function appendChatBubble(content, side, avatarSrc) {
+function appendChatBubble(content, side, avatarSrc, readStatus, friendOnline) {
     const area = document.getElementById("chat-messages-area");
+    
+    let ticksHtml = "";
+    if (side === "me") {
+        if (readStatus === "read") {
+            ticksHtml = `<i class="fas fa-check-double msg-ticks tick-blue" title="Read"></i>`; // 2 Blue Ticks
+        } else if (friendOnline) {
+            ticksHtml = `<i class="fas fa-check-double msg-ticks tick-grey" title="Delivered"></i>`; // 2 Grey Ticks
+        } else {
+            ticksHtml = `<i class="fas fa-check msg-ticks tick-grey" title="Sent"></i>`; // 1 Grey Tick
+        }
+    }
+
     area.innerHTML += `
         <div class="chat-bubble-row ${side}">
             <img src="${avatarSrc}" class="chat-avatar-small" style="width:30px; height:30px;">
-            <div class="chat-bubble">${content}</div>
+            <div class="chat-bubble">${content} ${ticksHtml}</div>
         </div>
     `;
     area.scrollTop = area.scrollHeight;
 }
 
-window.loadChatHistory = async function(friendName) {
-    const area = document.getElementById("chat-messages-area");
-    area.innerHTML = `<p style="color:#cbb27d; text-align:center;">Loading messages...</p>`;
-    
+// Master function that runs every 3 seconds to fetch status and messages
+async function pollChatData() {
     const displayUser = localStorage.getItem("jct_logged_in_user");
-    
+    if (!displayUser || !activeChatFriend) return;
+
     try {
-        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${friendName}`);
+        // 1. Fetch Friend's Online Status
+        const statusRes = await fetch(`${BACKEND_URL}/api/users/status/${activeChatFriend}`);
+        const statusData = await statusRes.json();
+        currentFriendIsOnline = statusData.online;
+        
+        const statusText = document.getElementById("chat-friend-status");
+        if(currentFriendIsOnline) {
+            statusText.innerText = "Online";
+            statusText.style.color = "#52c41a"; // Green
+        } else {
+            statusText.innerText = "Offline";
+            statusText.style.color = "#a67c52"; // Brown/Grey
+        }
+
+        // 2. Tell the database we have read their messages
+        await fetch(`${BACKEND_URL}/api/chat/read`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ sender: activeChatFriend, receiver: displayUser })
+        });
+
+        // 3. Fetch latest chat history
+        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${activeChatFriend}`);
         const history = await res.json();
         
-        area.innerHTML = `<div class="chat-date-divider">Chat History</div>`;
+        // Prevent re-rendering the whole chat if nothing changed (stops flickering)
+        const newCacheData = JSON.stringify(history);
+        if (newCacheData === cachedChatData) return; 
+        cachedChatData = newCacheData;
+
+        // Render UI
+        const area = document.getElementById("chat-messages-area");
+        const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        area.innerHTML = `<div class="chat-date-divider">${today}</div>`;
         
         history.forEach(msg => {
             const side = msg.sender === displayUser ? "me" : "friend";
             const avatar = localStorage.getItem('jct_avatar_' + msg.sender) || "static/image/defaultAvatar.jpg";
             const content = msg.message ? msg.message : `<img src="${msg.file_url}">`;
-            appendChatBubble(content, side, avatar);
+            
+            appendChatBubble(content, side, avatar, msg.read_status, currentFriendIsOnline);
         });
+
     } catch(err) {
-        area.innerHTML = `<p style="color:#ff4d4d; text-align:center;">Failed to load chat.</p>`;
+        console.error("Chat sync error");
     }
 }
 
