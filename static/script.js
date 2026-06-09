@@ -918,11 +918,7 @@ window.openFriendProfile = async function(username, avatarSrc) {
     document.getElementById("fp-streak").innerText = "...";
     document.getElementById("fp-quizzes").innerText = "...";
     document.getElementById("fp-quests").innerText = "...";
-    
-    // Update to use true XP instead of Holy Power!
-    const friendXP = data.xp || 0;
-    const friendRankData = calculateRank(friendXP);
-    document.getElementById("fp-rank").innerText = friendRankData.name;
+    document.getElementById("fp-rank").innerText = "Loading...";
 
     openModal("friend-profile-modal");
 
@@ -931,31 +927,21 @@ window.openFriendProfile = async function(username, avatarSrc) {
         if (!res.ok) throw new Error();
         const data = await res.json();
         
-        const hp = data.holypower || 0;
         document.getElementById("fp-time").innerText = data.active_time || 0;
-        document.getElementById("fp-hp").innerText = hp;
+        document.getElementById("fp-hp").innerText = data.holypower || 0;
         document.getElementById("fp-streak").innerText = data.daily_streak || 0;
         document.getElementById("fp-quizzes").innerText = data.quizzes_done || 0;
         document.getElementById("fp-quests").innerText = data.quests_done || 0;
 
-        // Rank Calculation Logic
-        let rank = "Seeker";
-        if (hp >= 50000) rank = "Apostle";
-        else if (hp >= 35000) rank = "Shepherd";
-        else if (hp >= 20000) rank = "Elder";
-        else if (hp >= 12000) rank = "Witness";
-        else if (hp >= 8000) rank = "Worker";
-        else if (hp >= 5000) rank = "Servant";
-        else if (hp >= 3000) rank = "Disciple";
-        else if (hp >= 1500) rank = "Sheep";
-        else if (hp >= 500) rank = "Follower";
-        else if (hp >= 100) rank = "Believer";
-        
-        document.getElementById("fp-rank").innerText = rank;
+        // Calculate and display correct Rank using their XP!
+        const friendXP = data.xp || 0;
+        const friendRankData = calculateRank(friendXP);
+        document.getElementById("fp-rank").innerText = friendRankData.name;
 
     } catch (err) {
         document.getElementById("fp-time").innerText = "?";
         document.getElementById("fp-hp").innerText = "?";
+        document.getElementById("fp-rank").innerText = "Error";
     }
 }
 
