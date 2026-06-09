@@ -275,7 +275,8 @@ window.loadLeaderboard = function(periodOverride) {
                 // Determine Reward Text
                 let rewardText = "-";
                 if (currentLbCategory === 'time' && currentLbPeriod !== 'all_time' && index < 3) {
-                    rewardText = `+${periodRewards[index]} <i class="fas fa-coins"></i>`;
+                    // Added XP to the visual display!
+                    rewardText = `+${periodRewards[index]} <i class="fas fa-coins"></i> & <span style="color:#4da6ff; font-weight:bold;">+${periodRewards[index]} XP</span>`;
                 }
 
                 tbody.innerHTML += `
