@@ -619,14 +619,17 @@ function calculateRank(xp) {
 
 // ================= PROFILE PAGE LOGIC =================
 const profileUsernameEl = document.getElementById("profile-username");
+const rankDisplayNameEl = document.getElementById("rank-display-name"); // Added this to detect the Rank page!
 
-if (profileUsernameEl) {
+// Run this logic if we are on the Profile page OR the Rank page
+if (profileUsernameEl || rankDisplayNameEl) {
     const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown Believer";
-    profileUsernameEl.textContent = displayUser;
+    
+    if (profileUsernameEl) profileUsernameEl.textContent = displayUser;
 
     const activeTimeEl = document.getElementById("stat-active-time");
     const holyPowerEl = document.getElementById("stat-holy-power");
-    const streakEl = document.getElementById("stat-streak"); // NEW
+    const streakEl = document.getElementById("stat-streak");
     const currentActiveDisplay = document.getElementById("current-active-display");
     const milestoneFill = document.getElementById("milestone-fill");
     const nextTarget = document.getElementById("next-milestone-target");
@@ -643,55 +646,56 @@ if (profileUsernameEl) {
         if (holyPowerEl) holyPowerEl.textContent = "0";
     }
 
-    if (activeTimeEl) {
-        activeTimeEl.textContent = "Updating...";
+    if (activeTimeEl) activeTimeEl.textContent = "Updating...";
+    if (rankDisplayNameEl) rankDisplayNameEl.textContent = "Loading...";
+
+    // Ping backend to fetch the current synced stats and rank data
+    fetch(`${BACKEND_URL}/api/update-time`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: displayUser, time_added: 0, isGuest: isGuestProfile })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const totalTime = data.total_time || 0;
+        if (activeTimeEl) activeTimeEl.textContent = totalTime;
         
-        fetch(`${BACKEND_URL}/api/update-time`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: displayUser, time_added: 0, isGuest: isGuestProfile })
-        })
-        .then(res => res.json())
-        .then(data => {
-            const totalTime = data.total_time || 0;
-            activeTimeEl.textContent = totalTime;
+        if (!isGuestProfile) {
+            const userXP = data.xp || 0;
+            const rankData = calculateRank(userXP);
             
-            if (!isGuestProfile) {
-                const userXP = data.xp || 0;
-                const rankData = calculateRank(userXP);
-                
-                // Update Profile Elements
-                const rankText = document.getElementById("profile-rank-text");
-                const xpText = document.getElementById("profile-xp-text");
-                if (rankText) rankText.textContent = rankData.name;
-                if (xpText) xpText.textContent = userXP;
+            // Update Profile Elements (If on profile.html)
+            const rankText = document.getElementById("profile-rank-text");
+            const xpText = document.getElementById("profile-xp-text");
+            if (rankText) rankText.textContent = rankData.name;
+            if (xpText) xpText.textContent = userXP;
 
-                if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
-                if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
-                if (streakEl) streakEl.textContent = data.daily_streak || 0;
-                
-                // Update Milestones
-                if (nextTarget) nextTarget.textContent = data.next_milestone;
-                if (nextReward) nextReward.innerHTML = `${data.next_reward} Holy Power <i class="fas fa-coins"></i>`;
-                const nextXP = document.getElementById("next-milestone-xp");
-                if (nextXP) nextXP.innerHTML = `+${data.next_xp} XP`;
-                
-                if (milestoneFill) {
-                    const range = data.next_milestone - data.prev_milestone;
-                    const progress = totalTime - data.prev_milestone;
-                    const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
-                    milestoneFill.style.width = percentage + "%";
-                }
+            if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
+            if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
+            if (streakEl) streakEl.textContent = data.daily_streak || 0;
+            
+            // Update Milestones
+            if (nextTarget) nextTarget.textContent = data.next_milestone;
+            if (nextReward) nextReward.innerHTML = `${data.next_reward} Holy Power <i class="fas fa-coins"></i>`;
+            const nextXP = document.getElementById("next-milestone-xp");
+            if (nextXP) nextXP.innerHTML = `+${data.next_xp} XP`;
+            
+            if (milestoneFill) {
+                const range = data.next_milestone - data.prev_milestone;
+                const progress = totalTime - data.prev_milestone;
+                const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
+                milestoneFill.style.width = percentage + "%";
+            }
 
-                // ================= UPDATE RANK PAGE TIMELINE =================
-                const rankDisplayName = document.getElementById("rank-display-name");
-                if (rankDisplayName) {
-                    rankDisplayName.textContent = rankData.name;
-                    document.getElementById("rank-xp-current").textContent = userXP;
-                    document.getElementById("rank-xp-next").textContent = rankData.maxed ? "MAX" : rankData.next;
+            // ================= UPDATE RANK PAGE TIMELINE =================
+            if (rankDisplayNameEl) {
+                rankDisplayNameEl.textContent = rankData.name;
+                document.getElementById("rank-xp-current").textContent = userXP;
+                document.getElementById("rank-xp-next").textContent = rankData.maxed ? "MAX" : rankData.next;
 
-                    // Progress Bar calculation
-                    const rankProgressFill = document.getElementById("rank-progress-fill");
+                // Progress Bar calculation
+                const rankProgressFill = document.getElementById("rank-progress-fill");
+                if (rankProgressFill) {
                     if (rankData.maxed) {
                         rankProgressFill.style.width = "100%";
                     } else {
@@ -700,27 +704,30 @@ if (profileUsernameEl) {
                         const rankPercent = Math.min(100, Math.max(0, (rankProgress / rankRange) * 100));
                         rankProgressFill.style.width = rankPercent + "%";
                     }
-
-                    // Timeline Visuals
-                    document.querySelectorAll('.rank-step').forEach(step => {
-                        const reqXP = parseInt(step.getAttribute('data-req'));
-                        step.classList.remove('current');
-                        
-                        if (userXP >= reqXP) {
-                            step.classList.remove('locked');
-                        }
-                        if (step.id === `step-${rankData.name}`) {
-                            step.classList.add('current');
-                        }
-                    });
                 }
+
+                // Timeline Visuals (Unlocks previous steps and highlights current)
+                document.querySelectorAll('.rank-step').forEach(step => {
+                    const reqXP = parseInt(step.getAttribute('data-req'));
+                    step.classList.remove('current');
+                    
+                    if (userXP >= reqXP) {
+                        step.classList.remove('locked');
+                    }
+                    if (step.id === `step-${rankData.name}`) {
+                        step.classList.add('current');
+                    }
+                });
             }
-        })
-        .catch(err => {
-            activeTimeEl.textContent = "?";
-            if(currentActiveDisplay && !isGuestProfile) currentActiveDisplay.textContent = "?";
-        });
-    }
+        } else {
+             if (rankDisplayNameEl) rankDisplayNameEl.textContent = "Guest (Unranked)";
+        }
+    })
+    .catch(err => {
+        if (activeTimeEl) activeTimeEl.textContent = "?";
+        if (currentActiveDisplay && !isGuestProfile) currentActiveDisplay.textContent = "?";
+        if (rankDisplayNameEl) rankDisplayNameEl.textContent = "Error Loading";
+    });
 }
 
 // Button Placeholders
