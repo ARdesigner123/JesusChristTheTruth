@@ -674,6 +674,13 @@ if (profileUsernameEl || rankDisplayNameEl) {
             if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
             if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
             if (streakEl) streakEl.textContent = data.daily_streak || 0;
+
+            // Add this inside the "if (!isGuestProfile)" block:
+            const quizzesEl = document.getElementById("stat-quizzes");
+            const questsEl = document.getElementById("stat-quests");
+            if (quizzesEl) quizzesEl.textContent = data.quizzes_done || 0;
+            if (questsEl) questsEl.textContent = data.quests_done || 0;
+            window.userLastQuizDate = data.last_quiz_date; // Store for quiz check
             
             // Update Milestones
             if (nextTarget) nextTarget.textContent = data.next_milestone;
@@ -1128,6 +1135,171 @@ async function pollChatData() {
     } catch(err) {
         console.error("Chat sync error");
     }
+}
+
+// ================= DAILY QUIZ LOGIC =================
+const QUIZ_BANK = [
+    { q: "What is the first book of the Bible?", opts: ["Exodus", "Genesis", "Leviticus", "Numbers"], ans: 1, diff: "easy" },
+    { q: "Who was swallowed by a great fish?", opts: ["Peter", "Paul", "Jonah", "Moses"], ans: 2, diff: "easy" },
+    { q: "How many days did God take to create the world?", opts: ["5", "6", "7", "3"], ans: 1, diff: "easy" },
+    { q: "Who defeated the giant Goliath?", opts: ["Saul", "Solomon", "David", "Jonathan"], ans: 2, diff: "easy" },
+    { q: "Who wrote the majority of the Psalms?", opts: ["David", "Moses", "Asaph", "Solomon"], ans: 0, diff: "medium" },
+    { q: "Where did Jesus perform His first miracle turning water into wine?", opts: ["Jerusalem", "Bethlehem", "Cana", "Nazareth"], ans: 2, diff: "medium" },
+    { q: "Who was the very first King of Israel?", opts: ["David", "Solomon", "Saul", "Samuel"], ans: 2, diff: "medium" },
+    { q: "What is the longest book in the Bible?", opts: ["Isaiah", "Psalms", "Jeremiah", "Genesis"], ans: 1, diff: "medium" },
+    { q: "Who was the father of John the Baptist?", opts: ["Zacharias", "Joseph", "Simeon", "Zebedee"], ans: 0, diff: "hard" },
+    { q: "What specific wood was Noah commanded to use for the Ark?", opts: ["Cedar", "Acacia", "Gopher", "Oak"], ans: 2, diff: "hard" },
+    { q: "On what island was John exiled when he wrote Revelation?", opts: ["Crete", "Cyprus", "Patmos", "Malta"], ans: 2, diff: "hard" },
+    { q: "Who was the only female Judge of Israel?", opts: ["Ruth", "Esther", "Deborah", "Miriam"], ans: 2, diff: "hard" },
+    { q: "How many years did the Israelites wander in the wilderness?", opts: ["30", "40", "50", "100"], ans: 1, diff: "medium" },
+    { q: "Who replaced Judas Iscariot as an Apostle?", opts: ["Paul", "Matthias", "Barnabas", "Silas"], ans: 1, diff: "hard" },
+    { q: "What was the Apostle Paul's profession by trade?", opts: ["Fisherman", "Carpenter", "Tentmaker", "Tax Collector"], ans: 2, diff: "hard" }
+];
+
+let activeQuestions = [];
+let currentQIndex = 0;
+let quizLives = 3;
+let selectedOptIndex = -1;
+let quizInterval;
+
+function getSGMidnightTimer() {
+    const now = new Date();
+    const sgTime = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+    sgTime.setUTCHours(23, 59, 59, 999);
+    return sgTime.getTime() - (8 * 60 * 60 * 1000);
+}
+
+// Ensure the profile HTML has an ID for quizzes! (Add `id="stat-quizzes"` to the html)
+window.openQuizModal = function() {
+    if (isGuest) return alert("Please register an account to play the Daily Quiz!");
+
+    const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    
+    document.getElementById("quiz-start-screen").style.display = "none";
+    document.getElementById("quiz-cooldown-screen").style.display = "none";
+    document.getElementById("quiz-q-screen").style.display = "none";
+
+    if (window.userLastQuizDate === todaySG) {
+        document.getElementById("quiz-cooldown-screen").style.display = "block";
+        startQuizCooldown();
+    } else {
+        document.getElementById("quiz-start-screen").style.display = "block";
+    }
+    openModal("quiz-modal");
+}
+
+function startQuizCooldown() {
+    clearInterval(quizInterval);
+    quizInterval = setInterval(() => {
+        const diff = getSGMidnightTimer() - Date.now();
+        if (diff <= 0) { document.getElementById("quiz-cd-timer").innerText = "Ready!"; clearInterval(quizInterval); } 
+        else {
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById("quiz-cd-timer").innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+    }, 1000);
+}
+
+window.startDailyQuiz = function() {
+    document.getElementById("quiz-start-screen").style.display = "none";
+    document.getElementById("quiz-q-screen").style.display = "block";
+    
+    // Shuffle and pick 10
+    activeQuestions = [...QUIZ_BANK].sort(() => 0.5 - Math.random()).slice(0, 10);
+    currentQIndex = 0;
+    quizLives = 3;
+    document.getElementById("life-1").classList.remove("life-lost");
+    document.getElementById("life-2").classList.remove("life-lost");
+    document.getElementById("life-3").classList.remove("life-lost");
+
+    loadQuestion();
+}
+
+function loadQuestion() {
+    selectedOptIndex = -1;
+    document.getElementById("quiz-submit-btn").style.display = "block";
+    document.getElementById("quiz-progress").innerText = `Question ${currentQIndex + 1} / 10`;
+    
+    const qData = activeQuestions[currentQIndex];
+    document.getElementById("quiz-question-text").innerText = qData.q;
+    
+    const badge = document.getElementById("quiz-difficulty");
+    badge.className = `diff-badge ${qData.diff}`;
+    badge.innerText = qData.diff.charAt(0).toUpperCase() + qData.diff.slice(1);
+
+    const optsContainer = document.getElementById("quiz-options-container");
+    optsContainer.innerHTML = "";
+    qData.opts.forEach((opt, idx) => {
+        optsContainer.innerHTML += `<button class="quiz-option" id="opt-${idx}" onclick="selectQuizOption(${idx})">${opt}</button>`;
+    });
+}
+
+window.selectQuizOption = function(idx) {
+    if (document.getElementById(`opt-${idx}`).classList.contains('wrong')) return; // Can't select wrong ones
+    selectedOptIndex = idx;
+    document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById(`opt-${idx}`).classList.add('selected');
+}
+
+window.submitQuizAnswer = function() {
+    if (selectedOptIndex === -1) return alert("Please select an answer first.");
+    
+    const qData = activeQuestions[currentQIndex];
+    const selectedBtn = document.getElementById(`opt-${selectedOptIndex}`);
+
+    if (selectedOptIndex === qData.ans) {
+        // Correct!
+        selectedBtn.classList.remove('selected');
+        selectedBtn.classList.add('correct');
+        document.getElementById("quiz-submit-btn").style.display = "none";
+        
+        setTimeout(() => {
+            currentQIndex++;
+            if (currentQIndex >= 10) finalizeQuiz('pass');
+            else loadQuestion();
+        }, 2000);
+    } else {
+        // Wrong!
+        selectedBtn.classList.remove('selected');
+        selectedBtn.classList.add('wrong');
+        quizLives--;
+        document.getElementById(`life-${quizLives + 1}`).classList.add("life-lost");
+        selectedOptIndex = -1; // Reset selection so they must guess again
+        
+        if (quizLives <= 0) {
+            setTimeout(() => finalizeQuiz('fail'), 1000);
+        }
+    }
+}
+
+window.resignQuiz = function() {
+    if(confirm("Are you sure you want to resign? You will fail today's quiz.")) {
+        finalizeQuiz('fail');
+    }
+}
+
+async function finalizeQuiz(status) {
+    document.getElementById("quiz-q-screen").style.display = "none";
+    
+    if (status === 'pass') {
+        alert("🎉 Congratulations! You passed the daily quiz!\n+1000 Holy Power\n+500 XP");
+    } else {
+        alert("❌ You failed today's quiz. Read your Bible and try again tomorrow!");
+    }
+
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
+
+    await fetch(`${BACKEND_URL}/api/quiz/result`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: displayUser, status: status })
+    });
+
+    // Refresh UI Profile
+    location.reload(); 
 }
 
 // ================= DIVINE SCROLL REVEAL =================

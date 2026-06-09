@@ -1045,6 +1045,27 @@ li,
 .rank-info strong { font-family: 'Cinzel', serif; font-size: 1.2rem; color: #fffdf5; }
 .rank-info span { font-family: 'Cardo', serif; font-size: 0.9rem; }
 
+/* ================= DAILY QUIZ STYLES ================= */
+.biblical-btn { border: none; padding: 10px 25px; border-radius: 8px; font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+.gold-btn { background: linear-gradient(135deg, #d4af37, #8b5a2b); color: #1a0a03; }
+.gold-btn:hover { background: linear-gradient(135deg, #ffd700, #a67c52); box-shadow: 0 0 15px gold; transform: translateY(-2px); }
+.brown-btn { background: #3b2206; color: #cbb27d; border: 1px solid #8b5a2b; }
+.brown-btn:hover { background: #5c3a21; color: #ffd700; }
+
+.diff-badge { padding: 4px 12px; border-radius: 15px; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; }
+.diff-badge.easy { background: rgba(82, 196, 26, 0.2); color: #52c41a; border: 1px solid #52c41a; }
+.diff-badge.medium { background: rgba(250, 173, 20, 0.2); color: #faad14; border: 1px solid #faad14; }
+.diff-badge.hard { background: rgba(255, 77, 79, 0.2); color: #ff4d4d; border: 1px solid #ff4d4d; }
+
+.quiz-options-grid { display: flex; flex-direction: column; gap: 12px; }
+.quiz-option { background: rgba(0,0,0,0.5); border: 2px solid #8b5a2b; color: #fffdf5; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Cardo', serif; font-size: 1.1rem; transition: 0.3s; text-align: left; }
+.quiz-option:hover { background: rgba(212, 175, 55, 0.1); border-color: #d4af37; }
+.quiz-option.selected { background: rgba(212, 175, 55, 0.3); border-color: #ffd700; box-shadow: 0 0 10px rgba(255,215,0,0.4); }
+.quiz-option.correct { background: rgba(82, 196, 26, 0.3); border-color: #52c41a; box-shadow: 0 0 15px rgba(82,196,26,0.6); color: #52c41a; pointer-events: none; }
+.quiz-option.wrong { background: rgba(255, 77, 79, 0.3); border-color: #ff4d4d; box-shadow: 0 0 15px rgba(255,77,79,0.6); color: #ff4d4d; pointer-events: none; opacity: 0.6; }
+
+.life-lost { color: #555 !important; text-shadow: none !important; }
+
 /* ================= DROPDOWN (Mobile Menu) ================= */
 .dropdown {
     position: absolute;

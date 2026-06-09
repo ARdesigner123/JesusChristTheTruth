@@ -141,7 +141,7 @@
 
                 <div class="profile-actions">
                     <a href="rank.html" class="profile-btn"><i class="fas fa-crown"></i> Your Rank</a>
-                    <a href="#" class="profile-btn"><i class="fas fa-question-circle"></i> Daily Quiz</a>
+                    <button class="profile-btn" onclick="openQuizModal()"><i class="fas fa-question-circle"></i> Daily Quiz</button>
                     <a href="#" class="profile-btn"><i class="fas fa-map-marked-alt"></i> Quests</a>
                 </div>
             </div>
@@ -316,6 +316,48 @@
                 <input type="text" id="chat-msg-input" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
                 <button class="chat-send-btn" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
             </div>
+        </div>
+    </div>
+
+    <div id="quiz-modal" class="custom-popup-modal">
+        <div class="popup-modal-content" style="max-width: 600px; text-align: center;">
+            
+            <div id="quiz-start-screen">
+                <h2 class="popup-title">Daily Quiz</h2>
+                <p style="color:#a67c52; font-family:'Cardo', serif; font-size:1.1rem;">Test your biblical knowledge. <br>Pass to earn <strong style="color:gold;">1000 Holy Power</strong> and <strong style="color:#4da6ff;">500 XP!</strong></p>
+                <div style="margin-top:30px; display:flex; gap:15px; justify-content:center;">
+                    <button class="biblical-btn gold-btn" onclick="startDailyQuiz()">Start Quiz</button>
+                    <button class="biblical-btn brown-btn" onclick="closeModal('quiz-modal')">Back</button>
+                </div>
+            </div>
+
+            <div id="quiz-cooldown-screen" style="display:none;">
+                <h2 class="popup-title">Come Back Tomorrow</h2>
+                <p style="color:#a67c52; font-family:'Cardo', serif;">You have already attempted the daily quiz today.</p>
+                <div class="lb-timer-container" style="margin-top:20px;">
+                    <i class="fas fa-clock"></i> Next Quiz In: <strong id="quiz-cd-timer" style="color:#ff4d4d;">00:00:00</strong>
+                </div>
+                <br><button class="biblical-btn brown-btn" style="margin-top:20px;" onclick="closeModal('quiz-modal')">Close</button>
+            </div>
+
+            <div id="quiz-q-screen" style="display:none; text-align:left;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <button class="danger-btn" style="padding: 5px 15px; font-size:0.9rem;" onclick="resignQuiz()">Resign</button>
+                    <span id="quiz-progress" style="color:#ffd700; font-family:'Cinzel', serif; font-weight:bold; font-size:1.2rem;">Question 1 / 10</span>
+                    <div id="quiz-lives" style="color:#ff4d4d; font-size:1.3rem;">
+                        <i class="fas fa-cross" id="life-1"></i> <i class="fas fa-cross" id="life-2"></i> <i class="fas fa-cross" id="life-3"></i>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-bottom:10px;">
+                    <span id="quiz-difficulty" class="diff-badge">Easy</span>
+                </div>
+                <h3 id="quiz-question-text" style="color:#fffdf5; font-family:'Cardo', serif; text-align:center; font-size:1.4rem; margin-bottom:20px;">Question?</h3>
+                
+                <div id="quiz-options-container" class="quiz-options-grid"></div>
+                
+                <button class="biblical-btn gold-btn" id="quiz-submit-btn" style="width:100%; margin-top:20px;" onclick="submitQuizAnswer()">Submit Answer</button>
+            </div>
+
         </div>
     </div>
 
