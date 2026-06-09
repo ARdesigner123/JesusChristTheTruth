@@ -675,12 +675,12 @@ if (profileUsernameEl || rankDisplayNameEl) {
             if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
             if (streakEl) streakEl.textContent = data.daily_streak || 0;
 
-            // Add this inside the "if (!isGuestProfile)" block:
+            // Inside the 'fetch' response in PROFILE PAGE LOGIC
             const quizzesEl = document.getElementById("stat-quizzes");
             const questsEl = document.getElementById("stat-quests");
-            if (quizzesEl) quizzesEl.textContent = data.quizzes_done || 0;
+            if (quizzesEl) quizzesEl.textContent = data.quizzes_passed || 0; // FIXED: Maps to passed
             if (questsEl) questsEl.textContent = data.quests_done || 0;
-            window.userLastQuizDate = data.last_quiz_date; // Store for quiz check
+            window.userLastQuizDate = data.last_quiz_date;
             
             // Update Milestones
             if (nextTarget) nextTarget.textContent = data.next_milestone;
@@ -938,7 +938,7 @@ window.openFriendProfile = async function(username, avatarSrc) {
         document.getElementById("fp-time").innerText = data.active_time || 0;
         document.getElementById("fp-hp").innerText = data.holypower || 0;
         document.getElementById("fp-streak").innerText = data.daily_streak || 0;
-        document.getElementById("fp-quizzes").innerText = data.quizzes_done || 0;
+        document.getElementById("fp-quizzes").innerText = data.quizzes_passed || 0; // FIXED: Maps to passed
         document.getElementById("fp-quests").innerText = data.quests_done || 0;
 
         // Calculate and display correct Rank using their XP!
