@@ -603,6 +603,20 @@ function createParticle() {
     }, duration * 1000);
 }
 
+// ================= RANK SYSTEM LOGIC =================
+function calculateRank(xp) {
+    if (xp >= 50000) return { name: "Apostle", prev: 40000, next: 50000, maxed: true };
+    if (xp >= 40000) return { name: "Elder", prev: 40000, next: 50000 };
+    if (xp >= 32000) return { name: "Witness", prev: 32000, next: 40000 };
+    if (xp >= 25000) return { name: "Worker", prev: 25000, next: 32000 };
+    if (xp >= 17000) return { name: "Servant", prev: 17000, next: 25000 };
+    if (xp >= 10000) return { name: "Disciple", prev: 10000, next: 17000 };
+    if (xp >= 5000)  return { name: "Sheep", prev: 5000, next: 10000 };
+    if (xp >= 2000)  return { name: "Follower", prev: 2000, next: 5000 };
+    if (xp >= 500)   return { name: "Believer", prev: 500, next: 2000 };
+    return { name: "Seeker", prev: 0, next: 500 };
+}
+
 // ================= PROFILE PAGE LOGIC =================
 const profileUsernameEl = document.getElementById("profile-username");
 
@@ -643,18 +657,62 @@ if (profileUsernameEl) {
             activeTimeEl.textContent = totalTime;
             
             if (!isGuestProfile) {
+                const userXP = data.xp || 0;
+                const rankData = calculateRank(userXP);
+                
+                // Update Profile Elements
+                const rankText = document.getElementById("profile-rank-text");
+                const xpText = document.getElementById("profile-xp-text");
+                if (rankText) rankText.textContent = rankData.name;
+                if (xpText) xpText.textContent = userXP;
+
                 if (currentActiveDisplay) currentActiveDisplay.textContent = totalTime;
                 if (holyPowerEl) holyPowerEl.textContent = data.holypower || 0;
-                if (streakEl) streakEl.textContent = data.daily_streak || 0; // NEW: Update streak UI
+                if (streakEl) streakEl.textContent = data.daily_streak || 0;
                 
+                // Update Milestones
                 if (nextTarget) nextTarget.textContent = data.next_milestone;
                 if (nextReward) nextReward.innerHTML = `${data.next_reward} Holy Power <i class="fas fa-coins"></i>`;
+                const nextXP = document.getElementById("next-milestone-xp");
+                if (nextXP) nextXP.innerHTML = `+${data.next_xp} XP`;
                 
                 if (milestoneFill) {
                     const range = data.next_milestone - data.prev_milestone;
                     const progress = totalTime - data.prev_milestone;
                     const percentage = Math.min(100, Math.max(0, (progress / range) * 100));
                     milestoneFill.style.width = percentage + "%";
+                }
+
+                // ================= UPDATE RANK PAGE TIMELINE =================
+                const rankDisplayName = document.getElementById("rank-display-name");
+                if (rankDisplayName) {
+                    rankDisplayName.textContent = rankData.name;
+                    document.getElementById("rank-xp-current").textContent = userXP;
+                    document.getElementById("rank-xp-next").textContent = rankData.maxed ? "MAX" : rankData.next;
+
+                    // Progress Bar calculation
+                    const rankProgressFill = document.getElementById("rank-progress-fill");
+                    if (rankData.maxed) {
+                        rankProgressFill.style.width = "100%";
+                    } else {
+                        const rankRange = rankData.next - rankData.prev;
+                        const rankProgress = userXP - rankData.prev;
+                        const rankPercent = Math.min(100, Math.max(0, (rankProgress / rankRange) * 100));
+                        rankProgressFill.style.width = rankPercent + "%";
+                    }
+
+                    // Timeline Visuals
+                    document.querySelectorAll('.rank-step').forEach(step => {
+                        const reqXP = parseInt(step.getAttribute('data-req'));
+                        step.classList.remove('current');
+                        
+                        if (userXP >= reqXP) {
+                            step.classList.remove('locked');
+                        }
+                        if (step.id === `step-${rankData.name}`) {
+                            step.classList.add('current');
+                        }
+                    });
                 }
             }
         })
@@ -853,7 +911,11 @@ window.openFriendProfile = async function(username, avatarSrc) {
     document.getElementById("fp-streak").innerText = "...";
     document.getElementById("fp-quizzes").innerText = "...";
     document.getElementById("fp-quests").innerText = "...";
-    document.getElementById("fp-rank").innerText = "Loading...";
+    
+    // Update to use true XP instead of Holy Power!
+    const friendXP = data.xp || 0;
+    const friendRankData = calculateRank(friendXP);
+    document.getElementById("fp-rank").innerText = friendRankData.name;
 
     openModal("friend-profile-modal");
 
