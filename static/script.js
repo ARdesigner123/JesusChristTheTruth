@@ -1254,10 +1254,29 @@ window.startDailyQuiz = function() {
     document.getElementById("quiz-start-screen").style.display = "none";
     document.getElementById("quiz-q-screen").style.display = "block";
     
-    // Shuffle and pick 10
-    activeQuestions = [...QUIZ_BANK].sort(() => 0.5 - Math.random()).slice(0, 10);
+    // Helper function to filter by difficulty, shuffle, and pick a specific amount
+    const pickQuestions = (difficulty, count) => {
+        return QUIZ_BANK
+            .filter(q => q.diff === difficulty)
+            .sort(() => 0.5 - Math.random()) // Shuffle
+            .slice(0, count); // Pick 'count' amount
+    };
+
+    // Build the 10-question progressive gauntlet!
+    activeQuestions = [
+        ...pickQuestions("easy", 2),
+        ...pickQuestions("medium", 2),
+        ...pickQuestions("hard", 2),
+        ...pickQuestions("difficult", 1),
+        ...pickQuestions("extreme", 1),
+        ...pickQuestions("insane", 1),
+        ...pickQuestions("impossible", 1)
+    ];
+
     currentQIndex = 0;
     quizLives = 3;
+    
+    // Reset visual lives
     document.getElementById("life-1").classList.remove("life-lost");
     document.getElementById("life-2").classList.remove("life-lost");
     document.getElementById("life-3").classList.remove("life-lost");
