@@ -1056,6 +1056,33 @@ li,
 .diff-badge.easy { background: rgba(82, 196, 26, 0.2); color: #52c41a; border: 1px solid #52c41a; }
 .diff-badge.medium { background: rgba(250, 173, 20, 0.2); color: #faad14; border: 1px solid #faad14; }
 .diff-badge.hard { background: rgba(255, 77, 79, 0.2); color: #ff4d4d; border: 1px solid #ff4d4d; }
+.diff-badge.difficult { 
+    background: rgba(255, 140, 0, 0.2); 
+    color: #ff8c00; /* Dark Orange */
+    border: 1px solid #ff8c00; 
+}
+
+.diff-badge.extreme { 
+    background: rgba(148, 0, 211, 0.2); 
+    color: #cc66ff; /* Purple */
+    border: 1px solid #9400d3; 
+    box-shadow: 0 0 8px rgba(148, 0, 211, 0.5);
+}
+
+.diff-badge.insane { 
+    background: rgba(139, 0, 0, 0.3); 
+    color: #ff4d4d; /* Bright Red over Dark Red */
+    border: 1px solid #8b0000; 
+    box-shadow: 0 0 10px rgba(139, 0, 0, 0.8);
+}
+
+.diff-badge.impossible { 
+    background: linear-gradient(135deg, #000000, #1a0a03); 
+    color: #ffd700; /* Gold */
+    border: 1px solid #d4af37; 
+    box-shadow: 0 0 15px gold; 
+    text-shadow: 0 0 5px #ffd700;
+}
 
 .quiz-options-grid { display: flex; flex-direction: column; gap: 12px; }
 .quiz-option { background: rgba(0,0,0,0.5); border: 2px solid #8b5a2b; color: #fffdf5; padding: 15px; border-radius: 8px; cursor: pointer; font-family: 'Cardo', serif; font-size: 1.1rem; transition: 0.3s; text-align: left; }
