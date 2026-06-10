@@ -1155,7 +1155,7 @@ const QUIZ_BANK = [
     { q: "Who wrote the majority of the Psalms?", opts: ["David", "Moses", "Asaph", "Solomon"], ans: 0, diff: "medium" },
     { q: "Where did Jesus perform His first miracle turning water into wine?", opts: ["Jerusalem", "Bethlehem", "Cana", "Nazareth"], ans: 2, diff: "medium" },
     { q: "Who was the very first King of Israel?", opts: ["David", "Solomon", "Saul", "Samuel"], ans: 2, diff: "medium" },
-    { q: "What is the longest chapter in the Bible?", opts: ["Psalm 23", "Psalm 119", "Isaiah 53", "Psalm 119"], ans: 1, diff: "medium" },
+    { q: "What is the longest chapter in the Bible?", opts: ["Psalm 23", "Psalm 119", "Isaiah 53", "Psalm 150"], ans: 1, diff: "medium" },
     { q: "How many years did the Israelites wander in the wilderness?", opts: ["30", "40", "50", "100"], ans: 1, diff: "medium" },
     { q: "Who wrote the majority of the New Testament epistles?", opts: ["Paul", "Peter", "John", "James"], ans: 0, diff: "medium" },
     { q: "Which Gospel writer was known as the 'beloved physician'?", opts: ["Matthew", "Luke", "Mark", "John"], ans: 1, diff: "medium" },
