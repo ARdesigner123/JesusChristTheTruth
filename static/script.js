@@ -1139,7 +1139,7 @@ async function pollChatData() {
 
 // ================= DAILY QUIZ LOGIC =================
 const QUIZ_BANK = [
-    // --- EASY ---
+    // --- EASY (10 Questions) ---
     { q: "What is the first book of the Bible?", opts: ["Exodus", "Genesis", "Leviticus", "Numbers"], ans: 1, diff: "easy" },
     { q: "Who was swallowed by a great fish?", opts: ["Peter", "Paul", "Jonah", "Moses"], ans: 2, diff: "easy" },
     { q: "How many days did God take to create the world?", opts: ["5", "6", "7", "3"], ans: 1, diff: "easy" },
@@ -1148,19 +1148,22 @@ const QUIZ_BANK = [
     { q: "How many original apostles did Jesus choose?", opts: ["10", "12", "14", "40"], ans: 1, diff: "easy" },
     { q: "In which river was Jesus baptized?", opts: ["Nile", "Tigris", "Jordan", "Euphrates"], ans: 2, diff: "easy" },
     { q: "Who is the earthly mother of Jesus?", opts: ["Elizabeth", "Martha", "Sarah", "Mary"], ans: 3, diff: "easy" },
+    { q: "What is the last book of the New Testament?", opts: ["Acts", "Jude", "Revelation", "Romans"], ans: 2, diff: "easy" },
+    { q: "Where was Jesus born?", opts: ["Nazareth", "Bethlehem", "Jerusalem", "Galilee"], ans: 1, diff: "easy" },
 
-    // --- MEDIUM ---
+    // --- MEDIUM (10 Questions) ---
     { q: "Who wrote the majority of the Psalms?", opts: ["David", "Moses", "Asaph", "Solomon"], ans: 0, diff: "medium" },
     { q: "Where did Jesus perform His first miracle turning water into wine?", opts: ["Jerusalem", "Bethlehem", "Cana", "Nazareth"], ans: 2, diff: "medium" },
     { q: "Who was the very first King of Israel?", opts: ["David", "Solomon", "Saul", "Samuel"], ans: 2, diff: "medium" },
-    { q: "What is the longest book in the Bible?", opts: ["Isaiah", "Psalms", "Jeremiah", "Genesis"], ans: 1, diff: "medium" },
+    { q: "What is the longest chapter in the Bible?", opts: ["Psalm 23", "Psalm 119", "Isaiah 53", "Psalm 119"], ans: 1, diff: "medium" },
     { q: "How many years did the Israelites wander in the wilderness?", opts: ["30", "40", "50", "100"], ans: 1, diff: "medium" },
     { q: "Who wrote the majority of the New Testament epistles?", opts: ["Paul", "Peter", "John", "James"], ans: 0, diff: "medium" },
     { q: "Which Gospel writer was known as the 'beloved physician'?", opts: ["Matthew", "Luke", "Mark", "John"], ans: 1, diff: "medium" },
-    { q: "Which disciple denied Jesus three times before the rooster crowed?", opts: ["Judas", "Thomas", "Peter", "Andrew"], ans: 2, diff: "medium" },
+    { q: "Which disciple denied Jesus three times?", opts: ["Judas", "Thomas", "Peter", "Andrew"], ans: 2, diff: "medium" },
     { q: "What was the name of the tax collector who climbed a tree to see Jesus?", opts: ["Matthew", "Levi", "Nicodemus", "Zacchaeus"], ans: 3, diff: "medium" },
+    { q: "Which of these is NOT a Fruit of the Spirit?", opts: ["Joy", "Patience", "Courage", "Gentleness"], ans: 2, diff: "medium" },
 
-    // --- HARD ---
+    // --- HARD (10 Questions) ---
     { q: "Who was the father of John the Baptist?", opts: ["Zacharias", "Joseph", "Simeon", "Zebedee"], ans: 0, diff: "hard" },
     { q: "What specific wood was Noah commanded to use for the Ark?", opts: ["Cedar", "Acacia", "Gopher", "Oak"], ans: 2, diff: "hard" },
     { q: "On what island was John exiled when he wrote Revelation?", opts: ["Crete", "Cyprus", "Patmos", "Malta"], ans: 2, diff: "hard" },
@@ -1170,37 +1173,35 @@ const QUIZ_BANK = [
     { q: "Who is recorded as the first Christian martyr?", opts: ["Stephen", "James", "Peter", "Paul"], ans: 0, diff: "hard" },
     { q: "What language was the majority of the New Testament originally written in?", opts: ["Hebrew", "Greek", "Aramaic", "Latin"], ans: 1, diff: "hard" },
     { q: "Which Archangel appeared to Mary to announce the birth of Jesus?", opts: ["Michael", "Raphael", "Gabriel", "Uriel"], ans: 2, diff: "hard" },
+    { q: "How many minor prophets are there in the Old Testament?", opts: ["5", "10", "12", "14"], ans: 2, diff: "hard" },
 
-    // --- DIFFICULT ---
+    // --- DIFFICULT (6 Questions) ---
     { q: "In what year did the Great Schism split the Catholic and Eastern Orthodox churches?", opts: ["1054", "1517", "325", "1095"], ans: 0, diff: "difficult" },
     { q: "Who authored 'Institutes of the Christian Religion'?", opts: ["Martin Luther", "John Calvin", "Thomas Aquinas", "John Wesley"], ans: 1, diff: "difficult" },
-    { q: "The First Council of Nicaea, which formulated the Nicene Creed, took place in what year?", opts: ["100 AD", "451 AD", "325 AD", "787 AD"], ans: 2, diff: "difficult" },
+    { q: "The First Council of Nicaea took place in what year?", opts: ["100 AD", "451 AD", "325 AD", "787 AD"], ans: 2, diff: "difficult" },
     { q: "Which Protestant Reformer famously nailed the 95 Theses to the Wittenberg door?", opts: ["Ulrich Zwingli", "John Knox", "Jan Hus", "Martin Luther"], ans: 3, diff: "difficult" },
     { q: "How many ecumenical councils are generally recognized by the Eastern Orthodox Church?", opts: ["Seven", "Three", "Twelve", "Twenty-One"], ans: 0, diff: "difficult" },
     { q: "What is the Catholic dogma that asserts Mary was conceived without original sin?", opts: ["Virgin Birth", "Immaculate Conception", "Theotokos", "Assumption"], ans: 1, diff: "difficult" },
 
-    // --- EXTREME ---
+    // --- EXTREME (6 Questions) ---
     { q: "Which Pope initiated the First Crusade in 1095 AD?", opts: ["Pope Gregory VII", "Pope Innocent III", "Pope Urban II", "Pope Boniface VIII"], ans: 2, diff: "extreme" },
     { q: "Who translated the Bible into Latin, creating the 'Vulgate'?", opts: ["Augustine", "Thomas Aquinas", "Jerome", "Clement"], ans: 2, diff: "extreme" },
-    { q: "What heresy denies the Trinity by claiming God merely acts in three different 'modes' or forms?", opts: ["Arianism", "Pelagianism", "Nestorianism", "Modalism (Sabellianism)"], ans: 3, diff: "extreme" },
+    { q: "What heresy denies the Trinity by claiming God acts in three different 'modes' instead of distinct persons?", opts: ["Arianism", "Pelagianism", "Nestorianism", "Modalism"], ans: 3, diff: "extreme" },
     { q: "In Catholic theology, what is the term for the bread and wine substantially changing into Christ's body and blood?", opts: ["Transubstantiation", "Consubstantiation", "Memorialism", "Sacramental Union"], ans: 0, diff: "extreme" },
     { q: "Which book of the Bible is famous for being the only one that never explicitly mentions God?", opts: ["Ruth", "Song of Solomon", "Esther", "Ecclesiastes"], ans: 2, diff: "extreme" },
-    { q: "The 'Filioque' controversy, a major cause of the Great Schism, was about the Holy Spirit proceeding from the Father and...", opts: ["The Virgin Mary", "The Church", "The Apostles", "The Son"], ans: 3, diff: "extreme" },
+    { q: "The 'Filioque' controversy was about the Holy Spirit proceeding from the Father and...", opts: ["The Virgin Mary", "The Church", "The Apostles", "The Son"], ans: 3, diff: "extreme" },
 
-    // --- INSANE ---
-    { q: "Who was the chief defender of Trinitarianism against Arius at the Council of Nicaea?", opts: ["Athanasius", "Tertullian", "Cyril of Alexandria", "Basil the Great"], ans: 0, diff: "insane" },
-    { q: "The Synod of Dort (1618-1619) was convened to officially address and condemn the teachings of whom?", opts: ["John Calvin", "Jacobus Arminius", "Michael Servetus", "Erasmus"], ans: 1, diff: "insane" },
-    { q: "Which early church father wrote the monumental work 'The City of God'?", opts: ["Justin Martyr", "Irenaeus", "Augustine of Hippo", "Origen"], ans: 2, diff: "insane" },
-    { q: "Which early Christian heresy taught that the physical world is inherently evil and salvation requires secret spiritual knowledge?", opts: ["Arianism", "Docetism", "Donatism", "Gnosticism"], ans: 3, diff: "insane" },
+    // --- INSANE (4 Questions) ---
+    { q: "Who was the chief defender of Trinitarianism against Arius at the Council of Nicaea?", opts: ["Athanasius", "Tertullian", "Cyril", "Basil the Great"], ans: 0, diff: "insane" },
+    { q: "The Synod of Dort (1618) was convened to officially address and condemn the teachings of whom?", opts: ["John Calvin", "Jacobus Arminius", "Michael Servetus", "Erasmus"], ans: 1, diff: "insane" },
+    { q: "Which early Christian heresy taught that the physical world is inherently evil and salvation requires secret knowledge?", opts: ["Arianism", "Docetism", "Donatism", "Gnosticism"], ans: 3, diff: "insane" },
     { q: "What was the name of the first anti-pope who reigned during the Western Schism from Avignon starting in 1378?", opts: ["Clement VII", "Benedict XIII", "Alexander V", "John XXIII"], ans: 0, diff: "insane" },
 
-    // --- IMPOSSIBLE ---
+    // --- IMPOSSIBLE (4 Questions) ---
     { q: "Who authored the 'Summa Theologica', highly influential in Catholic scholasticism?", opts: ["Thomas Aquinas", "Bonaventure", "Peter Lombard", "Duns Scotus"], ans: 0, diff: "impossible" },
     { q: "In Eastern Orthodox theology, what is the specific term used for the transformative process of achieving union with God?", opts: ["Kenosis", "Theosis", "Hypostasis", "Oikonomia"], ans: 1, diff: "impossible" },
     { q: "Which early Christian sect believed Jesus was entirely distinct from the cruel Creator God of the Old Testament?", opts: ["Montanism", "Apollinarianism", "Marcionism", "Novatianism"], ans: 2, diff: "impossible" },
-    { q: "What 1648 treaty ended the Thirty Years' War and established the principle of 'cuius regio, eius religio'?", opts: ["Treaty of Tordesillas", "Edict of Nantes", "Diet of Worms", "Peace of Westphalia"], ans: 3, diff: "impossible" },
-    { q: "In the Book of Revelation, which of the seven churches was accused of being 'lukewarm' and making Christ sick?", opts: ["Ephesus", "Laodicea", "Smyrna", "Pergamum"], ans: 1, diff: "impossible" },
-    { q: "The 'Tetragrammaton' refers to the four Hebrew letters used for the name of God. What are they?", opts: ["ELOH", "ADON", "YHWH", "SHAD"], ans: 2, diff: "impossible" }
+    { q: "The 'Tetragrammaton' refers to the four Hebrew letters used for the name of God. What are they generally transliterated as?", opts: ["ELOH", "ADON", "YHWH", "SHAD"], ans: 2, diff: "impossible" }
 ];
 
 let activeQuestions = [];
