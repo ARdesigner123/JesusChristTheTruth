@@ -498,25 +498,25 @@
 
     <!-- Disciple Modal -->
     <div id="disciple-modal" class="modal-overlay">
-    <div class="modal-content" id="modal-content">
-        <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
-        
-        <div class="modal-body">
-            <div class="modal-visuals">
-                <div class="window-frame">
-                    <img id="modal-img" src="" alt="">
+        <div class="modal-content" id="modal-content">
+            <button class="modal-close-btn" onclick="closeDiscipleModal()"><i class="fas fa-times"></i></button>
+            
+            <div class="modal-body">
+                <div class="modal-visuals">
+                    <div class="window-frame" style="width:160px; height:220px; margin: 0 auto 15px;">
+                        <img id="modal-img" src="" alt="" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <h2 id="modal-name"></h2>
+                    <p id="modal-occupation" class="occupation" style="color:#a67c52; font-family:'Cardo', serif;"></p>
                 </div>
-                <h2 id="modal-name"></h2>
-                <p id="modal-occupation" class="occupation"></p>
-            </div>
 
-            <div class="modal-info">
-                <h3>The Mission & Life</h3>
-                <p id="modal-bio"></p>
+                <div class="modal-info">
+                    <h3>The Mission & Life</h3>
+                    <p id="modal-bio"></p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- FOOTER -->
     <footer class="footer">

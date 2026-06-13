@@ -1544,8 +1544,11 @@ const discipleData = {
     }
 };
 
-function openModal(card, index) {
+// RENAME FUNCTION TO AVOID CONFLICT WITH PROFILE MODALS!
+window.openDiscipleModal = function(card, index) {
     const modal = document.getElementById('disciple-modal');
+    if (!modal) return;
+
     const name = card.querySelector('h3').innerText;
     const img = card.querySelector('img').src;
     const occ = card.querySelector('.occupation').innerText;
@@ -1573,23 +1576,26 @@ function openModal(card, index) {
     // Show modal
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
-}
+};
 
-function closeModal() {
+window.closeDiscipleModal = function() {
     const modal = document.getElementById('disciple-modal');
+    if (!modal) return;
     modal.classList.remove('active');
     setTimeout(() => {
         modal.style.display = 'none';
-    }, 600); // Matches CSS transition time
-}
+    }, 400); // Matches CSS transition time
+};
 
-// Attach click events to the "More Info" buttons
+// Attach click events to the "More Info" buttons securely
 document.querySelectorAll('.disciple-card, .tree-card').forEach((card, index) => {
     const btn = card.querySelector('.more-info-btn');
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevents card hover trigger
-        openModal(card, index);
-    });
+    if (btn) {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents card hover trigger
+            openDiscipleModal(card, index);
+        });
+    }
 });
 
 // ================= SCROLL REVEAL =================
@@ -1608,7 +1614,6 @@ const observer = new IntersectionObserver((entries) => {
 
 blocks.forEach((block, index) => {
     observer.observe(block);
-
     // Add slight delay for each block
     block.style.transitionDelay = `${index * 0.1}s`;
 });
