@@ -2163,93 +2163,139 @@
     transform: translateX(5px);
 }
 
-/* ================= RESPONSIVE TIMELINE ================= */
+/* ================= ULTIMATE RESPONSIVE DESIGN (CHURCH PAGE) ================= */
+
+/* --- LAPTOP / SMALL DESKTOP (Max 1024px) --- */
+@media (max-width: 1024px) {
+    .nav-links { display: none; }
+    .nav-right { display: none; } 
+    .menu-icon { display: block; } 
+    .navbar { padding: 0 30px; }
+    
+    .doctrine-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- TABLET (Max 900px) --- */
 @media (max-width: 900px) {
-    .timeline-line, .timeline-line-fill {
-        left: 40px; /* Move line to the far left */
-    }
+    /* 1. Navbar & Hero */
+    .navbar { height: 70px; padding: 0 40px; }
+    .logo { height: 60px; }
+    .hero { padding: 140px 20px 80px; }
+    .hero-container { padding: 30px 20px; }
+    .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
+    .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
+
+    /* 2. Timeline Squeeze (Moves line to the left, stacks content) */
+    .timeline-line, .timeline-line-fill { left: 30px; }
     
     .timeline-item.left, .timeline-item.right {
         width: 100%;
         left: 0;
         text-align: left;
-        padding-left: 80px; /* Make room for the line */
-        padding-right: 20px;
+        padding: 20px 15px 20px 70px; /* Room for the line on the left */
+        transform: translateY(40px); /* Reset entrance animation for mobile */
+    }
+    
+    .timeline-item.active { transform: translateY(0); }
+
+    /* Dots and Arrows snap to the left */
+    .timeline-item.left .timeline-dot, .timeline-item.right .timeline-dot {
+        left: 18px; 
+        right: auto;
+    }
+    .timeline-item.left .timeline-box::before, .timeline-item.right .timeline-box::before {
+        left: -15px; 
+        right: auto;
+        border-right: 15px solid #6b3f0d;
+        border-left: none;
     }
 
-    /* Stack Text and Image Vertically on Tablet/Mobile */
+    /* Timeline Images drop below text */
     .timeline-content-wrapper, .timeline-content-wrapper.reverse {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 20px;
     }
-
     .timeline-image {
-        position: relative; /* Turns off the desktop absolute positioning */
-        top: 0;
-        transform: none;
-        left: 0 !important;
-        right: 0 !important;
+        position: relative;
+        top: 0; transform: none;
+        left: 0 !important; right: 0 !important;
         width: 100%;
         padding: 0 !important;
-        justify-content: flex-start !important;
+        justify-content: center !important;
     }
+    .square-frame { max-width: 100%; height: auto; }
 
-    .square-frame {
-        width: 100%;
-        max-width: 400px;
-        height: 250px;
-    }
-
-    /* Fix dots and arrows for mobile left-alignment */
-    .timeline-item.left .timeline-dot, .timeline-item.right .timeline-dot {
-        left: 28px;
-        right: auto;
-    }
-    .timeline-item.left .timeline-box::before, .timeline-item.right .timeline-box::before {
-        left: -15px;
-        right: auto;
-        border-left: none;
-        border-right: 15px solid #6b3f0d;
-    }
-
-    .tab-buttons {
-        flex-wrap: wrap; /* Allows buttons to stack into 2 rows if needed */
-    }
-    .tab-btn {
-        flex: 1 1 50%; /* 2 buttons per row on tablet */
-        padding: 15px;
-        font-size: 1rem;
-    }
-    .tab-content.active {
-        flex-direction: column; /* Stacks text on top of image */
-        padding: 30px 20px;
-        gap: 30px;
-    }
-    .tab-text p {
-        text-align: left;
-    }
-
-    .saint-block {
-        flex-direction: column;
-        text-align: center;
-    }
-    .saint-block {
-        border-left: none;
-        border-top: 3px solid gold;
-    }
-
-    /* Fix Cross Symbols for Mobile */
-    .cross-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
+    /* 3. Cross Symbols (Stack vertically) */
+    .cross-grid { flex-direction: column; align-items: center; }
     .cross-divider {
-        width: 80%; /* Changes from vertical to horizontal */
+        width: 80%; 
         height: 2px;
         margin: 30px 0;
         background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.5), transparent);
     }
+
+    /* 4. Tab Buttons & Content */
+    .tab-buttons { flex-wrap: wrap; }
+    .tab-btn { flex: 1 1 50%; padding: 15px; font-size: 1.1rem; }
+    
+    .tab-content { 
+        padding: 40px 20px; 
+        flex-direction: column; /* Image drops below text */
+        gap: 30px; 
+    }
+    .tab-content.active { display: flex; }
+    .tab-text p { text-align: left; }
+    
+    .saint-block {
+        flex-direction: column;
+        text-align: center;
+        border-left: none;
+        border-top: 3px solid gold;
+    }
+}
+
+/* --- MOBILE PHONES (Max 600px) --- */
+@media (max-width: 600px) {
+    /* Navbar & Hero Shrink */
+    .navbar { height: 60px; padding: 0 15px; }
+    .logo { height: 45px; }
+    .hero { padding: 120px 15px 60px; }
+    .hero-container { padding: 25px 15px; border-radius: 15px; }
+    .main-title { font-size: 1.6rem; white-space: normal; }
+    .description { font-size: 1rem; line-height: 1.6; }
+    
+    /* Typography Adjustments */
+    .gospel-title, .church-subtitle { font-size: 1.5rem; margin-bottom: 30px; }
+    .timeline-box h3 { font-size: 1.4rem; }
+    .tab-text h3 { font-size: 1.4rem; text-align: center; }
+    
+    /* False Doctrine Grid */
+    .doctrine-grid { 
+        grid-template-columns: 1fr; /* Force 1 column on small phones */
+        gap: 25px; 
+        padding: 10px;
+    }
+
+    /* Tab Buttons Stack Completely */
+    .tab-btn { 
+        flex: 1 1 100%; 
+        border-bottom: 1px solid rgba(107, 63, 13, 0.5);
+    }
+    .tab-btn.active {
+        border-bottom: 2px solid gold;
+    }
+
+    /* Image Adjustments */
+    .saint-img-frame { width: 100px; height: 100px; }
+    .gothic-frame { height: 350px; } /* Prevent massive windows on phones */
+}
+
+/* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
+@media (max-width: 400px) {
+    .timeline-line, .timeline-line-fill { left: 20px; }
+    .timeline-item.left, .timeline-item.right { padding: 20px 10px 20px 50px; }
+    .timeline-item.left .timeline-dot, .timeline-item.right .timeline-dot { left: 8px; }
+    .cross-title { font-size: 1.5rem; }
 }

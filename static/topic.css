@@ -210,9 +210,112 @@
 .save-edit-btn { background: linear-gradient(135deg, #4da6ff, #0059b3); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-family: 'Cinzel', serif; cursor: pointer; margin-right: 10px; }
 .cancel-edit-btn { background: transparent; color: #cccccc; border: 1px solid #cccccc; padding: 8px 15px; border-radius: 5px; font-family: 'Cinzel', serif; cursor: pointer; }
 
-/* Responsive adjustments */
+/* ================= ULTIMATE RESPONSIVE DESIGN (TOPIC PAGE) ================= */
+
+/* --- LAPTOP / SMALL DESKTOP (Max 1024px) --- */
+@media (max-width: 1024px) {
+    .nav-links { display: none; }
+    .nav-right { display: none; } 
+    .menu-icon { display: block; } 
+    .navbar { padding: 0 30px; }
+}
+
+/* --- TABLET (Max 900px) --- */
+@media (max-width: 900px) {
+    /* Navbar & Hero Shrink */
+    .navbar { height: 70px; padding: 0 40px; }
+    .logo { height: 60px; }
+    .hero { padding: 140px 20px 80px; }
+    .hero-container { padding: 30px 20px; }
+    .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
+    .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
+    
+    /* Horizontal Card Adaptations */
+    .horizontal-card { 
+        flex: 0 0 90vw; /* Take up slightly more of the screen */
+        height: 600px;  /* Slight height reduction */
+        padding: 25px;
+    }
+}
+
+/* --- LARGE MOBILE (Max 768px) --- */
 @media (max-width: 768px) {
-    .controls-bar { flex-direction: column; }
-    .horizontal-card { flex: 0 0 95vw; padding: 20px; }
-    .replies-container { margin-left: 15px; padding-left: 10px; }
+    /* Controls Bar Stacking */
+    .controls-bar { 
+        flex-direction: column; 
+        align-items: stretch; /* Forces search and select to span full width */
+    }
+    
+    /* Cards squeeze */
+    .horizontal-card { 
+        flex: 0 0 92vw; 
+        padding: 20px; 
+    }
+    
+    /* Replies indentation shrinks to save horizontal space */
+    .replies-container { 
+        margin-left: 15px; 
+        padding-left: 15px; 
+    }
+    
+    /* Post Action Buttons Wrap */
+    .post-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+/* --- MOBILE PHONES (Max 600px) --- */
+@media (max-width: 600px) {
+    /* Navbar & Hero Squeeze */
+    .navbar { height: 60px; padding: 0 15px; }
+    .logo { height: 45px; }
+    .hero { padding: 120px 15px 60px; }
+    .main-title { font-size: 1.6rem; letter-spacing: 1px; white-space: normal; }
+    .description { font-size: 1rem; line-height: 1.6; }
+    .verse-reference { font-size: 0.9rem; }
+    
+    .cross-effect { transform: translateX(-50%) scale(0.6); top: -100px; }
+    .cross-wings { transform: translateX(-50%) scale(0.4); top: -130px; }
+
+    /* Section Typography */
+    .testimony-header h2 { font-size: 1.6rem; }
+    .testimony-header p { font-size: 1.05rem; }
+
+    /* Editor Toolbar adapts for small screens */
+    .editor-toolbar { justify-content: center; }
+    
+    /* Horizontal Feed - Full Width Snap */
+    .horizontal-card { 
+        flex: 0 0 95vw; /* Almost full width */
+        height: 550px; 
+        padding: 15px; 
+        border-radius: 10px;
+    }
+
+    /* Post adjustments */
+    .post { padding: 15px; }
+    .topic-header h2 { font-size: 1.4rem; }
+    .username { font-size: 1rem; }
+    .post-time { font-size: 0.8rem; }
+    
+    /* Button squeezing */
+    .submit-testimony-btn, .add-reply-btn {
+        width: 100%; /* Make buttons massive targets on mobile */
+        text-align: center;
+    }
+    
+    .save-edit-btn, .cancel-edit-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
+@media (max-width: 400px) {
+    .main-title { font-size: 1.4rem; }
+    .testimony-header h2 { font-size: 1.4rem; }
+    .horizontal-card { height: 500px; }
+    .avatar { width: 35px; height: 35px; font-size: 1rem; }
 }

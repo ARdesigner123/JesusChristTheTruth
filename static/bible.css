@@ -444,46 +444,99 @@
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
-/* ================= RESPONSIVE DESIGN ================= */
+/* ================= ULTIMATE RESPONSIVE DESIGN (BIBLE PAGE) ================= */
+
+/* --- LAPTOP / SMALL DESKTOP (Max 1200px) --- */
 @media (max-width: 1200px) {
     .bible-title { font-size: 1.9rem; }
     .bible-col { padding: 30px 20px; }
-    .bible-image-frame { width: 90%; } 
+    .bible-image-frame { width: 95%; } 
 }
 
+/* --- TABLET LANDSCAPE (Max 1024px) --- */
 @media (max-width: 1024px) {
-    .genesis-container { padding: 30px 20px; }
-    .hebrew-text { font-size: 2.5rem; }
-    
+    /* Global Nav */
+    .nav-links { display: none; }
+    .nav-right { display: none; } 
+    .menu-icon { display: block; } 
+    .navbar { padding: 0 30px; }
+
+    /* Genesis Section */
+    .genesis-container { padding: 40px 30px; }
+    .hebrew-text { font-size: 2.8rem; }
+
+    /* Bible Grid - Stack Columns on Tablets */
     .bible-grid { flex-direction: column; align-items: center; gap: 0; }
-    .bible-col { width: 100%; max-width: 650px; margin-bottom: 30px; }
+    .bible-col { width: 100%; max-width: 700px; margin-bottom: 30px; }
     .bible-image-frame { width: 60%; max-width: 300px; margin-bottom: 30px; }
     
+    /* Turn vertical divider into horizontal divider */
     .bible-divider {
         width: 80%; max-width: 400px; height: 2px;
         background: linear-gradient(to right, transparent, #ffd700, transparent);
-        margin: 10px 0 40px; opacity: 0.7;
+        margin: 10px auto 40px; opacity: 0.7;
     }
 }
 
+/* --- TABLET PORTRAIT (Max 900px) --- */
 @media (max-width: 900px) {
-    .genesis-grid { grid-template-columns: 1fr; } /* Stack genesis cards on mobile */
+    /* Hero */
+    .navbar { height: 70px; padding: 0 40px; }
+    .logo { height: 60px; }
+    .hero { padding: 140px 20px 60px; }
+    .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
+    .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
+
+    /* Genesis Section - Stack the 4 cards */
+    .genesis-grid { grid-template-columns: 1fr; gap: 20px; }
+    .genesis-card { padding: 25px; }
+    
+    /* Reader Panel Width Adjustment */
+    .side-panel { width: 85vw; }
 }
 
+/* --- LARGE MOBILE (Max 768px) --- */
 @media (max-width: 768px) {
+    /* Reader Panel takes over the whole screen */
     .side-panel { width: 100vw; border-radius: 0; border-left: none; }
     .panel-header { padding: 25px 20px 15px; }
     .panel-content { padding: 15px 20px 40px; }
-    .books-grid { grid-template-columns: 1fr; }
+    .books-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 }
 
+/* --- MOBILE PHONES (Max 600px) --- */
 @media (max-width: 600px) {
-    .genesis-intro h2 { font-size: 2rem; }
-    .hebrew-text { font-size: 1.8rem; }
+    /* Navbar & Hero Shrink */
+    .navbar { height: 60px; padding: 0 15px; }
+    .logo { height: 45px; }
+    .hero { padding: 120px 15px 40px; }
+    .main-title { font-size: 1.6rem; white-space: normal; }
+    .description { font-size: 1rem; line-height: 1.6; }
+    .verse-reference { font-size: 0.9rem; }
+    
+    /* Genesis Section Mobile Squeeze */
+    .genesis-container { padding: 30px 15px; }
+    .genesis-intro h2 { font-size: 1.8rem; }
+    .hebrew-text { font-size: 1.8rem; letter-spacing: 2px; }
     .translation { font-size: 1.2rem; }
+    .genesis-card h3 { font-size: 1.2rem; }
 
-    .bible-title { font-size: 1.7rem; }
-    .bible-details h4 { font-size: 1.15rem; }
+    /* Bible Columns Mobile Squeeze */
+    .bible-title { font-size: 1.6rem; }
+    .bible-details h4 { font-size: 1.1rem; }
     .bible-details p { font-size: 1rem; }
-    .bible-image-frame { width: 75%; }
+    .bible-image-frame { width: 85%; }
+    .bible-col { padding: 25px 15px; }
+    
+    /* Reader Panel Books Grid to Single Column */
+    .books-grid { grid-template-columns: 1fr; }
+    .book-section { font-size: 1.1rem; }
+}
+
+/* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
+@media (max-width: 400px) {
+    .main-title { font-size: 1.4rem; }
+    .hebrew-text { font-size: 1.5rem; }
+    .bible-image-frame { width: 100%; }
+    .orthodox-read-btn, .catholic-read-btn, .protestant-read-btn { font-size: 1rem; padding: 10px 0; }
 }

@@ -183,25 +183,96 @@
     transform: translateY(0);
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= ULTIMATE RESPONSIVE DESIGN (GENESIS PAGE) ================= */
+
+/* --- LAPTOP / SMALL DESKTOP (Max 1200px) --- */
+@media (max-width: 1200px) {
+    .genesis-section { padding: 20px 15px 60px; }
+    .genesis-container { padding: 40px 30px; }
+    .hebrew-text { font-size: 3rem; }
+}
+
+/* --- TABLET LANDSCAPE / SMALL LAPTOP (Max 1024px) --- */
 @media (max-width: 1024px) {
+    /* Stack the reading layout */
     .chapter-layout, .reverse-layout {
         flex-direction: column;
     }
     
+    /* Turn off sticky positioning for tablets/mobile */
     .image-column {
         position: relative;
         top: 0;
         width: 100%;
-        max-width: 500px;
+        max-width: 600px;
         margin: 30px auto 0;
     }
+    .verses-column { width: 100%; }
+    
+    .hebrew-text { font-size: 2.5rem; }
 }
 
+/* --- TABLET PORTRAIT (Max 900px) --- */
+@media (max-width: 900px) {
+    .book-header { padding: 40px 20px 10px; }
+    .book-title { font-size: 2.5rem; }
+    
+    /* Stack Genesis Intro Cards to 1 column */
+    .genesis-grid { grid-template-columns: 1fr; gap: 20px; }
+    .genesis-card { padding: 25px; }
+    
+    .hebrew-block { padding: 25px 15px; }
+}
+
+/* --- MOBILE PHONES (Max 600px) --- */
 @media (max-width: 600px) {
-    .book-title { font-size: 2.2rem; margin-top: 50px; }
-    .back-arrow { top: 20px; transform: none; left: 10px; }
+    /* Header & Back Arrow Adjustment */
+    .book-header { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 20px 15px 10px; 
+        margin-top: 20px;
+    }
+    
+    /* Safely positions the back arrow above the title so they don't overlap */
+    .back-arrow { 
+        position: relative; 
+        left: 0; 
+        top: 0; 
+        transform: none; 
+        margin-bottom: 15px;
+        align-self: flex-start;
+    }
     .back-arrow:hover { transform: translateX(-5px); }
-    .verse { font-size: 1.1rem; }
-    .trans { font-size: 1rem; }
+    .book-title { font-size: 2rem; letter-spacing: 1px; text-align: center; }
+
+    /* Genesis Seed Section Squeeze */
+    .genesis-container { padding: 25px 15px; }
+    .genesis-intro h2 { font-size: 1.8rem; }
+    .genesis-intro p { font-size: 1rem; }
+    
+    /* Safely scale the Hebrew text so it doesn't break the screen bounds */
+    .hebrew-text { font-size: 1.6rem; letter-spacing: 1px; }
+    .translation { font-size: 1.2rem; }
+    .transliteration { font-size: 1rem; }
+
+    /* Reader Layout Typography adjustments for mobile eyes */
+    .chapter-header h2 { font-size: 1.8rem; }
+    .chapter-summary { font-size: 1.05rem; padding: 15px; }
+    
+    .verse { font-size: 1.1rem; line-height: 1.6; padding: 8px 10px; }
+    .trans { font-size: 0.95rem; }
+    
+    .image-column { max-width: 100%; margin: 20px auto 0; }
+    .image-caption { font-size: 1rem; }
+}
+
+/* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
+@media (max-width: 400px) {
+    .book-title { font-size: 1.6rem; }
+    .hebrew-text { font-size: 1.4rem; }
+    .translation { font-size: 1.1rem; }
+    .verse { font-size: 1.05rem; }
+    .v-num { font-size: 0.9rem; }
 }
