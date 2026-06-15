@@ -749,6 +749,8 @@ li,
     border-radius: 20px;
     width: 850px;
     max-width: 95%;
+    max-height: 90vh; /* CRITICAL: Prevents it from being taller than the screen */
+    overflow-y: auto; /* CRITICAL: Enables scrolling inside the modal */
     position: relative;
     box-shadow: 0 15px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(212, 175, 55, 0.2);
     /* Pop-in growing effect */
@@ -2380,6 +2382,46 @@ li,
         grid-column: 1; 
         margin: 0; 
     } 
+
+    /* ================= AVATAR MODAL MOBILE SQUEEZE ================= */
+    .avatar-modal-layout { 
+        padding: 20px 10px; 
+        gap: 15px; 
+    }
+    .avatar-grid { 
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); 
+        gap: 10px; 
+    }
+    .avatar-option { 
+        width: 65px; 
+        height: 65px; 
+    }
+    .large-arch-frame { 
+        width: 120px; 
+        height: 160px; 
+        margin-bottom: 10px; 
+    }
+    .avatar-title {
+        font-size: 1.4rem;
+    }
+
+    /* ================= RANK PAGE MOBILE SQUEEZE ================= */
+    .current-rank-display h2 {
+        font-size: 1.5rem;
+    }
+    .rank-step { 
+        padding: 10px 15px; 
+        gap: 15px; 
+    }
+    .rank-info strong { 
+        font-size: 1.1rem; 
+    }
+    .rank-info span { 
+        font-size: 0.8rem; 
+    }
+    .rank-icon {
+        font-size: 1.2rem;
+    }
     
     /* Trinity Diagram - Extreme Mobile Squeeze */
     .trinity-diagram { 
