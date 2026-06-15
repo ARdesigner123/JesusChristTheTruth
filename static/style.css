@@ -1093,9 +1093,12 @@ li,
 
 /* ================= MAJESTIC QUIZ UI ================= */
 
-/* Inner Arena Wrap */
+/* Inner Arena Wrap - FIXED HEIGHT & FLEXBOX */
 .quiz-arena-content {
     background: linear-gradient(to bottom, #1a0a03, #2b1a03) !important;
+    max-height: 90vh; /* CRITICAL: Stops the modal from going off-screen */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header Bar */
@@ -1142,31 +1145,40 @@ li,
 }
 .life-lost { color: #331414 !important; text-shadow: none !important; }
 
-/* Question Container */
+/* Question Container - TIGHTENED PADDING */
 .quiz-question-container {
-    padding: 30px 40px 15px;
+    padding: 20px 30px 10px; /* Reduced padding to save height */
     text-align: center;
+    flex-shrink: 0; /* Keeps the question locked at the top */
 }
-.quiz-diff-wrapper { margin-bottom: 15px; }
+.quiz-diff-wrapper { margin-bottom: 10px; }
 
 #quiz-question-text {
     color: #fffdf5;
     font-family: 'Cardo', serif;
-    font-size: 1.6rem;
-    line-height: 1.5;
+    font-size: 1.4rem; /* Slightly smaller to save space */
+    line-height: 1.4;
     text-shadow: 1px 1px 5px #000;
+    margin-bottom: 0;
 }
 
-/* Options Area */
+/* Options Area - NOW SCROLLABLE */
 .quiz-action-area {
-    padding: 20px 40px 40px;
+    padding: 15px 30px 25px;
     background: radial-gradient(circle at top, rgba(212, 175, 55, 0.05), transparent 70%);
+    overflow-y: auto; /* CRITICAL: Adds an internal scrollbar if the screen is tiny! */
+    flex-grow: 1;
 }
+
+/* Custom Scrollbar for Options Area */
+.quiz-action-area::-webkit-scrollbar { width: 6px; }
+.quiz-action-area::-webkit-scrollbar-track { background: transparent; }
+.quiz-action-area::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 10px; }
 
 .quiz-options-grid { 
     display: flex; 
     flex-direction: column; 
-    gap: 12px; 
+    gap: 10px; /* Reduced gap from 12px to 10px */
     counter-reset: quiz-opt; /* CSS Magic to auto-generate A, B, C, D */
 }
 
@@ -1175,11 +1187,11 @@ li,
     border: 1px solid #5c3a21; 
     border-left: 5px solid #8b5a2b; /* Thick left edge like a book binding */
     color: #e6e6e6; 
-    padding: 16px 20px; 
+    padding: 12px 18px; /* Thinner padding to save height */
     border-radius: 8px; 
     cursor: pointer; 
     font-family: 'Cardo', serif; 
-    font-size: 1.2rem; 
+    font-size: 1.1rem; /* Reduced from 1.2rem */
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); 
     text-align: left; 
     display: flex;
@@ -1194,7 +1206,7 @@ li,
     font-family: 'Cinzel', serif;
     font-weight: bold;
     margin-right: 15px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 }
 
 .quiz-option:hover { 
@@ -1244,6 +1256,7 @@ li,
     0% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
     100% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 10px #fff; }
 }
+
 
 /* ================= MAJESTIC COOLDOWN SCREEN ================= */
 .cooldown-icon {
@@ -2764,6 +2777,7 @@ li,
     .quiz-action-area { padding: 15px 20px 30px; }
     .quiz-option { font-size: 1.05rem; padding: 12px 15px; }
     .quiz-option::before { font-size: 1.1rem; margin-right: 10px; }
+    .quiz-submit-flare { font-size: 1.1rem; padding: 12px; }
 
      #quiz-cooldown-screen { padding: 40px 20px; }
     .cooldown-text { max-width: 100%; font-size: 1.1rem; }
