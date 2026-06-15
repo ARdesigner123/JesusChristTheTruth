@@ -1137,71 +1137,126 @@ async function pollChatData() {
     }
 }
 
-// ================= DAILY QUIZ LOGIC =================
+// ================= QUIZ ENGINE LOGIC =================
 const QUIZ_BANK = [
-    // --- EASY (10 Questions) ---
+    // --- EASY (15 Questions) ---
     { q: "What is the first book of the Bible?", opts: ["Exodus", "Genesis", "Leviticus", "Numbers"], ans: 1, diff: "easy" },
     { q: "Who was swallowed by a great fish?", opts: ["Peter", "Paul", "Jonah", "Moses"], ans: 2, diff: "easy" },
-    { q: "How many days did God take to create the world?", opts: ["5", "6", "7", "3"], ans: 1, diff: "easy" },
-    { q: "Who defeated the giant Goliath?", opts: ["Saul", "Solomon", "David", "Jonathan"], ans: 2, diff: "easy" },
+    { q: "How many days did God take to create the world before resting?", opts: ["5", "6", "7", "3"], ans: 1, diff: "easy" },
+    { q: "Who defeated the giant Goliath with a sling and a stone?", opts: ["Saul", "Solomon", "David", "Jonathan"], ans: 2, diff: "easy" },
     { q: "What was the name of Jesus' earthly father?", opts: ["Joseph", "John", "Zechariah", "Simeon"], ans: 0, diff: "easy" },
     { q: "How many original apostles did Jesus choose?", opts: ["10", "12", "14", "40"], ans: 1, diff: "easy" },
     { q: "In which river was Jesus baptized?", opts: ["Nile", "Tigris", "Jordan", "Euphrates"], ans: 2, diff: "easy" },
     { q: "Who is the earthly mother of Jesus?", opts: ["Elizabeth", "Martha", "Sarah", "Mary"], ans: 3, diff: "easy" },
     { q: "What is the last book of the New Testament?", opts: ["Acts", "Jude", "Revelation", "Romans"], ans: 2, diff: "easy" },
     { q: "Where was Jesus born?", opts: ["Nazareth", "Bethlehem", "Jerusalem", "Galilee"], ans: 1, diff: "easy" },
+    { q: "Who built the Ark to survive the great flood?", opts: ["Abraham", "Moses", "Noah", "Enoch"], ans: 2, diff: "easy" },
+    { q: "Who was sold into slavery in Egypt by his brothers?", opts: ["Jacob", "Esau", "Isaac", "Joseph"], ans: 3, diff: "easy" },
+    { q: "What did Jesus turn into wine at the wedding in Cana?", opts: ["Juice", "Bread", "Water", "Dirt"], ans: 2, diff: "easy" },
+    { q: "Which disciple betrayed Jesus?", opts: ["Peter", "Judas Iscariot", "Thomas", "John"], ans: 1, diff: "easy" },
+    { q: "Who received the Ten Commandments from God on Mount Sinai?", opts: ["Aaron", "Joshua", "Elijah", "Moses"], ans: 3, diff: "easy" },
 
-    // --- MEDIUM (10 Questions) ---
+    // --- MEDIUM (15 Questions) ---
     { q: "Who wrote the majority of the Psalms?", opts: ["David", "Moses", "Asaph", "Solomon"], ans: 0, diff: "medium" },
-    { q: "Where did Jesus perform His first miracle turning water into wine?", opts: ["Jerusalem", "Bethlehem", "Cana", "Nazareth"], ans: 2, diff: "medium" },
     { q: "Who was the very first King of Israel?", opts: ["David", "Solomon", "Saul", "Samuel"], ans: 2, diff: "medium" },
     { q: "What is the longest chapter in the Bible?", opts: ["Psalm 23", "Psalm 119", "Isaiah 53", "Psalm 150"], ans: 1, diff: "medium" },
     { q: "How many years did the Israelites wander in the wilderness?", opts: ["30", "40", "50", "100"], ans: 1, diff: "medium" },
     { q: "Who wrote the majority of the New Testament epistles?", opts: ["Paul", "Peter", "John", "James"], ans: 0, diff: "medium" },
     { q: "Which Gospel writer was known as the 'beloved physician'?", opts: ["Matthew", "Luke", "Mark", "John"], ans: 1, diff: "medium" },
     { q: "Which disciple denied Jesus three times?", opts: ["Judas", "Thomas", "Peter", "Andrew"], ans: 2, diff: "medium" },
-    { q: "What was the name of the tax collector who climbed a tree to see Jesus?", opts: ["Matthew", "Levi", "Nicodemus", "Zacchaeus"], ans: 3, diff: "medium" },
-    { q: "Which of these is NOT a Fruit of the Spirit?", opts: ["Joy", "Patience", "Courage", "Gentleness"], ans: 2, diff: "medium" },
+    { q: "What was the name of the short tax collector who climbed a tree to see Jesus?", opts: ["Matthew", "Levi", "Nicodemus", "Zacchaeus"], ans: 3, diff: "medium" },
+    { q: "Which of these is NOT a Fruit of the Spirit mentioned in Galatians 5?", opts: ["Joy", "Patience", "Courage", "Gentleness"], ans: 2, diff: "medium" },
+    { q: "What did God use to lead the Israelites through the wilderness by day?", opts: ["A pillar of fire", "A pillar of cloud", "An angel", "A shining star"], ans: 1, diff: "medium" },
+    { q: "Who was the oldest man recorded in the Bible, living 969 years?", opts: ["Adam", "Noah", "Enoch", "Methuselah"], ans: 3, diff: "medium" },
+    { q: "What was the name of the sea that Moses parted?", opts: ["Dead Sea", "Mediterranean Sea", "Red Sea", "Sea of Galilee"], ans: 2, diff: "medium" },
+    { q: "Which prophet was taken up to heaven in a chariot of fire?", opts: ["Elisha", "Enoch", "Isaiah", "Elijah"], ans: 3, diff: "medium" },
+    { q: "Who was the strong man whose hair was cut by Delilah?", opts: ["Gideon", "Samson", "Jephthah", "Boaz"], ans: 1, diff: "medium" },
+    { q: "What type of bird brought an olive branch back to Noah's Ark?", opts: ["Raven", "Eagle", "Dove", "Sparrow"], ans: 2, diff: "medium" },
 
-    // --- HARD (10 Questions) ---
+    // --- HARD (15 Questions) ---
     { q: "Who was the father of John the Baptist?", opts: ["Zacharias", "Joseph", "Simeon", "Zebedee"], ans: 0, diff: "hard" },
     { q: "What specific wood was Noah commanded to use for the Ark?", opts: ["Cedar", "Acacia", "Gopher", "Oak"], ans: 2, diff: "hard" },
     { q: "On what island was John exiled when he wrote Revelation?", opts: ["Crete", "Cyprus", "Patmos", "Malta"], ans: 2, diff: "hard" },
-    { q: "Who was the only female Judge of Israel?", opts: ["Ruth", "Esther", "Deborah", "Miriam"], ans: 2, diff: "hard" },
+    { q: "Who was the only female Judge of Israel mentioned in the Bible?", opts: ["Ruth", "Esther", "Deborah", "Miriam"], ans: 2, diff: "hard" },
     { q: "Who replaced Judas Iscariot as an Apostle?", opts: ["Paul", "Matthias", "Barnabas", "Silas"], ans: 1, diff: "hard" },
     { q: "What was the Apostle Paul's profession by trade?", opts: ["Fisherman", "Carpenter", "Tentmaker", "Tax Collector"], ans: 2, diff: "hard" },
-    { q: "Who is recorded as the first Christian martyr?", opts: ["Stephen", "James", "Peter", "Paul"], ans: 0, diff: "hard" },
+    { q: "Who is recorded in Acts as the first Christian martyr?", opts: ["Stephen", "James", "Peter", "Paul"], ans: 0, diff: "hard" },
     { q: "What language was the majority of the New Testament originally written in?", opts: ["Hebrew", "Greek", "Aramaic", "Latin"], ans: 1, diff: "hard" },
     { q: "Which Archangel appeared to Mary to announce the birth of Jesus?", opts: ["Michael", "Raphael", "Gabriel", "Uriel"], ans: 2, diff: "hard" },
     { q: "How many minor prophets are there in the Old Testament?", opts: ["5", "10", "12", "14"], ans: 2, diff: "hard" },
+    { q: "Who was the king of Judea when Jesus was born?", opts: ["Pilate", "Caesar Augustus", "Herod the Great", "Agrippa"], ans: 2, diff: "hard" },
+    { q: "Who interpreted King Nebuchadnezzar’s dream of the great statue?", opts: ["Joseph", "Isaiah", "Ezekiel", "Daniel"], ans: 3, diff: "hard" },
+    { q: "What is the name of the pool where Jesus healed a paralyzed man in John 5?", opts: ["Siloam", "Bethesda", "Gihon", "Hezekiah"], ans: 1, diff: "hard" },
+    { q: "In Revelation, what is the name of the star that fell to earth and poisoned the waters?", opts: ["Wormwood", "Lucifer", "Abaddon", "Leviathan"], ans: 0, diff: "hard" },
+    { q: "Who was Paul’s primary companion during his first missionary journey?", opts: ["Silas", "Timothy", "Barnabas", "Luke"], ans: 2, diff: "hard" },
 
-    // --- DIFFICULT (6 Questions) ---
-    { q: "In what year did the Great Schism split the Catholic and Eastern Orthodox churches?", opts: ["1054", "1517", "325", "1095"], ans: 0, diff: "difficult" },
-    { q: "Who authored 'Institutes of the Christian Religion'?", opts: ["Martin Luther", "John Calvin", "Thomas Aquinas", "John Wesley"], ans: 1, diff: "difficult" },
-    { q: "The First Council of Nicaea took place in what year?", opts: ["100 AD", "451 AD", "325 AD", "787 AD"], ans: 2, diff: "difficult" },
-    { q: "Which Protestant Reformer famously nailed the 95 Theses to the Wittenberg door?", opts: ["Ulrich Zwingli", "John Knox", "Jan Hus", "Martin Luther"], ans: 3, diff: "difficult" },
-    { q: "How many ecumenical councils are generally recognized by the Eastern Orthodox Church?", opts: ["Seven", "Three", "Twelve", "Twenty-One"], ans: 0, diff: "difficult" },
-    { q: "What is the Catholic dogma that asserts Mary was conceived without original sin?", opts: ["Virgin Birth", "Immaculate Conception", "Theotokos", "Assumption"], ans: 1, diff: "difficult" },
+    // --- DIFFICULT (15 Questions) ---
+    { q: "Which Old Testament prophet married a prostitute named Gomer as a symbol of God's relationship with Israel?", opts: ["Amos", "Hosea", "Micah", "Malachi"], ans: 1, diff: "difficult" },
+    { q: "What was the name of the false god to whom apostate Israelites sacrificed their children in the Valley of Hinnom?", opts: ["Molech", "Dagon", "Asherah", "Baal"], ans: 0, diff: "difficult" },
+    { q: "Who was the high priest during the trial and crucifixion of Jesus?", opts: ["Annas", "Caiaphas", "Gamaliel", "Alexander"], ans: 1, diff: "difficult" },
+    { q: "In Daniel's vision of the four beasts, what animal represented the first beast?", opts: ["Bear", "Leopard", "Lion", "Dragon"], ans: 2, diff: "difficult" },
+    { q: "Who was the false prophet hired by Balak to curse Israel, whose donkey spoke to him?", opts: ["Jannes", "Hananiah", "Elymas", "Balaam"], ans: 3, diff: "difficult" },
+    { q: "In Revelation, what is the name of the 'destroyer' angel of the abyss?", opts: ["Apollyon", "Beelzebub", "Belial", "Legion"], ans: 0, diff: "difficult" },
+    { q: "Which New Testament letter contains the statement: 'Faith without works is dead'?", opts: ["Romans", "Galatians", "Hebrews", "James"], ans: 3, diff: "difficult" },
+    { q: "Who was the Roman centurion in Caesarea who sent for Peter and received the Holy Spirit?", opts: ["Julius", "Claudius", "Cornelius", "Augustus"], ans: 2, diff: "difficult" },
+    { q: "Which Israelite king aggressively promoted the worship of Baal alongside his wife, Jezebel?", opts: ["Jeroboam", "Ahab", "Manasseh", "Omri"], ans: 1, diff: "difficult" },
+    { q: "Who was the sorcerer in Paphos who tried to buy the power of the Holy Spirit with money?", opts: ["Elymas", "Simon the Sorcerer", "Jannes", "Jambres"], ans: 1, diff: "difficult" },
+    { q: "What is the name of the place where Jesus was crucified, meaning 'Place of a Skull'?", opts: ["Gethsemane", "Golgotha", "Moriah", "Zion"], ans: 1, diff: "difficult" },
+    { q: "Who was the brother of Moses and the first High Priest of Israel?", opts: ["Hur", "Eleazar", "Phinehas", "Aaron"], ans: 3, diff: "difficult" },
+    { q: "In the Parable of the Sower, what does the seed represent?", opts: ["Money", "The Word of God", "Good Deeds", "Love"], ans: 1, diff: "difficult" },
+    { q: "Which prophet confronted King David about his sin with Bathsheba?", opts: ["Samuel", "Nathan", "Gad", "Ahijah"], ans: 1, diff: "difficult" },
+    { q: "What was the name of the city that God destroyed with fire and brimstone alongside Gomorrah?", opts: ["Nineveh", "Jericho", "Sodom", "Tyre"], ans: 2, diff: "difficult" },
 
-    // --- EXTREME (6 Questions) ---
-    { q: "Which Pope initiated the First Crusade in 1095 AD?", opts: ["Pope Gregory VII", "Pope Innocent III", "Pope Urban II", "Pope Boniface VIII"], ans: 2, diff: "extreme" },
-    { q: "Who translated the Bible into Latin, creating the 'Vulgate'?", opts: ["Augustine", "Thomas Aquinas", "Jerome", "Clement"], ans: 2, diff: "extreme" },
-    { q: "What heresy denies the Trinity by claiming God acts in three different 'modes' instead of distinct persons?", opts: ["Arianism", "Pelagianism", "Nestorianism", "Modalism"], ans: 3, diff: "extreme" },
-    { q: "In Catholic theology, what is the term for the bread and wine substantially changing into Christ's body and blood?", opts: ["Transubstantiation", "Consubstantiation", "Memorialism", "Sacramental Union"], ans: 0, diff: "extreme" },
-    { q: "Which book of the Bible is famous for being the only one that never explicitly mentions God?", opts: ["Ruth", "Song of Solomon", "Esther", "Ecclesiastes"], ans: 2, diff: "extreme" },
-    { q: "The 'Filioque' controversy was about the Holy Spirit proceeding from the Father and...", opts: ["The Virgin Mary", "The Church", "The Apostles", "The Son"], ans: 3, diff: "extreme" },
+    // --- EXTREME (15 Questions) ---
+    { q: "What was the name of Moses' Midianite wife?", opts: ["Miriam", "Zipporah", "Keturah", "Hagar"], ans: 1, diff: "extreme" },
+    { q: "Which King of Judah was stricken with leprosy after attempting to burn incense in the temple?", opts: ["Hezekiah", "Josiah", "Uzziah", "Ahaz"], ans: 2, diff: "extreme" },
+    { q: "In Ezekiel’s vision of the chariot of God, the four living creatures had four faces: a man, a lion, an eagle, and a...", opts: ["Bear", "Ox", "Ram", "Serpent"], ans: 1, diff: "extreme" },
+    { q: "Which Old Testament book does not mention the name of God explicitly?", opts: ["Song of Solomon", "Lamentations", "Ruth", "Esther"], ans: 3, diff: "extreme" },
+    { q: "What was the specific name of the valley where David defeated Goliath?", opts: ["Valley of Elah", "Valley of Achor", "Valley of Jezreel", "Valley of Hinnom"], ans: 0, diff: "extreme" },
+    { q: "Who was the left-handed judge who killed Eglon, the fat king of Moab?", opts: ["Shamgar", "Gideon", "Othniel", "Ehud"], ans: 3, diff: "extreme" },
+    { q: "In Revelation, what color is the horse ridden by the rider named Death?", opts: ["Black", "Pale (Ashen)", "Red", "White"], ans: 1, diff: "extreme" },
+    { q: "According to Levitical law, on the Day of Atonement, the high priest cast lots over two goats. One was sacrificed; what was the other called?", opts: ["The Passover Lamb", "The Scapegoat", "The Free Offering", "The Firstfruit"], ans: 1, diff: "extreme" },
+    { q: "Who was the silversmith in Ephesus who was struck blind by Paul?", opts: ["Demetrius", "Elymas (Bar-Jesus)", "Alexander", "Sceva"], ans: 1, diff: "extreme" },
+    { q: "What was the name of the false goddess often worshipped alongside Baal in the Old Testament, represented by wooden poles?", opts: ["Astarte", "Asherah", "Ishtar", "Diana"], ans: 1, diff: "extreme" },
+    { q: "Who was the Jewish leader that led the rebuilding of the walls of Jerusalem after the Babylonian exile?", opts: ["Ezra", "Zerubbabel", "Nehemiah", "Haggai"], ans: 2, diff: "extreme" },
+    { q: "In Paul's letters, who abandoned him 'because he loved this present world'?", opts: ["Titus", "Demas", "Crescens", "Alexander"], ans: 1, diff: "extreme" },
+    { q: "Which prophet was commanded to eat food cooked over cow dung as a sign to Israel?", opts: ["Jeremiah", "Isaiah", "Amos", "Ezekiel"], ans: 3, diff: "extreme" },
+    { q: "Who was the king of Babylon who went insane and lived like a wild animal for seven years?", opts: ["Belshazzar", "Darius", "Cyrus", "Nebuchadnezzar"], ans: 3, diff: "extreme" },
+    { q: "What was the name of Abraham’s father?", opts: ["Nahor", "Haran", "Terah", "Lot"], ans: 2, diff: "extreme" },
 
-    // --- INSANE (4 Questions) ---
-    { q: "Who was the chief defender of Trinitarianism against Arius at the Council of Nicaea?", opts: ["Athanasius", "Tertullian", "Cyril", "Basil the Great"], ans: 0, diff: "insane" },
-    { q: "The Synod of Dort (1618) was convened to officially address and condemn the teachings of whom?", opts: ["John Calvin", "Jacobus Arminius", "Michael Servetus", "Erasmus"], ans: 1, diff: "insane" },
-    { q: "Which early Christian heresy taught that the physical world is inherently evil and salvation requires secret knowledge?", opts: ["Arianism", "Docetism", "Donatism", "Gnosticism"], ans: 3, diff: "insane" },
-    { q: "What was the name of the first anti-pope who reigned during the Western Schism from Avignon starting in 1378?", opts: ["Clement VII", "Benedict XIII", "Alexander V", "John XXIII"], ans: 0, diff: "insane" },
+    // --- INSANE (15 Questions) ---
+    { q: "What were the exact dimensions (in cubits) of the Ark of the Covenant?", opts: ["3 x 1.5 x 1.5", "2.5 x 1.5 x 1.5", "4 x 2 x 2", "5 x 3 x 3"], ans: 1, diff: "insane" },
+    { q: "Who was the judge of Israel who killed 600 Philistines with an oxgoad?", opts: ["Ibzan", "Jair", "Shamgar", "Elon"], ans: 2, diff: "insane" },
+    { q: "In Genesis, who was the grandfather of Nimrod?", opts: ["Ham", "Cush", "Shem", "Japheth"], ans: 0, diff: "insane" },
+    { q: "What was the name of the Egyptian sun god whose worship was humiliated by the plague of darkness?", opts: ["Osiris", "Horus", "Anubis", "Ra (Amon-Ra)"], ans: 3, diff: "insane" },
+    { q: "In Revelation 9, how long are the demonic 'locusts' allowed to torment mankind?", opts: ["3 months", "5 months", "7 months", "12 months"], ans: 1, diff: "insane" },
+    { q: "What was the name of the man who fell out of a third-story window while Paul was preaching?", opts: ["Eutychus", "Trophimus", "Erastus", "Philemon"], ans: 0, diff: "insane" },
+    { q: "Who was the mother of King Solomon?", opts: ["Michal", "Abigail", "Bathsheba", "Ahinoam"], ans: 2, diff: "insane" },
+    { q: "What is the longest single name found in the Bible (Isaiah 8:1)?", opts: ["Tilgath-pilneser", "Zaphnath-paaneah", "Maher-shalal-hash-baz", "Chushan-rishathaim"], ans: 2, diff: "insane" },
+    { q: "According to Proverbs 30, who is the author of the 'sayings' in that specific chapter?", opts: ["Lemuel", "Agur", "Solomon", "Hezekiah"], ans: 1, diff: "insane" },
+    { q: "What was the name of the servant whose ear Peter cut off in the Garden of Gethsemane?", opts: ["Caiaphas", "Rufus", "Malchus", "Jairus"], ans: 2, diff: "insane" },
+    { q: "In 2 Kings, who drove his chariot 'like a madman'?", opts: ["Ahab", "Jehu", "Joram", "Hazael"], ans: 1, diff: "insane" },
+    { q: "What was the name of the well where Isaac and Rebekah’s servant met?", opts: ["Beer-lahai-roi", "Beersheba", "Bethel", "Hebron"], ans: 0, diff: "insane" },
+    { q: "Which tribe of Israel was NOT given an allotment of land in Canaan?", opts: ["Simeon", "Dan", "Levi", "Issachar"], ans: 2, diff: "insane" },
+    { q: "Who was the man who stretched out his hand to steady the Ark of the Covenant and was struck dead?", opts: ["Abinadab", "Uzzah", "Ahio", "Perez"], ans: 1, diff: "insane" },
+    { q: "What was the name of Moses' father?", opts: ["Amram", "Izhar", "Kohath", "Hebron"], ans: 0, diff: "insane" },
 
-    // --- IMPOSSIBLE (4 Questions) ---
-    { q: "Who authored the 'Summa Theologica', highly influential in Catholic scholasticism?", opts: ["Thomas Aquinas", "Bonaventure", "Peter Lombard", "Duns Scotus"], ans: 0, diff: "impossible" },
-    { q: "In Eastern Orthodox theology, what is the specific term used for the transformative process of achieving union with God?", opts: ["Kenosis", "Theosis", "Hypostasis", "Oikonomia"], ans: 1, diff: "impossible" },
-    { q: "Which early Christian sect believed Jesus was entirely distinct from the cruel Creator God of the Old Testament?", opts: ["Montanism", "Apollinarianism", "Marcionism", "Novatianism"], ans: 2, diff: "impossible" },
-    { q: "The 'Tetragrammaton' refers to the four Hebrew letters used for the name of God. What are they generally transliterated as?", opts: ["ELOH", "ADON", "YHWH", "SHAD"], ans: 2, diff: "impossible" }
+    // --- IMPOSSIBLE (15 Questions) ---
+    { q: "In 2 Samuel 24, when David numbered the people, exactly how many 'valiant men that drew the sword' were in Israel (excluding Judah)?", opts: ["500,000", "800,000", "1,000,000", "1,200,000"], ans: 1, diff: "impossible" },
+    { q: "In Nehemiah 3, which specific gate was repaired by Joiada the son of Paseah?", opts: ["The Sheep Gate", "The Old Gate", "The Fish Gate", "The Valley Gate"], ans: 1, diff: "impossible" },
+    { q: "Who was the father of Aholiab (who helped build the Tabernacle)?", opts: ["Uri", "Hur", "Ahisamach", "Bezaleel"], ans: 2, diff: "impossible" },
+    { q: "In the genealogy of Genesis 5, exactly how old was Mahalalel when he died?", opts: ["930", "962", "969", "975"], ans: 2, diff: "impossible" },
+    { q: "According to Ezra 2, exactly how many men returned from Babylon who belonged to the family of Parosh?", opts: ["1,254", "2,172", "2,752", "3,112"], ans: 1, diff: "impossible" },
+    { q: "What were the names of Job's three daughters born to him after his restoration?", opts: ["Jemimah, Keziah, and Keren-Happuch", "Rachel, Leah, and Dinah", "Tamar, Zilpah, and Milcah", "Zipporah, Jael, and Keturah"], ans: 0, diff: "impossible" },
+    { q: "In Jeremiah 38, who was the Ethiopian eunuch who rescued Jeremiah from the muddy cistern?", opts: ["Ebed-Melech", "Gedaliah", "Pashhur", "Irijah"], ans: 0, diff: "impossible" },
+    { q: "In Numbers 33, what was the exact number of the firstborn males of the Israelites counted by Moses?", opts: ["22,000", "22,273", "23,105", "25,000"], ans: 1, diff: "impossible" },
+    { q: "Who was the king of Eglon killed by Joshua in Joshua 10?", opts: ["Hoham", "Piram", "Adoni-Zedek", "Debir"], ans: 3, diff: "impossible" },
+    { q: "In 1 Chronicles 2, who is listed as the mother of Amasa?", opts: ["Abigail", "Zeruiah", "Ephrath", "Azubah"], ans: 1, diff: "impossible" },
+    { q: "Which minor prophet specifically mentions the 'valley of Shittim'?", opts: ["Joel", "Obadiah", "Micah", "Nahum"], ans: 1, diff: "impossible" },
+    { q: "What was the exact weight of Goliath's spearhead?", opts: ["300 shekels of iron", "400 shekels of iron", "500 shekels of iron", "600 shekels of iron"], ans: 3, diff: "impossible" },
+    { q: "In 2 Kings 25, who was the captain of the guard who burned down the temple of Jerusalem?", opts: ["Nebuzaradan", "Rabshakeh", "Tartak", "Rabsaris"], ans: 0, diff: "impossible" },
+    { q: "Who was the maternal grandfather of King Jehoiachin?", opts: ["Elnathan", "Hilkiah", "Pedaiah", "Adaiah"], ans: 0, diff: "impossible" },
+    { q: "In Acts 27, what was the specific name of the Alexandrian ship that Paul sailed on toward Rome?", opts: ["It is not named", "Castor and Pollux", "The Adramyttium", "The Euroclydon"], ans: 0, diff: "impossible" }
 ];
 
 let activeQuestions = [];
@@ -1209,6 +1264,8 @@ let currentQIndex = 0;
 let quizLives = 3;
 let selectedOptIndex = -1;
 let quizInterval;
+let quizMode = 'daily'; // 'daily' or 'practice'
+let maxQuestions = 10;
 
 function getSGMidnightTimer() {
     const now = new Date();
@@ -1217,23 +1274,32 @@ function getSGMidnightTimer() {
     return sgTime.getTime() - (8 * 60 * 60 * 1000);
 }
 
-// Ensure the profile HTML has an ID for quizzes! (Add `id="stat-quizzes"` to the html)
-window.openQuizModal = function() {
-    if (isGuest) return alert("Please register an account to play the Daily Quiz!");
+// 1. Open the Menu
+window.openQuizMenu = function() {
+    if (isGuest) return alert("Please register an account to play the Quiz!");
+    openModal("quiz-menu-modal");
+}
 
-    const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
-    
-    document.getElementById("quiz-start-screen").style.display = "none";
-    document.getElementById("quiz-cooldown-screen").style.display = "none";
-    document.getElementById("quiz-q-screen").style.display = "none";
+// 2. Click "Daily Quiz" from Menu
+window.startDailyQuizFlow = function() {
+    closeModal("quiz-menu-modal");
+    setTimeout(() => {
+        const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
+        
+        document.getElementById("quiz-start-screen").style.display = "none";
+        document.getElementById("quiz-cooldown-screen").style.display = "none";
+        document.getElementById("quiz-q-screen").style.display = "none";
 
-    if (window.userLastQuizDate === todaySG) {
-        document.getElementById("quiz-cooldown-screen").style.display = "block";
-        startQuizCooldown();
-    } else {
-        document.getElementById("quiz-start-screen").style.display = "block";
-    }
-    openModal("quiz-modal");
+        if (window.userLastQuizDate === todaySG) {
+            document.getElementById("quiz-cooldown-screen").style.display = "block";
+            startQuizCooldown();
+        } else {
+            quizMode = 'daily';
+            maxQuestions = 10;
+            startActualQuiz(); // Bypass intro screen, jump right into quiz
+        }
+        openModal("quiz-modal");
+    }, 400); // wait for menu to close
 }
 
 function startQuizCooldown() {
@@ -1250,19 +1316,40 @@ function startQuizCooldown() {
     }, 1000);
 }
 
-window.startDailyQuiz = function() {
+// 3. Click a Difficulty from Menu
+window.startDifficultyQuiz = function(difficulty) {
+    closeModal("quiz-menu-modal");
+    setTimeout(() => {
+        document.getElementById("quiz-start-screen").style.display = "none";
+        document.getElementById("quiz-cooldown-screen").style.display = "none";
+        
+        quizMode = 'practice';
+        maxQuestions = 15;
+        
+        // Filter exactly 15 questions from that difficulty
+        activeQuestions = QUIZ_BANK
+            .filter(q => q.diff === difficulty)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 15);
+            
+        openModal("quiz-modal");
+        
+        // Jump right into the questions
+        document.getElementById("quiz-q-screen").style.display = "block";
+        resetQuizState();
+        loadQuestion();
+    }, 400);
+}
+
+// Internal flow to trigger the Daily Gauntlet
+window.startActualQuiz = function() {
     document.getElementById("quiz-start-screen").style.display = "none";
     document.getElementById("quiz-q-screen").style.display = "block";
     
-    // Helper function to filter by difficulty, shuffle, and pick a specific amount
     const pickQuestions = (difficulty, count) => {
-        return QUIZ_BANK
-            .filter(q => q.diff === difficulty)
-            .sort(() => 0.5 - Math.random()) // Shuffle
-            .slice(0, count); // Pick 'count' amount
+        return QUIZ_BANK.filter(q => q.diff === difficulty).sort(() => 0.5 - Math.random()).slice(0, count);
     };
 
-    // Build the 10-question progressive gauntlet!
     activeQuestions = [
         ...pickQuestions("easy", 2),
         ...pickQuestions("medium", 2),
@@ -1273,21 +1360,22 @@ window.startDailyQuiz = function() {
         ...pickQuestions("impossible", 1)
     ];
 
+    resetQuizState();
+    loadQuestion();
+}
+
+function resetQuizState() {
     currentQIndex = 0;
     quizLives = 3;
-    
-    // Reset visual lives
     document.getElementById("life-1").classList.remove("life-lost");
     document.getElementById("life-2").classList.remove("life-lost");
     document.getElementById("life-3").classList.remove("life-lost");
-
-    loadQuestion();
 }
 
 function loadQuestion() {
     selectedOptIndex = -1;
     document.getElementById("quiz-submit-btn").style.display = "block";
-    document.getElementById("quiz-progress").innerText = `Question ${currentQIndex + 1} / 10`;
+    document.getElementById("quiz-progress").innerText = `Question ${currentQIndex + 1} / ${maxQuestions}`;
     
     const qData = activeQuestions[currentQIndex];
     document.getElementById("quiz-question-text").innerText = qData.q;
@@ -1324,7 +1412,7 @@ window.submitQuizAnswer = function() {
         
         setTimeout(() => {
             currentQIndex++;
-            if (currentQIndex >= 10) finalizeQuiz('pass');
+            if (currentQIndex >= maxQuestions) finalizeQuiz('pass');
             else loadQuestion();
         }, 2000);
     } else {
@@ -1333,40 +1421,66 @@ window.submitQuizAnswer = function() {
         selectedBtn.classList.add('wrong');
         quizLives--;
         document.getElementById(`life-${quizLives + 1}`).classList.add("life-lost");
-        selectedOptIndex = -1; // Reset selection so they must guess again
+        selectedOptIndex = -1; 
         
         if (quizLives <= 0) {
-            setTimeout(() => finalizeQuiz('fail'), 1000);
+            document.getElementById("quiz-submit-btn").style.display = "none";
+            // Reveal the correct answer in green!
+            const correctBtn = document.getElementById(`opt-${qData.ans}`);
+            if (correctBtn) correctBtn.classList.add('correct');
+            
+            // Wait 2.5 seconds so they can read the correct answer before failing
+            setTimeout(() => finalizeQuiz('fail'), 2500);
         }
     }
 }
 
 window.resignQuiz = function() {
-    if(confirm("Are you sure you want to resign? You will fail today's quiz.")) {
+    if(confirm("Are you sure you want to resign? You will fail this quiz.")) {
         finalizeQuiz('fail');
     }
 }
 
 async function finalizeQuiz(status) {
     document.getElementById("quiz-q-screen").style.display = "none";
+    const displayUser = localStorage.getItem("jct_logged_in_user");
     
-    if (status === 'pass') {
-        alert("🎉 Congratulations! You passed the daily quiz!\n+1000 Holy Power\n+500 XP");
+    // 1. Handle UI Alerts & Local State
+    if (quizMode === 'daily') {
+        if (status === 'pass') {
+            alert("🎉 Congratulations! You passed the daily quiz!\n+1000 Holy Power\n+500 XP");
+        } else {
+            alert("❌ You failed today's quiz. Read your Bible and try again tomorrow!");
+        }
+        window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
     } else {
-        alert("❌ You failed today's quiz. Read your Bible and try again tomorrow!");
+        // Practice Mode
+        if (status === 'pass') {
+            alert(`🎉 Great job! You conquered the ${activeQuestions[0].diff.toUpperCase()} challenge! Keep studying the Word.`);
+        } else {
+            alert(`❌ You ran out of lives on the ${activeQuestions[0].diff.toUpperCase()} challenge. Keep studying and try again!`);
+        }
     }
 
-    const displayUser = localStorage.getItem("jct_logged_in_user");
-    window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
+    // 2. Send to Backend (Both Modes update stats!)
+    if (!isGuest && displayUser) {
+        try {
+            await fetch(`${BACKEND_URL}/api/quiz/result`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: displayUser, status: status, mode: quizMode })
+            });
+        } catch (err) {
+            console.error("Failed to save quiz stats", err);
+        }
+    }
 
-    await fetch(`${BACKEND_URL}/api/quiz/result`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: displayUser, status: status })
-    });
-
-    // Refresh UI Profile
-    location.reload(); 
+    // 3. Finalize Screen
+    if (quizMode === 'daily') {
+        location.reload(); // Refresh profile stats immediately
+    } else {
+        closeModal("quiz-modal"); // Keep them on the page for practice
+    }
 }
 
 // ================= DIVINE SCROLL REVEAL =================
