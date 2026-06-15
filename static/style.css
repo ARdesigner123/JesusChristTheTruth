@@ -1245,6 +1245,161 @@ li,
     100% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 0 10px #fff; }
 }
 
+/* ================= MAJESTIC COOLDOWN SCREEN ================= */
+.cooldown-icon {
+    font-size: 3.5rem;
+    color: #d4af37;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    animation: floatIcon 3s ease-in-out infinite;
+}
+
+@keyframes floatIcon {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.cooldown-text {
+    color: #cbb27d;
+    font-family: 'Cardo', serif;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cooldown-timer-box {
+    background: linear-gradient(to bottom, rgba(20, 10, 5, 0.9), rgba(0, 0, 0, 0.8));
+    border: 2px solid #5c3a21;
+    border-radius: 15px;
+    padding: 25px 40px;
+    display: inline-block;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 10px 20px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+.timer-label {
+    font-family: 'Cinzel', serif;
+    color: #a67c52;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.timer-countdown {
+    font-family: 'Cinzel', serif;
+    color: #ff4d4d;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(255, 77, 77, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cooldown-close-btn {
+    background: transparent;
+    border: 2px solid #8b5a2b;
+    color: #cbb27d;
+    padding: 12px 35px;
+    border-radius: 30px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cooldown-close-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: #ffd700;
+    color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* ================= ARENA DIFFICULTY BADGES ================= */
+.quiz-diff-wrapper {
+    margin-bottom: 25px;
+    display: inline-block;
+}
+
+/* Base style for the badge inside the quiz */
+#quiz-difficulty {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding: 8px 30px;
+    border-radius: 30px;
+    border: 2px solid transparent; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+/* Overriding the default diff-badge classes specifically for the Arena */
+#quiz-difficulty.easy { 
+    color: #52c41a; 
+    border-color: #52c41a; 
+    background: linear-gradient(to bottom, rgba(82, 196, 26, 0.15), rgba(0,0,0,0.8));
+    text-shadow: 0 0 10px rgba(82, 196, 26, 0.8);
+    box-shadow: 0 0 20px rgba(82, 196, 26, 0.3), inset 0 0 10px rgba(82, 196, 26, 0.2);
+}
+
+#quiz-difficulty.medium { 
+    color: #faad14; 
+    border-color: #faad14; 
+    background: linear-gradient(to bottom, rgba(250, 173, 20, 0.15), rgba(0,0,0,0.8));
+    text-shadow: 0 0 10px rgba(250, 173, 20, 0.8);
+    box-shadow: 0 0 20px rgba(250, 173, 20, 0.3), inset 0 0 10px rgba(250, 173, 20, 0.2);
+}
+
+#quiz-difficulty.hard { 
+    color: #ff4d4d; 
+    border-color: #ff4d4d; 
+    background: linear-gradient(to bottom, rgba(255, 77, 79, 0.15), rgba(0,0,0,0.8));
+    text-shadow: 0 0 10px rgba(255, 77, 79, 0.8);
+    box-shadow: 0 0 20px rgba(255, 77, 79, 0.3), inset 0 0 10px rgba(255, 77, 79, 0.2);
+}
+
+#quiz-difficulty.difficult { 
+    color: #ff8c00; 
+    border-color: #ff8c00; 
+    background: linear-gradient(to bottom, rgba(255, 140, 0, 0.15), rgba(0,0,0,0.8));
+    text-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+    box-shadow: 0 0 20px rgba(255, 140, 0, 0.3), inset 0 0 10px rgba(255, 140, 0, 0.2);
+}
+
+#quiz-difficulty.extreme { 
+    color: #e066ff; 
+    border-color: #9400d3; 
+    background: linear-gradient(to bottom, rgba(148, 0, 211, 0.15), rgba(0,0,0,0.8));
+    text-shadow: 0 0 10px #e066ff;
+    box-shadow: 0 0 20px rgba(148, 0, 211, 0.4), inset 0 0 10px rgba(148, 0, 211, 0.3);
+}
+
+#quiz-difficulty.insane { 
+    color: #ff3333; 
+    border-color: #ff1a1a; 
+    background: linear-gradient(to bottom, rgba(139, 0, 0, 0.4), rgba(0,0,0,0.9));
+    text-shadow: 0 0 15px #ff3333;
+    box-shadow: 0 0 25px rgba(255, 26, 26, 0.6), inset 0 0 15px rgba(255, 26, 26, 0.4);
+}
+
+#quiz-difficulty.impossible { 
+    color: #ffd700; 
+    border-color: #d4af37; 
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.2), rgba(0,0,0,0.9));
+    text-shadow: 0 0 15px #ffd700, 0 0 30px #d4af37;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
 /* ================= DROPDOWN (Mobile Menu) ================= */
 .dropdown {
     position: absolute;
@@ -2609,6 +2764,14 @@ li,
     .quiz-action-area { padding: 15px 20px 30px; }
     .quiz-option { font-size: 1.05rem; padding: 12px 15px; }
     .quiz-option::before { font-size: 1.1rem; margin-right: 10px; }
+
+     #quiz-cooldown-screen { padding: 40px 20px; }
+    .cooldown-text { max-width: 100%; font-size: 1.1rem; }
+    .cooldown-timer-box { padding: 20px; }
+    .timer-countdown { font-size: 2rem; }
+    .timer-countdown i { font-size: 1.2rem; }
+    
+    #quiz-difficulty { font-size: 0.95rem; padding: 6px 20px; letter-spacing: 2px; }
 }
 
 /* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
