@@ -1274,8 +1274,9 @@ function getSGMidnightTimer() {
     return sgTime.getTime() - (8 * 60 * 60 * 1000);
 }
 
-// 1. Open the Menu
+// 1. Open the Menu safely!
 window.openQuizMenu = function() {
+    const isGuest = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
     if (isGuest) return alert("Please register an account to play the Quiz!");
     openModal("quiz-menu-modal");
 }
@@ -1283,10 +1284,11 @@ window.openQuizMenu = function() {
 // 2. Click "Daily Quiz" from Menu
 window.startDailyQuizFlow = function() {
     closeModal("quiz-menu-modal");
+    
     setTimeout(() => {
         const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
         
-        document.getElementById("quiz-start-screen").style.display = "none";
+        // Clear all screens inside the modal first
         document.getElementById("quiz-cooldown-screen").style.display = "none";
         document.getElementById("quiz-q-screen").style.display = "none";
 
@@ -1295,8 +1297,7 @@ window.startDailyQuizFlow = function() {
             startQuizCooldown();
         } else {
             quizMode = 'daily';
-            maxQuestions = 10;
-            startActualQuiz(); // Bypass intro screen, jump right into quiz
+            startActualQuiz(); 
         }
         openModal("quiz-modal");
     }, 400); // wait for menu to close
@@ -1319,23 +1320,23 @@ function startQuizCooldown() {
 // 3. Click a Difficulty from Menu
 window.startDifficultyQuiz = function(difficulty) {
     closeModal("quiz-menu-modal");
+    
     setTimeout(() => {
-        document.getElementById("quiz-start-screen").style.display = "none";
         document.getElementById("quiz-cooldown-screen").style.display = "none";
+        document.getElementById("quiz-q-screen").style.display = "block";
         
         quizMode = 'practice';
-        maxQuestions = 15;
         
-        // Filter exactly 15 questions from that difficulty
+        // Filter questions from that difficulty
         activeQuestions = QUIZ_BANK
             .filter(q => q.diff === difficulty)
             .sort(() => 0.5 - Math.random())
             .slice(0, 15);
             
+        maxQuestions = activeQuestions.length; // CRITICAL FIX: prevents crashing!
+            
         openModal("quiz-modal");
         
-        // Jump right into the questions
-        document.getElementById("quiz-q-screen").style.display = "block";
         resetQuizState();
         loadQuestion();
     }, 400);
@@ -1343,7 +1344,6 @@ window.startDifficultyQuiz = function(difficulty) {
 
 // Internal flow to trigger the Daily Gauntlet
 window.startActualQuiz = function() {
-    document.getElementById("quiz-start-screen").style.display = "none";
     document.getElementById("quiz-q-screen").style.display = "block";
     
     const pickQuestions = (difficulty, count) => {
@@ -1360,6 +1360,7 @@ window.startActualQuiz = function() {
         ...pickQuestions("impossible", 1)
     ];
 
+    maxQuestions = activeQuestions.length; // 10
     resetQuizState();
     loadQuestion();
 }
@@ -1392,7 +1393,7 @@ function loadQuestion() {
 }
 
 window.selectQuizOption = function(idx) {
-    if (document.getElementById(`opt-${idx}`).classList.contains('wrong')) return; // Can't select wrong ones
+    if (document.getElementById(`opt-${idx}`).classList.contains('wrong')) return; 
     selectedOptIndex = idx;
     document.querySelectorAll('.quiz-option').forEach(el => el.classList.remove('selected'));
     document.getElementById(`opt-${idx}`).classList.add('selected');
@@ -1425,11 +1426,15 @@ window.submitQuizAnswer = function() {
         
         if (quizLives <= 0) {
             document.getElementById("quiz-submit-btn").style.display = "none";
-            // Reveal the correct answer in green!
-            const correctBtn = document.getElementById(`opt-${qData.ans}`);
-            if (correctBtn) correctBtn.classList.add('correct');
             
-            // Wait 2.5 seconds so they can read the correct answer before failing
+            // REVEAL CORRECT ANSWER IN GREEN
+            const correctBtn = document.getElementById(`opt-${qData.ans}`);
+            if (correctBtn) {
+                correctBtn.classList.remove('selected');
+                correctBtn.classList.add('correct');
+            }
+            
+            // Wait 2.5 seconds so they can see the correct answer before failing
             setTimeout(() => finalizeQuiz('fail'), 2500);
         }
     }
@@ -1445,7 +1450,6 @@ async function finalizeQuiz(status) {
     document.getElementById("quiz-q-screen").style.display = "none";
     const displayUser = localStorage.getItem("jct_logged_in_user");
     
-    // 1. Handle UI Alerts & Local State
     if (quizMode === 'daily') {
         if (status === 'pass') {
             alert("🎉 Congratulations! You passed the daily quiz!\n+1000 Holy Power\n+500 XP");
@@ -1454,15 +1458,13 @@ async function finalizeQuiz(status) {
         }
         window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
     } else {
-        // Practice Mode
         if (status === 'pass') {
-            alert(`🎉 Great job! You conquered the ${activeQuestions[0].diff.toUpperCase()} challenge! Keep studying the Word.`);
+            alert(`🎉 Great job! You conquered the ${activeQuestions[0].diff.toUpperCase()} challenge!`);
         } else {
             alert(`❌ You ran out of lives on the ${activeQuestions[0].diff.toUpperCase()} challenge. Keep studying and try again!`);
         }
     }
 
-    // 2. Send to Backend (Both Modes update stats!)
     if (!isGuest && displayUser) {
         try {
             await fetch(`${BACKEND_URL}/api/quiz/result`, {
@@ -1475,11 +1477,10 @@ async function finalizeQuiz(status) {
         }
     }
 
-    // 3. Finalize Screen
     if (quizMode === 'daily') {
-        location.reload(); // Refresh profile stats immediately
+        location.reload(); 
     } else {
-        closeModal("quiz-modal"); // Keep them on the page for practice
+        closeModal("quiz-modal"); 
     }
 }
 
