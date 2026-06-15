@@ -1096,9 +1096,18 @@ li,
 /* Inner Arena Wrap - FIXED HEIGHT & FLEXBOX */
 .quiz-arena-content {
     background: linear-gradient(to bottom, #1a0a03, #2b1a03) !important;
-    max-height: 90vh; /* CRITICAL: Stops the modal from going off-screen */
+    max-height: 80vh; /* Reduced to 80vh to give absolute safety room on top and bottom */
     display: flex;
     flex-direction: column;
+}
+
+/* Options Area - NOW SCROLLABLE */
+.quiz-action-area {
+    padding: 15px 30px 25px;
+    background: radial-gradient(circle at top, rgba(212, 175, 55, 0.05), transparent 70%);
+    overflow-y: auto; /* Adds the internal scrollbar */
+    flex-grow: 1;
+    min-height: 0; /* CRITICAL FIX: Forces the browser to stop stretching the modal and actually use the scrollbar! */
 }
 
 /* Header Bar */
@@ -2769,13 +2778,17 @@ li,
 
     .difficulty-menu-grid { grid-template-columns: 1fr; } /* Stack 1 column on phones */
 
-    .quiz-header-bar { padding: 15px; }
-    .quiz-progress-wrapper { font-size: 1.1rem; }
-    .quiz-lives-wrapper { font-size: 1.2rem; }
-    .quiz-question-container { padding: 25px 20px 10px; }
-    #quiz-question-text { font-size: 1.3rem; }
-    .quiz-action-area { padding: 15px 20px 30px; }
-    .quiz-option { font-size: 1.05rem; padding: 12px 15px; }
+    .quiz-arena-content { max-height: 85vh; } /* Safely contains it on mobile */
+    .quiz-header-bar { padding: 12px 15px; }
+    .quiz-progress-wrapper { font-size: 1rem; }
+    .quiz-lives-wrapper { font-size: 1.1rem; }
+    
+    .quiz-question-container { padding: 15px 15px 5px; }
+    #quiz-question-text { font-size: 1.15rem; } /* Slightly smaller for mobile reading */
+    .quiz-diff-wrapper { margin-bottom: 5px; }
+    
+    .quiz-action-area { padding: 10px 15px 20px; }
+    .quiz-option { font-size: 1rem; padding: 10px 12px; margin-bottom: 8px; }
     .quiz-option::before { font-size: 1.1rem; margin-right: 10px; }
     .quiz-submit-flare { font-size: 1.1rem; padding: 12px; }
 
