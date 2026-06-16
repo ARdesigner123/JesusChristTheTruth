@@ -331,7 +331,16 @@ li,
     box-shadow: 0 15px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(212, 175, 55, 0.2);
     transform: scale(0.7);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* CRITICAL FIX: Forces modals to never exceed screen height and allows scrolling */
+    max-height: 85vh; 
+    overflow-y: auto; 
 }
+
+/* Custom Scrollbar so it matches the theme */
+.popup-modal-content::-webkit-scrollbar { width: 6px; }
+.popup-modal-content::-webkit-scrollbar-track { background: transparent; }
+.popup-modal-content::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 10px; }
 
 .custom-popup-modal.show .popup-modal-content {
     transform: scale(1);
@@ -1131,10 +1140,10 @@ li,
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* CRITICAL: Completely hides the scrollbar */
-    padding: 30px 20px 20px; /* Tighter vertical padding to reduce height */
+    overflow-y: auto; /* Allow scrolling if phone is extremely small */
+    padding: 20px; 
     text-align: center;
-    min-height: 350px; /* Reduced from 400px to make it shorter */
+    min-height: 350px; 
     width: 100%;
     box-sizing: border-box;
 }
@@ -2689,6 +2698,16 @@ li,
 
     .difficulty-menu-grid { grid-template-columns: 1fr; }
 
+    /* Make the modal padding smaller so more content fits */
+    .popup-modal-content { 
+        padding: 25px 15px !important; 
+    }
+
+    /* Shrink the Quiz Menu buttons slightly to fit better */
+    .quiz-menu-row { margin-bottom: 12px !important; }
+    .diff-btn { padding: 12px; font-size: 1rem; }
+    .quiz-lb-btn { width: 50px; font-size: 1.1rem; }
+
     /* The Header Re-organization Trick */
     .quiz-header-bar { 
         flex-wrap: wrap; 
@@ -2721,12 +2740,19 @@ li,
     .quiz-option::before { font-size: 1.1rem; margin-right: 10px; }
     .quiz-submit-flare { font-size: 1.1rem; padding: 12px; }
 
-    #quiz-cooldown-screen { padding: 30px 15px; }
-    .cooldown-text { max-width: 100%; font-size: 1.1rem; margin-bottom: 20px; }
-    .cooldown-timer-box { padding: 15px; width: 100%; }
+    /* Perfect the Cooldown Screen for Mobile */
+    #quiz-cooldown-screen { 
+        padding: 10px !important; 
+        min-height: auto !important; 
+    }
+    .cooldown-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    #quiz-cooldown-screen .popup-title { font-size: 1.6rem !important; margin-bottom: 10px; }
+    .cooldown-text { font-size: 1rem; margin-bottom: 20px; width: 100%; }
+    
+    .cooldown-timer-box { padding: 15px; width: 100%; box-sizing: border-box; margin-bottom: 15px; }
     .timer-countdown { font-size: 2rem; }
     .timer-countdown i { font-size: 1.2rem; }
-    .cooldown-close-btn { width: 100%; }
+    .cooldown-close-btn { width: 100%; padding: 12px; font-size: 1rem; }
     
     #quiz-difficulty { font-size: 0.95rem; padding: 6px 20px; letter-spacing: 2px; }
     
