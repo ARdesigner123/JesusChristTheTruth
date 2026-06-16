@@ -861,18 +861,35 @@ window.searchFriend = async function() {
 
 // ================= DYNAMIC CHAT DATE LOGIC =================
 
-// Helper to safely parse DB timestamps and format them!
-function formatChatDate(dateString) {
-    if (!dateString) return "";
+// Helper to safely parse Supabase database timestamps into valid Javascript Date objects
+function parseDBDate(dateString) {
+    if (!dateString) return new Date();
     
-    // FIX: Postgres returns "2026-06-08 05:18:20.304492"
-    // We must replace the space with 'T' and append 'Z' so browsers know it's UTC time.
     let safeDate = dateString;
-    if (typeof dateString === 'string' && dateString.includes(' ')) {
-        safeDate = dateString.replace(' ', 'T') + 'Z';
+    
+    // 1. Replace space with T (e.g., 2026-06-08 05:18:20 -> 2026-06-08T05:18:20)
+    if (typeof safeDate === 'string' && safeDate.includes(' ')) {
+        safeDate = safeDate.replace(' ', 'T');
     }
+    
+    // 2. Remove the microseconds which break browser parsers (.304492)
+    if (typeof safeDate === 'string' && safeDate.includes('.')) {
+        safeDate = safeDate.split('.')[0];
+    }
+    
+    // 3. Append 'Z' to tell the browser it is UTC time (Global Time)
+    if (typeof safeDate === 'string' && !safeDate.endsWith('Z') && !safeDate.includes('+')) {
+        safeDate += 'Z';
+    }
+    
+    return new Date(safeDate);
+}
 
-    const msgDate = new Date(safeDate);
+// Helper to calculate "Today", "Yesterday", or "8 June 2026"
+function formatChatDate(dateString) {
+    const msgDate = parseDBDate(dateString);
+    if (isNaN(msgDate.getTime())) return "Unknown Date"; // Failsafe
+
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
@@ -882,8 +899,9 @@ function formatChatDate(dateString) {
     } else if (msgDate.toDateString() === yesterday.toDateString()) {
         return "Yesterday";
     } else {
-        // Formats exactly like "8 June 2026"
-        return msgDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        // Enforces exact layout: "8 June 2026"
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return msgDate.toLocaleDateString('en-GB', options); 
     }
 }
 
@@ -907,12 +925,9 @@ window.renderChatMessages = function(messages, currentUser, friendUsername) {
         const avatar = isMe ? (localStorage.getItem('jct_avatar_' + currentUser) || "static/image/defaultAvatar.jpg") 
                             : (localStorage.getItem('jct_avatar_' + friendUsername) || "static/image/defaultAvatar.jpg");
 
-        // Safely parse the time for the message bubble too!
-        let safeDate = msg.created_at;
-        if (typeof msg.created_at === 'string' && msg.created_at.includes(' ')) {
-            safeDate = msg.created_at.replace(' ', 'T') + 'Z';
-        }
-        const timeStr = new Date(safeDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        // Format the small time string (e.g., "01:18 PM") using local timezone
+        const msgDateObj = parseDBDate(msg.created_at);
+        const timeStr = isNaN(msgDateObj.getTime()) ? "" : msgDateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
         chatArea.innerHTML += `
             <div class="chat-bubble-row ${rowClass}">
@@ -927,8 +942,10 @@ window.renderChatMessages = function(messages, currentUser, friendUsername) {
         `;
     });
     
-    // Auto-scroll to the newest message
-    chatArea.scrollTop = chatArea.scrollHeight;
+    // Auto-scroll to the newest message seamlessly
+    setTimeout(() => {
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 50);
 }
 
 // Make sure your openChat function calls renderChatMessages:
