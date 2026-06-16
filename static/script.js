@@ -817,7 +817,7 @@ function initFriendsSystem() {
     const displayUser = localStorage.getItem("jct_logged_in_user");
     if (!displayUser || isGuest) return; // Guests can't have friends
 
-    // 1. Fetch Requests
+    // 1. Fetch Requests (Now uses DB avatar)
     fetch(`${BACKEND_URL}/api/friends/requests/${displayUser}`)
         .then(res => res.json())
         .then(data => {
@@ -826,7 +826,9 @@ function initFriendsSystem() {
                 const list = document.getElementById("friend-requests-list");
                 list.innerHTML = "";
                 data.forEach(req => {
-                    const avatar = localStorage.getItem('jct_avatar_' + req.sender_username) || "static/image/defaultAvatar.jpg";
+                    const avatar = req.avatar_url; // From Database!
+                    localStorage.setItem('jct_avatar_' + req.sender_username, avatar); // Cache it for chat
+
                     list.innerHTML += `
                         <div class="friend-bar" id="req-${req.sender_username}">
                             <div class="friend-info">
@@ -843,15 +845,16 @@ function initFriendsSystem() {
             }
         });
 
-    // 2. Fetch Friend List
+    // 2. Fetch Friend List (Now uses DB avatar)
     fetch(`${BACKEND_URL}/api/friends/list/${displayUser}`)
         .then(res => res.json())
         .then(friends => {
             const list = document.getElementById("friend-list");
             if (friends.length > 0) list.innerHTML = "";
             friends.forEach(friend => {
-                const avatar = localStorage.getItem('jct_avatar_' + friend) || "static/image/defaultAvatar.jpg";
-                addFriendToUI(friend, avatar);
+                const avatar = friend.avatar_url; // From Database!
+                localStorage.setItem('jct_avatar_' + friend.username, avatar); // Cache it for chat
+                addFriendToUI(friend.username, avatar);
             });
         });
 }
@@ -866,6 +869,7 @@ window.openAddFriendModal = function() {
     searchFriend(); // Instantly load available users when modal opens!
 }
 
+// ================= FRIEND SEARCH LOGIC =================
 window.searchFriend = async function() {
     const query = document.getElementById("friend-search-input").value.trim();
     const displayUser = localStorage.getItem("jct_logged_in_user");
@@ -882,7 +886,8 @@ window.searchFriend = async function() {
         }
 
         users.forEach(u => {
-            const avatar = localStorage.getItem('jct_avatar_' + u.username) || "static/image/defaultAvatar.jpg";
+            // Uses DB avatar!
+            const avatar = u.avatar_url || "static/image/defaultAvatar.jpg"; 
             resultsDiv.innerHTML += `
                 <div class="friend-bar">
                     <div class="friend-info">
@@ -1066,10 +1071,10 @@ function addFriendToUI(username, avatarSrc) {
     `;
 }
 
-// ================= NEW: VIEW FRIEND PROFILE =================
+// ================= VIEW FRIEND PROFILE =================
 window.openFriendProfile = async function(username, avatarSrc) {
     document.getElementById("fp-username").innerText = username;
-    document.getElementById("fp-avatar").src = avatarSrc;
+    document.getElementById("fp-avatar").src = avatarSrc; // Fast initial load
     
     // Reset defaults while loading
     document.getElementById("fp-time").innerText = "...";
@@ -1086,13 +1091,22 @@ window.openFriendProfile = async function(username, avatarSrc) {
         if (!res.ok) throw new Error();
         const data = await res.json();
         
+        // REAL-TIME AVATAR UPDATE: Check if they updated their picture recently!
+        if (data.avatar_url) {
+            document.getElementById("fp-avatar").src = data.avatar_url;
+            localStorage.setItem('jct_avatar_' + username, data.avatar_url);
+            
+            // Also update the tiny picture on the main Friend List in the background!
+            const friendListImg = document.querySelector(`#friend-bar-${username} .friend-avatar`);
+            if (friendListImg) friendListImg.src = data.avatar_url;
+        }
+
         document.getElementById("fp-time").innerText = data.active_time || 0;
         document.getElementById("fp-hp").innerText = data.holypower || 0;
         document.getElementById("fp-streak").innerText = data.daily_streak || 0;
-        document.getElementById("fp-quizzes").innerText = data.quizzes_passed || 0; // FIXED: Maps to passed
+        document.getElementById("fp-quizzes").innerText = data.quizzes_passed || 0;
         document.getElementById("fp-quests").innerText = data.quests_done || 0;
 
-        // Calculate and display correct Rank using their XP!
         const friendXP = data.xp || 0;
         const friendRankData = calculateRank(friendXP);
         document.getElementById("fp-rank").innerText = friendRankData.name;
@@ -1136,16 +1150,20 @@ let chatPollInterval;
 let cachedChatData = "";
 let currentFriendIsOnline = false;
 
+// ================= WHATSAPP-STYLE CHAT SYSTEM =================
 window.openChat = function(username, avatarSrc) {
     activeChatFriend = username;
     document.getElementById("chat-friend-name").innerText = username;
-    document.getElementById("chat-friend-avatar").src = avatarSrc;
+    
+    // Pull the freshest avatar from the cache we just updated
+    const freshAvatar = localStorage.getItem('jct_avatar_' + username) || avatarSrc;
+    document.getElementById("chat-friend-avatar").src = freshAvatar;
+    
     document.getElementById("emoji-picker").style.display = "none";
-    cachedChatData = ""; // Reset cache so it forces a render
+    cachedChatData = ""; 
     
     openModal("chat-modal");
 
-    // Instantly load, then poll every 3 seconds for new messages/status
     pollChatData(); 
     chatPollInterval = setInterval(pollChatData, 3000);
 }
