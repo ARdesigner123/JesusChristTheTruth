@@ -338,19 +338,41 @@ const AVATAR_LIST = [
 
 let temporarySelectedAvatar = "";
 
-// 1. Initialize Avatar on Page Load
-function initializeUserAvatar() {
-    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
-    const savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
-    
-    // Apply to Main Profile Arch
-    const mainProfileImg = document.getElementById("main-profile-avatar");
-    if (mainProfileImg) mainProfileImg.src = savedAvatar;
-    
-    // Apply to tiny Navbar Icon
-    const navProfileImg = document.getElementById("nav-avatar-img");
-    if (navProfileImg) navProfileImg.src = savedAvatar;
+// 1. Initialize Avatar on Page Load (NOW SYNCS WITH DATABASE)
+async function initializeUserAvatar() {
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    if (!displayUser) return; // Guests handle differently or fallback to default
+
+    // Step A: Load instantly from local storage so the UI doesn't look empty
+    let savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
+    applyAvatarToUI(savedAvatar);
+
+    // Step B: Ask the database for the permanent avatar (in case they logged in on a new phone)
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/users/profile/${displayUser}`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.avatar_url) {
+                // Save it locally and update the UI
+                localStorage.setItem('jct_avatar_' + displayUser, data.avatar_url);
+                applyAvatarToUI(data.avatar_url);
+            }
+        }
+    } catch(err) {
+        console.warn("Could not sync avatar from database.");
+    }
 }
+
+// Helper to update the images on screen
+function applyAvatarToUI(avatarSrc) {
+    const mainProfileImg = document.getElementById("main-profile-avatar");
+    if (mainProfileImg) mainProfileImg.src = avatarSrc;
+    
+    const navProfileImg = document.getElementById("nav-avatar-img");
+    if (navProfileImg) navProfileImg.src = avatarSrc;
+}
+
+// Run immediately on page load
 initializeUserAvatar();
 
 // 2. Open Modal and Generate Grid
@@ -465,14 +487,33 @@ window.discardCustomPhoto = function() {
     openAvatarModal();
 }
 
-// 7. Save Final Selection
-window.saveAvatar = function() {
-    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
+// 7. Save Final Selection (NOW SAVES TO DATABASE)
+window.saveAvatar = async function() {
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    if (!displayUser) {
+        alert("Guests cannot save avatars permanently.");
+        closeAvatarModal();
+        return;
+    }
+
+    // 1. Save locally for instant speed
     localStorage.setItem('jct_avatar_' + displayUser, temporarySelectedAvatar);
-    
-    // Apply changes instantly
-    initializeUserAvatar();
+    applyAvatarToUI(temporarySelectedAvatar);
     closeAvatarModal();
+
+    // 2. Push to Supabase Database so it saves across all phones/devices!
+    try {
+        await fetch(`${BACKEND_URL}/api/users/avatar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                username: displayUser, 
+                avatar_url: temporarySelectedAvatar 
+            })
+        });
+    } catch(err) {
+        console.error("Failed to push avatar to database.");
+    }
 }
 
 // ================= SECURE LOGOUT =================
