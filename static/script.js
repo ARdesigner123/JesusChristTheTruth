@@ -1087,8 +1087,11 @@ window.openFriendProfile = async function(username, avatarSrc) {
     openModal("friend-profile-modal");
 
     try {
-        const res = await fetch(`${BACKEND_URL}/api/users/profile/${username}`);
-        if (!res.ok) throw new Error();
+        // CRITICAL FIX 1: encodeURIComponent safely converts spaces so the URL doesn't break
+        const safeUsername = encodeURIComponent(username);
+        const res = await fetch(`${BACKEND_URL}/api/users/profile/${safeUsername}`);
+        
+        if (!res.ok) throw new Error("Profile not found");
         const data = await res.json();
         
         // REAL-TIME AVATAR UPDATE: Check if they updated their picture recently!
@@ -1096,9 +1099,12 @@ window.openFriendProfile = async function(username, avatarSrc) {
             document.getElementById("fp-avatar").src = data.avatar_url;
             localStorage.setItem('jct_avatar_' + username, data.avatar_url);
             
-            // Also update the tiny picture on the main Friend List in the background!
-            const friendListImg = document.querySelector(`#friend-bar-${username} .friend-avatar`);
-            if (friendListImg) friendListImg.src = data.avatar_url;
+            // CRITICAL FIX 2: Use getElementById because querySelector crashes if IDs have spaces!
+            const friendBar = document.getElementById(`friend-bar-${username}`);
+            if (friendBar) {
+                const friendListImg = friendBar.querySelector('.friend-avatar');
+                if (friendListImg) friendListImg.src = data.avatar_url;
+            }
         }
 
         document.getElementById("fp-time").innerText = data.active_time || 0;
@@ -1112,6 +1118,7 @@ window.openFriendProfile = async function(username, avatarSrc) {
         document.getElementById("fp-rank").innerText = friendRankData.name;
 
     } catch (err) {
+        console.error("Failed to load profile:", err);
         document.getElementById("fp-time").innerText = "?";
         document.getElementById("fp-hp").innerText = "?";
         document.getElementById("fp-rank").innerText = "Error";
