@@ -818,19 +818,17 @@ function initFriendsSystem() {
 // Run init on load
 document.addEventListener("DOMContentLoaded", initFriendsSystem);
 
+// ================= FRIEND SEARCH LOGIC =================
 window.openAddFriendModal = function() {
     openModal("add-friend-modal");
-    document.getElementById("friend-search-results").innerHTML = "";
     document.getElementById("friend-search-input").value = "";
+    searchFriend(); // Instantly load available users when modal opens!
 }
 
 window.searchFriend = async function() {
     const query = document.getElementById("friend-search-input").value.trim();
-    if(!query) return;
-    
     const displayUser = localStorage.getItem("jct_logged_in_user");
     const resultsDiv = document.getElementById("friend-search-results");
-    resultsDiv.innerHTML = `<p style="color:#cbb27d; text-align:center;">Searching...</p>`;
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/users/search?q=${query}&current_user=${displayUser}`);
@@ -838,7 +836,7 @@ window.searchFriend = async function() {
         
         resultsDiv.innerHTML = "";
         if (users.length === 0) {
-            resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">No users found.</p>`;
+            resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">No believers found.</p>`;
             return;
         }
 
@@ -850,12 +848,96 @@ window.searchFriend = async function() {
                         <img src="${avatar}" class="friend-avatar">
                         <span class="friend-name">${u.username}</span>
                     </div>
-                    <button class="profile-btn" style="padding: 5px 15px; font-size:0.9rem;" onclick="sendFriendRequest('${u.username}')"><i class="fas fa-user-plus"></i></button>
+                    <button class="profile-btn" style="padding: 5px 15px; font-size:0.9rem;" onclick="sendFriendRequest('${u.username}')">
+                        <i class="fas fa-user-plus"></i> Add
+                    </button>
                 </div>
             `;
         });
     } catch(err) {
-        resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">Search failed.</p>`;
+        resultsDiv.innerHTML = `<p style="color:#ff4d4d; text-align:center;">Search failed to connect.</p>`;
+    }
+}
+
+// ================= DYNAMIC CHAT DATE LOGIC =================
+
+// Helper to calculate "Today", "Yesterday", or "12 June"
+function formatChatDate(dateString) {
+    const msgDate = new Date(dateString);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (msgDate.toDateString() === today.toDateString()) {
+        return "Today";
+    } else if (msgDate.toDateString() === yesterday.toDateString()) {
+        return "Yesterday";
+    } else {
+        const options = { day: 'numeric', month: 'long' };
+        if (msgDate.getFullYear() !== today.getFullYear()) {
+            options.year = 'numeric'; // Add year if it's from a previous year
+        }
+        return msgDate.toLocaleDateString('en-GB', options); // e.g., "12 June"
+    }
+}
+
+// The master function to render messages with dynamic dates
+window.renderChatMessages = function(messages, currentUser, friendUsername) {
+    const chatArea = document.getElementById("chat-messages-area");
+    chatArea.innerHTML = "";
+    let lastDatePrinted = "";
+
+    messages.forEach(msg => {
+        const msgDateLabel = formatChatDate(msg.created_at);
+        
+        // If the date changes from the previous message, insert a Divider!
+        if (msgDateLabel !== lastDatePrinted) {
+            chatArea.innerHTML += `<div class="chat-date-divider">${msgDateLabel}</div>`;
+            lastDatePrinted = msgDateLabel;
+        }
+
+        const isMe = msg.sender === currentUser;
+        const rowClass = isMe ? "me" : "friend";
+        const avatar = isMe ? (localStorage.getItem('jct_avatar_' + currentUser) || "static/image/defaultAvatar.jpg") 
+                            : (localStorage.getItem('jct_avatar_' + friendUsername) || "static/image/defaultAvatar.jpg");
+
+        const timeStr = new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        chatArea.innerHTML += `
+            <div class="chat-bubble-row ${rowClass}">
+                ${!isMe ? `<img src="${avatar}" style="width:30px; height:30px; border-radius:50%; border:1px solid #8b5a2b; object-fit:cover;">` : ''}
+                <div class="chat-bubble">
+                    ${msg.message}
+                    <span style="display:block; font-size:0.75rem; color:#888; text-align:right; margin-top:5px;">
+                        ${timeStr} ${isMe ? '<i class="fas fa-check-double tick-blue"></i>' : ''}
+                    </span>
+                </div>
+            </div>
+        `;
+    });
+    
+    // Auto-scroll to the newest message
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+// Make sure your openChat function calls renderChatMessages:
+window.openChat = async function(friendName, friendAvatar) {
+    activeChatFriend = friendName;
+    document.getElementById('chat-friend-name').innerText = friendName;
+    document.getElementById('chat-friend-avatar').src = friendAvatar;
+    document.getElementById('chat-friend-status').innerText = "Online"; 
+    
+    openModal('chat-modal');
+    
+    const displayUser = localStorage.getItem("jct_logged_in_user");
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${friendName}`);
+        const messages = await res.json();
+        
+        // Pass the messages into our new dynamic renderer!
+        renderChatMessages(messages, displayUser, friendName);
+    } catch (err) {
+        document.getElementById("chat-messages-area").innerHTML = "<p style='text-align:center; color:red;'>Failed to load messages.</p>";
     }
 }
 

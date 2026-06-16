@@ -185,7 +185,6 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -222,7 +221,7 @@
             <h2 class="popup-title">Add a Friend</h2>
             
             <div class="search-bar-wrap">
-                <input type="text" id="friend-search-input" placeholder="Search username...">
+                <input type="text" id="friend-search-input" placeholder="Search username..." oninput="searchFriend()">
                 <button onclick="searchFriend()"><i class="fas fa-search"></i></button>
             </div>
             
@@ -298,7 +297,7 @@
 
             <div class="chat-messages-area" id="chat-messages-area">
                 <div class="chat-date-divider">Today</div>
-                </div>
+            </div>
 
             <div id="emoji-picker" class="emoji-picker-container" style="display: none;">
                 <span onclick="addEmoji('😀')">😀</span> <span onclick="addEmoji('😂')">😂</span> 
