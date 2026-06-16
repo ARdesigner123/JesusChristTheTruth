@@ -1374,8 +1374,13 @@ let currentQIndex = 0;
 let quizLives = 3;
 let selectedOptIndex = -1;
 let quizInterval;
-let quizMode = 'daily'; // 'daily' or 'practice'
+let quizMode = 'daily'; 
 let maxQuestions = 10;
+
+// NEW TIMER VARIABLES
+let questionsCorrect = 0;
+let quizStartTime = 0;
+let activeTimerInterval;
 
 function getSGMidnightTimer() {
     const now = new Date();
@@ -1398,7 +1403,6 @@ window.startDailyQuizFlow = function() {
     setTimeout(() => {
         const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
         
-        // Clear all screens inside the modal first
         document.getElementById("quiz-cooldown-screen").style.display = "none";
         document.getElementById("quiz-q-screen").style.display = "none";
 
@@ -1410,21 +1414,7 @@ window.startDailyQuizFlow = function() {
             startActualQuiz(); 
         }
         openModal("quiz-modal");
-    }, 400); // wait for menu to close
-}
-
-function startQuizCooldown() {
-    clearInterval(quizInterval);
-    quizInterval = setInterval(() => {
-        const diff = getSGMidnightTimer() - Date.now();
-        if (diff <= 0) { document.getElementById("quiz-cd-timer").innerText = "Ready!"; clearInterval(quizInterval); } 
-        else {
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById("quiz-cd-timer").innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-    }, 1000);
+    }, 400);
 }
 
 // 3. Click a Difficulty from Menu
@@ -1433,18 +1423,16 @@ window.startDifficultyQuiz = function(difficulty) {
     
     setTimeout(() => {
         document.getElementById("quiz-cooldown-screen").style.display = "none";
-        document.getElementById("quiz-q-screen").style.display = "block";
+        document.getElementById("quiz-q-screen").style.display = "flex"; // Fix flex
         
-        quizMode = 'practice';
+        quizMode = difficulty; // Stores 'easy', 'medium', etc.
         
-        // Filter questions from that difficulty
         activeQuestions = QUIZ_BANK
             .filter(q => q.diff === difficulty)
             .sort(() => 0.5 - Math.random())
             .slice(0, 15);
             
-        maxQuestions = activeQuestions.length; // CRITICAL FIX: prevents crashing!
-            
+        maxQuestions = activeQuestions.length; 
         openModal("quiz-modal");
         
         resetQuizState();
@@ -1452,9 +1440,8 @@ window.startDifficultyQuiz = function(difficulty) {
     }, 400);
 }
 
-// Internal flow to trigger the Daily Gauntlet
 window.startActualQuiz = function() {
-    document.getElementById("quiz-q-screen").style.display = "block";
+    document.getElementById("quiz-q-screen").style.display = "flex";
     
     const pickQuestions = (difficulty, count) => {
         return QUIZ_BANK.filter(q => q.diff === difficulty).sort(() => 0.5 - Math.random()).slice(0, count);
@@ -1470,7 +1457,7 @@ window.startActualQuiz = function() {
         ...pickQuestions("impossible", 1)
     ];
 
-    maxQuestions = activeQuestions.length; // 10
+    maxQuestions = activeQuestions.length;
     resetQuizState();
     loadQuestion();
 }
@@ -1478,9 +1465,23 @@ window.startActualQuiz = function() {
 function resetQuizState() {
     currentQIndex = 0;
     quizLives = 3;
+    questionsCorrect = 0;
     document.getElementById("life-1").classList.remove("life-lost");
     document.getElementById("life-2").classList.remove("life-lost");
     document.getElementById("life-3").classList.remove("life-lost");
+    
+    // Start Timer
+    quizStartTime = Date.now();
+    clearInterval(activeTimerInterval);
+    activeTimerInterval = setInterval(updateTimerUI, 1000);
+    updateTimerUI();
+}
+
+function updateTimerUI() {
+    const diff = Math.floor((Date.now() - quizStartTime) / 1000);
+    const m = Math.floor(diff / 60).toString().padStart(2, '0');
+    const s = (diff % 60).toString().padStart(2, '0');
+    document.getElementById("quiz-timer-display").innerText = `${m}:${s}`;
 }
 
 function loadQuestion() {
@@ -1516,10 +1517,10 @@ window.submitQuizAnswer = function() {
     const selectedBtn = document.getElementById(`opt-${selectedOptIndex}`);
 
     if (selectedOptIndex === qData.ans) {
-        // Correct!
         selectedBtn.classList.remove('selected');
         selectedBtn.classList.add('correct');
         document.getElementById("quiz-submit-btn").style.display = "none";
+        questionsCorrect++;
         
         setTimeout(() => {
             currentQIndex++;
@@ -1527,7 +1528,6 @@ window.submitQuizAnswer = function() {
             else loadQuestion();
         }, 2000);
     } else {
-        // Wrong!
         selectedBtn.classList.remove('selected');
         selectedBtn.classList.add('wrong');
         quizLives--;
@@ -1536,15 +1536,11 @@ window.submitQuizAnswer = function() {
         
         if (quizLives <= 0) {
             document.getElementById("quiz-submit-btn").style.display = "none";
-            
-            // REVEAL CORRECT ANSWER IN GREEN
             const correctBtn = document.getElementById(`opt-${qData.ans}`);
             if (correctBtn) {
                 correctBtn.classList.remove('selected');
                 correctBtn.classList.add('correct');
             }
-            
-            // Wait 2.5 seconds so they can see the correct answer before failing
             setTimeout(() => finalizeQuiz('fail'), 2500);
         }
     }
@@ -1557,22 +1553,23 @@ window.resignQuiz = function() {
 }
 
 async function finalizeQuiz(status) {
+    clearInterval(activeTimerInterval); // Stop timer
     document.getElementById("quiz-q-screen").style.display = "none";
     const displayUser = localStorage.getItem("jct_logged_in_user");
     
+    const timeTakenSeconds = Math.floor((Date.now() - quizStartTime) / 1000);
+    const m = Math.floor(timeTakenSeconds / 60);
+    const s = timeTakenSeconds % 60;
+    const timeString = `${m}m ${s}s`;
+
     if (quizMode === 'daily') {
-        if (status === 'pass') {
-            alert("🎉 Congratulations! You passed the daily quiz!\n+1000 Holy Power\n+500 XP");
-        } else {
-            alert("❌ You failed today's quiz. Read your Bible and try again tomorrow!");
-        }
+        if (status === 'pass') alert(`🎉 Congratulations! You passed the daily quiz in ${timeString}!\n+1000 Holy Power\n+500 XP`);
+        else alert(`❌ You failed today's quiz after ${timeString}. You got ${questionsCorrect} correct. Read your Bible and try again tomorrow!`);
         window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
     } else {
-        if (status === 'pass') {
-            alert(`🎉 Great job! You conquered the ${activeQuestions[0].diff.toUpperCase()} challenge!`);
-        } else {
-            alert(`❌ You ran out of lives on the ${activeQuestions[0].diff.toUpperCase()} challenge. Keep studying and try again!`);
-        }
+        const diffName = quizMode.toUpperCase();
+        if (status === 'pass') alert(`🎉 Great job! You conquered the ${diffName} challenge in ${timeString}!`);
+        else alert(`❌ You ran out of lives on the ${diffName} challenge after ${timeString}. You got ${questionsCorrect} correct. Keep studying and try again!`);
     }
 
     if (!isGuest && displayUser) {
@@ -1580,17 +1577,75 @@ async function finalizeQuiz(status) {
             await fetch(`${BACKEND_URL}/api/quiz/result`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: displayUser, status: status, mode: quizMode })
+                body: JSON.stringify({ 
+                    username: displayUser, 
+                    status: status, 
+                    mode: quizMode,
+                    correct_count: questionsCorrect,
+                    time_taken: timeTakenSeconds
+                })
             });
-        } catch (err) {
-            console.error("Failed to save quiz stats", err);
-        }
+        } catch (err) { console.error("Failed to save quiz stats"); }
     }
 
-    if (quizMode === 'daily') {
-        location.reload(); 
-    } else {
-        closeModal("quiz-modal"); 
+    if (quizMode === 'daily') location.reload(); 
+    else closeModal("quiz-modal"); 
+}
+
+// ================= FETCH QUIZ LEADERBOARD =================
+window.openQuizLeaderboard = async function(mode) {
+    const displayUser = localStorage.getItem("jct_logged_in_user") || "";
+    const title = mode === 'daily' ? 'Daily Quiz' : mode.charAt(0).toUpperCase() + mode.slice(1) + ' Quiz';
+    document.getElementById('mode-lb-title').innerText = `${title} Leaderboard`;
+    document.getElementById('my-mode-record').innerText = "Loading...";
+    document.getElementById('mode-lb-tbody').innerHTML = `<tr><td colspan="5" style="text-align:center; color:#cbb27d;">Loading Leaders...</td></tr>`;
+    
+    openModal('quiz-mode-leaderboard-modal');
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/quiz/leaderboard/${mode}?currentUser=${displayUser}`);
+        const data = await res.json();
+
+        // 1. Set User Record
+        if (data.userRecord) {
+            const m = Math.floor(data.userRecord.time_taken / 60);
+            const s = data.userRecord.time_taken % 60;
+            document.getElementById('my-mode-record').innerHTML = `
+                <i class="fas fa-check-circle" style="color:#52c41a;"></i> ${data.userRecord.correct_count} Correct 
+                &nbsp;|&nbsp; <i class="fas fa-stopwatch" style="color:#4da6ff;"></i> ${m}m ${s}s 
+                &nbsp;|&nbsp; <span class="status-${data.userRecord.status}">${data.userRecord.status.toUpperCase()}</span>
+            `;
+        } else {
+            document.getElementById('my-mode-record').innerText = "No record found. Play a quiz!";
+        }
+
+        // 2. Populate Table
+        const tbody = document.getElementById('mode-lb-tbody');
+        tbody.innerHTML = "";
+        
+        if (data.topRecords.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No data yet. Be the first!</td></tr>`;
+            return;
+        }
+
+        data.topRecords.forEach((record, index) => {
+            const rankClass = index === 0 ? "rank-1" : index === 1 ? "rank-2" : index === 2 ? "rank-3" : "rank-other";
+            const rankIcon = index === 0 ? "🏆 1st" : index === 1 ? "🥈 2nd" : index === 2 ? "🥉 3rd" : `${index + 1}th`;
+            const m = Math.floor(record.time_taken / 60).toString().padStart(2, '0');
+            const s = (record.time_taken % 60).toString().padStart(2, '0');
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td class="${rankClass}">${rankIcon}</td>
+                    <td style="font-weight:bold;">${record.username}</td>
+                    <td style="color:#52c41a; font-weight:bold;">${record.correct_count}</td>
+                    <td style="color:#4da6ff;">${m}:${s}</td>
+                    <td class="status-${record.status}">${record.status.toUpperCase()}</td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        document.getElementById('mode-lb-tbody').innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Failed to load leaderboard.</td></tr>`;
     }
 }
 

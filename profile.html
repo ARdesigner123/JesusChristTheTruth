@@ -323,79 +323,99 @@
             <i class="fas fa-arrow-left close-modal-icon" onclick="closeModal('quiz-menu-modal')"></i>
             <h2 class="popup-title">Quiz Menu</h2>
             
-            <button class="biblical-btn gold-btn" style="width: 100%; margin-bottom: 30px; font-size: 1.3rem; padding: 15px;" onclick="startDailyQuizFlow()">
-                <i class="fas fa-calendar-day"></i> Daily Quiz
-            </button>
-
-            <div class="title-underline" style="margin: 0 auto 20px;"></div>
-            <h3 style="color: #cbb27d; font-family: 'Cinzel', serif; margin-bottom: 20px;">Difficulty Levels</h3>
-            <p style="color: #a67c52; font-family: 'Cardo', serif; font-size: 0.95rem; margin-bottom: 20px;">Practice your knowledge with 15-question challenges.</p>
-
-            <div class="difficulty-menu-grid">
-                <button class="diff-btn btn-easy" onclick="startDifficultyQuiz('easy')">Easy</button>
-                <button class="diff-btn btn-medium" onclick="startDifficultyQuiz('medium')">Medium</button>
-                <button class="diff-btn btn-hard" onclick="startDifficultyQuiz('hard')">Hard</button>
-                <button class="diff-btn btn-difficult" onclick="startDifficultyQuiz('difficult')">Difficult</button>
-                <button class="diff-btn btn-extreme" onclick="startDifficultyQuiz('extreme')">Extreme</button>
-                <button class="diff-btn btn-insane" onclick="startDifficultyQuiz('insane')">Insane</button>
-                <button class="diff-btn btn-impossible" style="grid-column: 1 / -1;" onclick="startDifficultyQuiz('impossible')">Impossible</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="quiz-menu-modal" class="custom-popup-modal">
-        <div class="popup-modal-content" style="max-width: 500px; text-align: center;">
-            <i class="fas fa-arrow-left close-modal-icon" onclick="closeModal('quiz-menu-modal')"></i>
-            <h2 class="popup-title">Quiz Menu</h2>
-            
-            <button class="biblical-btn gold-btn" style="width: 100%; margin-bottom: 30px; font-size: 1.3rem; padding: 15px;" onclick="startDailyQuizFlow()">
-                <i class="fas fa-calendar-day"></i> Daily Quiz
-            </button>
-
-            <div class="title-underline" style="margin: 0 auto 20px;"></div>
-            <h3 style="color: #cbb27d; font-family: 'Cinzel', serif; margin-bottom: 20px;">Difficulty Levels</h3>
-            <p style="color: #a67c52; font-family: 'Cardo', serif; font-size: 0.95rem; margin-bottom: 20px;">Practice your knowledge with 15-question challenges.</p>
-
-            <div class="difficulty-menu-grid">
-                <button class="diff-btn btn-easy" onclick="startDifficultyQuiz('easy')">Easy</button>
-                <button class="diff-btn btn-medium" onclick="startDifficultyQuiz('medium')">Medium</button>
-                <button class="diff-btn btn-hard" onclick="startDifficultyQuiz('hard')">Hard</button>
-                <button class="diff-btn btn-difficult" onclick="startDifficultyQuiz('difficult')">Difficult</button>
-                <button class="diff-btn btn-extreme" onclick="startDifficultyQuiz('extreme')">Extreme</button>
-                <button class="diff-btn btn-insane" onclick="startDifficultyQuiz('insane')">Insane</button>
-                <button class="diff-btn btn-impossible" style="grid-column: 1 / -1;" onclick="startDifficultyQuiz('impossible')">Impossible</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= ACTUAL QUIZ MODAL ================= -->
-    <div id="quiz-modal" class="custom-popup-modal">
-        <div class="popup-modal-content quiz-arena-content" style="max-width: 700px; padding: 0; overflow: hidden;">
-            
-            <!-- MAJESTIC COOLDOWN SCREEN (Only for Daily) -->
-            <div id="quiz-cooldown-screen" style="display:none; padding: 50px 30px; text-align: center;">
-                <i class="fas fa-hourglass-half cooldown-icon"></i>
-                <h2 class="popup-title" style="font-size: 2.2rem; margin-bottom: 15px; letter-spacing: 2px;">Rest & Reflect</h2>
-                <p class="cooldown-text">You have already completed your daily biblical challenge. Return tomorrow for new trials and spiritual growth.</p>
-                
-                <div class="cooldown-timer-box">
-                    <div class="timer-label">Next Quiz Available In</div>
-                    <div class="timer-countdown">
-                        <i class="fas fa-clock" style="color: #8b5a2b; font-size: 1.5rem; margin-right: 10px; vertical-align: middle;"></i>
-                        <span id="quiz-cd-timer">00:00:00</span>
-                    </div>
-                </div>
-                
-                <br>
-                <button class="cooldown-close-btn" onclick="closeModal('quiz-modal')">
-                    <i class="fas fa-door-open"></i> Return to Profile
+            <div class="quiz-menu-row" style="margin-bottom: 30px;">
+                <button class="biblical-btn gold-btn" style="flex-grow: 1; font-size: 1.3rem; padding: 15px;" onclick="startDailyQuizFlow()">
+                    <i class="fas fa-calendar-day"></i> Daily Quiz
+                </button>
+                <button class="quiz-lb-btn" style="width: 60px; font-size: 1.3rem;" onclick="openQuizLeaderboard('daily')">
+                    <i class="fas fa-trophy"></i>
                 </button>
             </div>
 
-            <!-- QUESTION SCREEN -->
+            <div class="title-underline" style="margin: 0 auto 20px;"></div>
+            <h3 style="color: #cbb27d; font-family: 'Cinzel', serif; margin-bottom: 20px;">Difficulty Levels</h3>
+            <p style="color: #a67c52; font-family: 'Cardo', serif; font-size: 0.95rem; margin-bottom: 20px;">Practice your knowledge with 15-question challenges.</p>
+
+            <div class="difficulty-menu-grid">
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-easy" onclick="startDifficultyQuiz('easy')">Easy</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('easy')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-medium" onclick="startDifficultyQuiz('medium')">Medium</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('medium')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-hard" onclick="startDifficultyQuiz('hard')">Hard</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('hard')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-difficult" onclick="startDifficultyQuiz('difficult')">Difficult</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('difficult')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-extreme" onclick="startDifficultyQuiz('extreme')">Extreme</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('extreme')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row">
+                    <button class="diff-btn btn-insane" onclick="startDifficultyQuiz('insane')">Insane</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('insane')"><i class="fas fa-trophy"></i></button>
+                </div>
+                <div class="quiz-menu-row" style="grid-column: 1 / -1;">
+                    <button class="diff-btn btn-impossible" onclick="startDifficultyQuiz('impossible')">Impossible</button>
+                    <button class="quiz-lb-btn" onclick="openQuizLeaderboard('impossible')"><i class="fas fa-trophy"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-mode-leaderboard-modal" class="custom-popup-modal">
+        <div class="popup-modal-content" style="max-width: 600px; text-align: center; max-height: 85vh; overflow-y: auto;">
+            <i class="fas fa-arrow-left close-modal-icon" onclick="closeModal('quiz-mode-leaderboard-modal')"></i>
+            <h2 class="popup-title" id="mode-lb-title">Leaderboard</h2>
+            
+            <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #d4af37; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color:#ffd700; font-family:'Cinzel', serif; margin-bottom:5px;">Your Highest Record</h3>
+                <p style="color:#fffdf5; font-family:'Cardo', serif; font-size:1.2rem; margin:0;" id="my-mode-record">Loading...</p>
+            </div>
+
+            <div class="lb-table-container">
+                <table class="lb-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Correct</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mode-lb-tbody">
+                        <tr><td colspan="5" style="text-align:center; color:#cbb27d;">Loading Leaders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-modal" class="custom-popup-modal">
+        <div class="popup-modal-content quiz-arena-content" style="max-width: 700px;">
+            
+            <div id="quiz-cooldown-screen" style="display:none;">
+                <i class="fas fa-hourglass-half cooldown-icon"></i>
+                <h2 class="popup-title" style="font-size: 2.2rem; margin-bottom: 15px; letter-spacing: 2px;">Rest & Reflect</h2>
+                <p class="cooldown-text">You have already completed your daily biblical challenge. Return tomorrow for new trials and spiritual growth.</p>
+                <div class="cooldown-timer-box">
+                    <div class="timer-label">Next Quiz Available In</div>
+                    <div class="timer-countdown">
+                        <i class="fas fa-clock" style="color: #8b5a2b; font-size: 1.5rem; margin-right: 10px;"></i>
+                        <span id="quiz-cd-timer">00:00:00</span>
+                    </div>
+                </div>
+                <br><button class="cooldown-close-btn" onclick="closeModal('quiz-modal')"><i class="fas fa-door-open"></i> Return to Profile</button>
+            </div>
+
             <div id="quiz-q-screen" style="display:none;">
-                
-                <!-- Majestic Top Bar -->
                 <div class="quiz-header-bar">
                     <button class="quiz-resign-btn" onclick="resignQuiz()"><i class="fas fa-flag"></i> Resign</button>
                     
@@ -404,14 +424,16 @@
                         <span id="quiz-progress">Question 1 / 10</span>
                     </div>
 
-                    <div id="quiz-lives" class="quiz-lives-wrapper" title="Remaining Lives">
-                        <i class="fas fa-cross" id="life-1"></i>
-                        <i class="fas fa-cross" id="life-2"></i>
-                        <i class="fas fa-cross" id="life-3"></i>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="color: #4da6ff; font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: bold; display:flex; align-items:center; gap:5px;">
+                            <i class="fas fa-stopwatch"></i> <span id="quiz-timer-display">00:00</span>
+                        </div>
+                        <div id="quiz-lives" class="quiz-lives-wrapper" title="Remaining Lives">
+                            <i class="fas fa-cross" id="life-1"></i> <i class="fas fa-cross" id="life-2"></i> <i class="fas fa-cross" id="life-3"></i>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Question Area -->
                 <div class="quiz-question-container">
                     <div class="quiz-diff-wrapper">
                         <span id="quiz-difficulty" class="arena-diff-badge">Easy</span>
@@ -420,15 +442,12 @@
                     <div class="title-underline" style="margin: 15px auto 0; width: 100px;"></div>
                 </div>
                 
-                <!-- Options & Submit -->
                 <div class="quiz-action-area">
                     <div id="quiz-options-container" class="quiz-options-grid"></div>
-                    
                     <button class="biblical-btn gold-btn quiz-submit-flare" id="quiz-submit-btn" style="width:100%; margin-top:25px; display:none;" onclick="submitQuizAnswer()">
                         <i class="fas fa-check-circle"></i> Submit Answer
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
