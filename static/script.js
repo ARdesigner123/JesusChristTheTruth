@@ -1403,12 +1403,16 @@ window.startDailyQuizFlow = function() {
     setTimeout(() => {
         const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
         
-        // Hide both screens initially
         document.getElementById("quiz-cooldown-screen").style.display = "none";
         document.getElementById("quiz-q-screen").style.display = "none";
 
-        if (window.userLastQuizDate === todaySG) {
-            // FIXED: Use "flex" to trigger the nice centered layout
+        // SAFETY FORMATTER: Drops time if it came from the DB as a full timestamp
+        let lastDate = "";
+        if (window.userLastQuizDate) {
+            lastDate = window.userLastQuizDate.split('T')[0].split(' ')[0];
+        }
+
+        if (lastDate === todaySG) {
             document.getElementById("quiz-cooldown-screen").style.display = "flex";
             startQuizCooldown();
         } else {
@@ -1425,9 +1429,9 @@ window.startDifficultyQuiz = function(difficulty) {
     
     setTimeout(() => {
         document.getElementById("quiz-cooldown-screen").style.display = "none";
-        document.getElementById("quiz-q-screen").style.display = "flex"; // Fix flex
+        document.getElementById("quiz-q-screen").style.display = "flex"; 
         
-        quizMode = difficulty; // Stores 'easy', 'medium', etc.
+        quizMode = difficulty; 
         
         activeQuestions = QUIZ_BANK
             .filter(q => q.diff === difficulty)
