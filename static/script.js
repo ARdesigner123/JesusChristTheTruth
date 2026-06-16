@@ -1403,27 +1403,55 @@ window.openQuizMenu = function() {
 
 // 2. Click "Daily Quiz" from Menu
 window.startDailyQuizFlow = function() {
-    const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().substring(0, 10);
+    closeModal("quiz-menu-modal");
     
-    let lastDate = "";
-    if (window.userLastQuizDate) {
-        lastDate = String(window.userLastQuizDate).substring(0, 10);
-    }
+    setTimeout(() => {
+        const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().substring(0, 10);
+        
+        // Hide both screens initially
+        document.getElementById("quiz-cooldown-screen").style.display = "none";
+        document.getElementById("quiz-q-screen").style.display = "none";
 
-    if (lastDate === todaySG) {
-        // ALREADY COMPLETED TODAY: Swap view INSIDE the Menu Modal
-        document.getElementById("quiz-menu-main").style.display = "none";
-        document.getElementById("quiz-cooldown-screen").style.display = "flex";
-        startQuizCooldown();
-    } else {
-        // NOT COMPLETED: Close Menu and open actual Quiz Modal
-        closeModal("quiz-menu-modal");
-        setTimeout(() => {
+        // SAFETY FORMATTER: Extract ONLY the YYYY-MM-DD from the user's last quiz date
+        let lastDate = "";
+        if (window.userLastQuizDate) {
+            lastDate = String(window.userLastQuizDate).substring(0, 10);
+        }
+
+        // Compare the strict 10-character dates
+        if (lastDate === todaySG) {
+            document.getElementById("quiz-cooldown-screen").style.display = "flex";
+            startQuizCooldown(); // This calls the timer function below!
+        } else {
             quizMode = 'daily';
             startActualQuiz(); 
-            openModal("quiz-modal");
-        }, 400);
+        }
+        openModal("quiz-modal");
+    }, 400);
+}
+
+// ================= MISSING TIMER FUNCTION RESTORED =================
+function startQuizCooldown() {
+    const timerDisplay = document.getElementById("quiz-cd-timer");
+    
+    function updateCooldown() {
+        const diff = getSGMidnightTimer() - Date.now();
+        if (diff <= 0) { 
+            timerDisplay.innerText = "Ready!"; 
+            clearInterval(quizInterval); 
+            // If they wait on this screen until midnight, auto-refresh to let them play!
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            timerDisplay.innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
     }
+
+    clearInterval(quizInterval);
+    updateCooldown(); // Run instantly so it doesn't show 00:00:00 for the first second!
+    quizInterval = setInterval(updateCooldown, 1000);
 }
 
 // NEW FUNCTION: Let user go back from Cooldown Screen to Menu
