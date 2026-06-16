@@ -1393,34 +1393,44 @@ function getSGMidnightTimer() {
 window.openQuizMenu = function() {
     const isGuest = !!localStorage.getItem("jct_guest_user") && !localStorage.getItem("jct_logged_in_user");
     if (isGuest) return alert("Please register an account to play the Quiz!");
+    
+    // Always reset the view to show the menu buttons first
+    document.getElementById("quiz-menu-main").style.display = "block";
+    document.getElementById("quiz-cooldown-screen").style.display = "none";
+    
     openModal("quiz-menu-modal");
 }
 
 // 2. Click "Daily Quiz" from Menu
 window.startDailyQuizFlow = function() {
-    closeModal("quiz-menu-modal");
+    const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().substring(0, 10);
     
-    setTimeout(() => {
-        const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
-        
-        document.getElementById("quiz-cooldown-screen").style.display = "none";
-        document.getElementById("quiz-q-screen").style.display = "none";
+    let lastDate = "";
+    if (window.userLastQuizDate) {
+        lastDate = String(window.userLastQuizDate).substring(0, 10);
+    }
 
-        // SAFETY FORMATTER: Drops time if it came from the DB as a full timestamp
-        let lastDate = "";
-        if (window.userLastQuizDate) {
-            lastDate = window.userLastQuizDate.split('T')[0].split(' ')[0];
-        }
-
-        if (lastDate === todaySG) {
-            document.getElementById("quiz-cooldown-screen").style.display = "flex";
-            startQuizCooldown();
-        } else {
+    if (lastDate === todaySG) {
+        // ALREADY COMPLETED TODAY: Swap view INSIDE the Menu Modal
+        document.getElementById("quiz-menu-main").style.display = "none";
+        document.getElementById("quiz-cooldown-screen").style.display = "flex";
+        startQuizCooldown();
+    } else {
+        // NOT COMPLETED: Close Menu and open actual Quiz Modal
+        closeModal("quiz-menu-modal");
+        setTimeout(() => {
             quizMode = 'daily';
             startActualQuiz(); 
-        }
-        openModal("quiz-modal");
-    }, 400);
+            openModal("quiz-modal");
+        }, 400);
+    }
+}
+
+// NEW FUNCTION: Let user go back from Cooldown Screen to Menu
+window.backToQuizMenu = function() {
+    clearInterval(quizInterval); // Stop timer
+    document.getElementById("quiz-cooldown-screen").style.display = "none";
+    document.getElementById("quiz-menu-main").style.display = "block";
 }
 
 // 3. Click a Difficulty from Menu
@@ -1428,9 +1438,7 @@ window.startDifficultyQuiz = function(difficulty) {
     closeModal("quiz-menu-modal");
     
     setTimeout(() => {
-        document.getElementById("quiz-cooldown-screen").style.display = "none";
         document.getElementById("quiz-q-screen").style.display = "flex"; 
-        
         quizMode = difficulty; 
         
         activeQuestions = QUIZ_BANK
