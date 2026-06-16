@@ -1421,7 +1421,7 @@ window.startDailyQuizFlow = function() {
         // Compare the strict 10-character dates
         if (lastDate === todaySG) {
             document.getElementById("quiz-cooldown-screen").style.display = "flex";
-            startQuizCooldown(); // This calls the timer function below!
+            startQuizCooldown(); // THIS WILL NO LONGER CRASH!
         } else {
             quizMode = 'daily';
             startActualQuiz(); 
@@ -1430,7 +1430,7 @@ window.startDailyQuizFlow = function() {
     }, 400);
 }
 
-// ================= MISSING TIMER FUNCTION RESTORED =================
+// ================= RESTORED COOLDOWN TIMER FUNCTION =================
 function startQuizCooldown() {
     const timerDisplay = document.getElementById("quiz-cd-timer");
     
@@ -1439,7 +1439,7 @@ function startQuizCooldown() {
         if (diff <= 0) { 
             timerDisplay.innerText = "Ready!"; 
             clearInterval(quizInterval); 
-            // If they wait on this screen until midnight, auto-refresh to let them play!
+            // Auto-refresh so they can immediately play if they waited until midnight!
             setTimeout(() => location.reload(), 2000);
         } else {
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1450,15 +1450,17 @@ function startQuizCooldown() {
     }
 
     clearInterval(quizInterval);
-    updateCooldown(); // Run instantly so it doesn't show 00:00:00 for the first second!
+    updateCooldown(); // Run instantly so it doesn't show 00:00:00 for a second
     quizInterval = setInterval(updateCooldown, 1000);
 }
 
-// NEW FUNCTION: Let user go back from Cooldown Screen to Menu
+// Let user go back from Cooldown Screen to Menu
 window.backToQuizMenu = function() {
     clearInterval(quizInterval); // Stop timer
-    document.getElementById("quiz-cooldown-screen").style.display = "none";
-    document.getElementById("quiz-menu-main").style.display = "block";
+    closeModal("quiz-modal");
+    setTimeout(() => {
+        openModal("quiz-menu-modal");
+    }, 400);
 }
 
 // 3. Click a Difficulty from Menu
