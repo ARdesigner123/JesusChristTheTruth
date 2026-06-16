@@ -1403,11 +1403,13 @@ window.startDailyQuizFlow = function() {
     setTimeout(() => {
         const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
         
+        // Hide both screens initially
         document.getElementById("quiz-cooldown-screen").style.display = "none";
         document.getElementById("quiz-q-screen").style.display = "none";
 
         if (window.userLastQuizDate === todaySG) {
-            document.getElementById("quiz-cooldown-screen").style.display = "block";
+            // FIXED: Use "flex" to trigger the nice centered layout
+            document.getElementById("quiz-cooldown-screen").style.display = "flex";
             startQuizCooldown();
         } else {
             quizMode = 'daily';
