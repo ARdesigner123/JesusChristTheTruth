@@ -861,23 +861,29 @@ window.searchFriend = async function() {
 
 // ================= DYNAMIC CHAT DATE LOGIC =================
 
-// Helper to calculate "Today", "Yesterday", or "12 June"
+// Helper to safely parse DB timestamps and format them!
 function formatChatDate(dateString) {
-    const msgDate = new Date(dateString);
+    if (!dateString) return "";
+    
+    // FIX: Postgres returns "2026-06-08 05:18:20.304492"
+    // We must replace the space with 'T' and append 'Z' so browsers know it's UTC time.
+    let safeDate = dateString;
+    if (typeof dateString === 'string' && dateString.includes(' ')) {
+        safeDate = dateString.replace(' ', 'T') + 'Z';
+    }
+
+    const msgDate = new Date(safeDate);
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
 
     if (msgDate.toDateString() === today.toDateString()) {
         return "Today";
     } else if (msgDate.toDateString() === yesterday.toDateString()) {
         return "Yesterday";
     } else {
-        const options = { day: 'numeric', month: 'long' };
-        if (msgDate.getFullYear() !== today.getFullYear()) {
-            options.year = 'numeric'; // Add year if it's from a previous year
-        }
-        return msgDate.toLocaleDateString('en-GB', options); // e.g., "12 June"
+        // Formats exactly like "8 June 2026"
+        return msgDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 }
 
@@ -901,7 +907,12 @@ window.renderChatMessages = function(messages, currentUser, friendUsername) {
         const avatar = isMe ? (localStorage.getItem('jct_avatar_' + currentUser) || "static/image/defaultAvatar.jpg") 
                             : (localStorage.getItem('jct_avatar_' + friendUsername) || "static/image/defaultAvatar.jpg");
 
-        const timeStr = new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        // Safely parse the time for the message bubble too!
+        let safeDate = msg.created_at;
+        if (typeof msg.created_at === 'string' && msg.created_at.includes(' ')) {
+            safeDate = msg.created_at.replace(' ', 'T') + 'Z';
+        }
+        const timeStr = new Date(safeDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
         chatArea.innerHTML += `
             <div class="chat-bubble-row ${rowClass}">
