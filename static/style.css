@@ -1126,71 +1126,106 @@ li,
     overflow: hidden; /* Keeps the rounded borders clean */
 }
 
-/* ================= COOLDOWN SCREEN ================= */
+/* ================= MAJESTIC COOLDOWN SCREEN ================= */
 #quiz-cooldown-screen {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    overflow-y: auto; 
-    padding: 50px 30px;
+    overflow: hidden; /* CRITICAL: Completely hides the scrollbar */
+    padding: 30px 20px 20px; /* Tighter vertical padding to reduce height */
     text-align: center;
-    max-height: 85vh;
-    min-height: 400px; /* CRITICAL: Prevents it from collapsing into a bar! */
+    min-height: 350px; /* Reduced from 400px to make it shorter */
     width: 100%;
+    box-sizing: border-box;
 }
 
 .cooldown-icon {
-    font-size: 3.5rem;
-    color: #d4af37;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+    font-size: 3.2rem;
+    color: #ffd700;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
     animation: floatIcon 3s ease-in-out infinite;
 }
 
 @keyframes floatIcon {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); filter: drop-shadow(0 0 25px gold); }
     100% { transform: translateY(0px); }
 }
 
+#quiz-cooldown-screen .popup-title {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
 .cooldown-text {
-    color: #cbb27d;
+    color: #e6dbb8;
     font-family: 'Cardo', serif;
-    font-size: 1.25rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    max-width: 80%;
+    font-size: 1.15rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    max-width: 95%; /* Widened from 80% to stretch across the modal */
     margin-left: auto;
     margin-right: auto;
 }
 
+/* Glowing Plaque Effect */
 .cooldown-timer-box {
-    background: linear-gradient(to bottom, rgba(20, 10, 5, 0.9), rgba(0, 0, 0, 0.8));
-    border: 2px solid #5c3a21;
-    border-radius: 15px;
-    padding: 25px 40px;
+    background: linear-gradient(135deg, rgba(43, 26, 3, 0.95), rgba(15, 8, 3, 0.95));
+    border: 2px solid #a67c52;
+    border-radius: 12px;
+    padding: 20px 50px; /* Widened the horizontal padding */
     display: inline-block;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 10px 20px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 175, 55, 0.15);
+    margin-bottom: 25px;
+    position: relative;
 }
 
-.timer-label { font-family: 'Cinzel', serif; color: #a67c52; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-.timer-countdown { font-family: 'Cinzel', serif; color: #ff4d4d; font-size: 2.5rem; font-weight: bold; text-shadow: 0 0 20px rgba(255, 77, 77, 0.6); display: flex; align-items: center; justify-content: center; }
+.timer-label {
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.timer-countdown {
+    font-family: 'Cinzel', serif;
+    color: #ff4d4d;
+    font-size: 2.8rem;
+    font-weight: bold;
+    text-shadow: 0 0 15px rgba(255, 77, 77, 0.5), 2px 2px 0px #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 2px;
+}
 
 .cooldown-close-btn {
-    background: transparent;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(43, 26, 3, 0.6));
     border: 2px solid #8b5a2b;
-    color: #cbb27d;
-    padding: 12px 35px;
+    color: #d4af37;
+    padding: 12px 50px; /* Widened the button */
     border-radius: 30px;
     font-family: 'Cinzel', serif;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
-.cooldown-close-btn:hover { background: rgba(212, 175, 55, 0.1); border-color: #ffd700; color: #ffd700; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3); }
+
+.cooldown-close-btn:hover {
+    background: rgba(212, 175, 55, 0.15);
+    border-color: #ffd700;
+    color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
 
 /* ================= ACTIVE QUESTION SCREEN ================= */
 #quiz-q-screen {

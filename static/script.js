@@ -1403,31 +1403,29 @@ window.openQuizMenu = function() {
 
 // 2. Click "Daily Quiz" from Menu
 window.startDailyQuizFlow = function() {
-    closeModal("quiz-menu-modal");
-    
-    setTimeout(() => {
-        const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().substring(0, 10);
-        
-        // Hide both screens initially
-        document.getElementById("quiz-cooldown-screen").style.display = "none";
-        document.getElementById("quiz-q-screen").style.display = "none";
+    const todaySG = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().substring(0, 10);
 
-        // SAFETY FORMATTER: Extract ONLY the YYYY-MM-DD from the user's last quiz date
-        let lastDate = "";
-        if (window.userLastQuizDate) {
-            lastDate = String(window.userLastQuizDate).substring(0, 10);
-        }
+    // SAFETY FORMATTER: Extract ONLY the YYYY-MM-DD from the user's last quiz date
+    let lastDate = "";
+    if (window.userLastQuizDate) {
+        lastDate = String(window.userLastQuizDate).substring(0, 10);
+    }
 
-        // Compare the strict 10-character dates
-        if (lastDate === todaySG) {
-            document.getElementById("quiz-cooldown-screen").style.display = "flex";
-            startQuizCooldown(); // THIS WILL NO LONGER CRASH!
-        } else {
+    if (lastDate === todaySG) {
+        // ALREADY COMPLETED TODAY: Swap view INSIDE the Menu Modal
+        // DO NOT CLOSE THE MODAL!
+        document.getElementById("quiz-menu-main").style.display = "none";
+        document.getElementById("quiz-cooldown-screen").style.display = "flex";
+        startQuizCooldown(); 
+    } else {
+        // NOT COMPLETED: Close Menu and open actual Quiz Modal
+        closeModal("quiz-menu-modal");
+        setTimeout(() => {
             quizMode = 'daily';
             startActualQuiz(); 
-        }
-        openModal("quiz-modal");
-    }, 400);
+            openModal("quiz-modal");
+        }, 400);
+    }
 }
 
 // ================= RESTORED COOLDOWN TIMER FUNCTION =================
@@ -1454,13 +1452,12 @@ function startQuizCooldown() {
     quizInterval = setInterval(updateCooldown, 1000);
 }
 
-// Let user go back from Cooldown Screen to Menu
+// NEW FUNCTION: Let user go back from Cooldown Screen to Menu
 window.backToQuizMenu = function() {
     clearInterval(quizInterval); // Stop timer
-    closeModal("quiz-modal");
-    setTimeout(() => {
-        openModal("quiz-menu-modal");
-    }, 400);
+    // Instantly swap the view back to the buttons without closing the modal
+    document.getElementById("quiz-cooldown-screen").style.display = "none";
+    document.getElementById("quiz-menu-main").style.display = "block";
 }
 
 // 3. Click a Difficulty from Menu
