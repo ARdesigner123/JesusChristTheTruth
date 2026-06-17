@@ -833,6 +833,18 @@ li,
 .rank-other { color: #8b5a2b; } /* Dull Brown */
 
 /* ================= NEW AVATAR & FRAME STYLES ================= */
+
+/* Glowing Animations */
+@keyframes holy-glow {
+    0% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)) brightness(1); transform: translateY(0px); }
+    100% { filter: drop-shadow(0 0 35px rgba(255, 215, 0, 1)) brightness(1.1); transform: translateY(-5px); }
+}
+
+@keyframes subtle-float {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-3px); }
+}
+
 /* Modal Tabs */
 .avatar-modal-tabs {
     display: flex;
@@ -845,77 +857,123 @@ li,
     background: transparent;
     border: 2px solid #5c3a21;
     color: #cbb27d;
-    padding: 8px 20px;
+    padding: 10px 25px;
     border-radius: 8px;
     font-family: 'Cinzel', serif;
     font-weight: bold;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.3s ease;
+}
+
+.modal-tab:hover {
+    background: rgba(203, 178, 125, 0.1);
 }
 
 .modal-tab.active {
-    background: #cbb27d;
+    background: linear-gradient(135deg, #cbb27d, #d4af37);
     color: #1a0a03;
     border-color: #ffd700;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
 }
 
-/* Base Frame Containers (Handle Sizes and Borders) */
+/* ================= THE GLOWING FRAMES ================= */
+/* Base styles for the profile pages */
 .profile-frame-container {
-    width: 120px; /* Adjust to your original profile size */
+    width: 120px; 
     height: 120px;
     margin: 0 auto 10px;
-    border: 3px solid #cbb27d;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(203, 178, 125, 0.4);
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 0 10px rgba(203, 178, 125, 0.5));
+    border: 3px solid #cbb27d;
 }
 
-.profile-frame-container img { width: 100%; height: 100%; object-fit: cover; }
-
+/* The impressive Preview Frame inside the modal */
 .preview-frame-container {
     width: 180px; 
     height: 180px;
-    margin-bottom: 15px;
-    background: #2b1a03;
-    border: 4px solid #ffd700;
+    margin-bottom: 25px;
+    background: #1a0a03;
     overflow: hidden;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
-    transition: all 0.3s ease;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* The active glowing light effect */
+    animation: holy-glow 2.5s infinite alternate ease-in-out;
+    border: 4px solid #ffd700;
 }
 
-.preview-frame-container img { width: 100%; height: 100%; object-fit: cover; }
+.profile-frame-container img, .preview-frame-container img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.3s ease;
+}
 
-/* SHAPE CLASSES (Applied dynamically to containers) */
+/* ================= THE SHAPES ================= 
+  Note: clip-path removes CSS borders, so for complex shapes 
+  we remove the border and rely entirely on the glowing drop-shadow!
+*/
 .shape-arch { border-radius: 90px 90px 15px 15px; }
 .shape-circle { border-radius: 50%; }
 .shape-square { border-radius: 15px; }
 .shape-leaf { border-radius: 0 50% 0 50%; }
 .shape-blob { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
 
-/* Frame Options in Grid */
-.frame-option {
-    width: 85px; height: 85px;
+/* NEW ADVANCED SHAPES */
+.shape-diamond { 
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); 
+    border: none !important; border-radius: 0; 
+}
+.shape-hexagon { 
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); 
+    border: none !important; border-radius: 0; 
+}
+.shape-star { 
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
+    border: none !important; border-radius: 0; 
+}
+.shape-shield { 
+    clip-path: polygon(50% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%, 0 0); 
+    border: none !important; border-radius: 0; 
+}
+/* Geometric Crystal Heart */
+.shape-heart {
+    clip-path: polygon(50% 25%, 75% 0%, 100% 25%, 100% 50%, 50% 100%, 0% 50%, 0% 25%, 25% 0%);
+    border: none !important; border-radius: 0;
+}
+
+/* ================= GRID OPTIONS ================= */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 15px;
+    padding-right: 10px; /* Space for scrollbar */
+}
+
+/* Frame Grid specifically */
+#frame-grid .frame-option {
+    width: 90px; height: 90px;
     border: 2px solid #5c3a21;
-    background: #1a0a03;
+    background: #0d0501;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.3s;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
 .frame-option.selected {
     border-color: #ffd700;
-    box-shadow: 0 0 15px gold;
-    transform: scale(1.05);
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    transform: scale(1.1);
 }
 
-/* Mini visual representation of the frame inside the grid */
 .frame-mini-preview {
-    width: 60%; height: 60%;
-    background: #cbb27d;
-    border: 2px solid #ffd700;
+    width: 65%; height: 65%;
+    background: linear-gradient(135deg, #cbb27d, #8b5a2b);
+    animation: subtle-float 2s infinite alternate ease-in-out;
 }
 
 .change-avatar-btn {
@@ -1016,7 +1074,7 @@ li,
     transform: translateX(-5px);
 }
 
-/* Modal Layout */
+/* ================= MODAL LAYOUT ================= */
 .avatar-modal-layout {
     display: flex;
     padding: 40px;
@@ -1024,9 +1082,25 @@ li,
 }
 
 .avatar-selection-area {
-    flex: 6;
+    flex: 1.5;
     border-right: 1px dashed rgba(166, 124, 82, 0.4);
     padding-right: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for the selection area */
+.avatar-selection-area::-webkit-scrollbar { width: 8px; }
+.avatar-selection-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+.avatar-selection-area::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 10px; }
+.avatar-selection-area::-webkit-scrollbar-thumb:hover { background: #cbb27d; }
+
+.avatar-preview-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .avatar-title {
@@ -1045,8 +1119,9 @@ li,
     gap: 15px;
 }
 
+/* Avatar Grid Options */
 .avatar-option {
-    width: 85px; height: 85px;
+    width: 90px; height: 90px;
     border-radius: 12px;
     border: 3px solid #5c3a21;
     overflow: hidden;
@@ -1058,7 +1133,7 @@ li,
 
 .avatar-option img {
     width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
 }
 
 .avatar-option:hover {
@@ -1066,14 +1141,12 @@ li,
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
     transform: translateY(-5px);
 }
+.avatar-option:hover img { transform: scale(1.15); }
 
-.avatar-option:hover img { transform: scale(1.1); }
-
-/* Highlight the selected avatar */
 .avatar-option.selected {
     border-color: #ffd700;
-    box-shadow: 0 0 20px gold;
-    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+    transform: scale(1.08);
 }
 
 /* Upload Box */
@@ -1091,15 +1164,6 @@ li,
 }
 
 .avatar-upload-box i { font-size: 1.5rem; margin-bottom: 5px; color: #ffd700; }
-
-/* Right Preview Area */
-.avatar-preview-area {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 
 .save-avatar-btn { width: 100%; justify-content: center; margin-bottom: 10px; }
 

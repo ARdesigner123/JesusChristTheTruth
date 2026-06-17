@@ -1198,6 +1198,12 @@ window.openFriendProfile = async function(username, avatarSrc) {
             }
         }
 
+        // --- NEW: REAL-TIME FRAME UPDATE ---
+        const frameContainer = document.getElementById("fp-frame-container");
+        if (frameContainer) {
+            frameContainer.className = `profile-frame-container ${data.avatar_frame || 'shape-arch'}`;
+        }
+
         document.getElementById("fp-time").innerText = data.active_time || 0;
         document.getElementById("fp-hp").innerText = data.holypower || 0;
         document.getElementById("fp-streak").innerText = data.daily_streak || 0;
