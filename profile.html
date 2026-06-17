@@ -72,7 +72,7 @@
 
             <!-- ================= VIEW: PROFILE ================= -->
             <div id="view-profile">
-                <div id="main-profile-frame" class="profile-frame-container shape-arch">
+                <div id="main-profile-frame" class="profile-frame-container shape-arch color-gold effect-none">
                     <img src="static/image/defaultAvatar.jpg" id="main-profile-avatar" alt="User Avatar" onerror="this.src='https://i.imgur.com/8Q5g0tZ.png'">
                 </div>
                 <button class="change-avatar-btn" onclick="openAvatarModal()"><i class="fas fa-camera"></i> Change Appearance</button>
@@ -200,19 +200,23 @@
         
         <div class="avatar-modal-layout">
             <div class="avatar-selection-area">
-                <div class="avatar-modal-tabs">
+                <div class="avatar-modal-tabs" style="flex-wrap: wrap;">
                     <button class="modal-tab active" id="tab-btn-avatar" onclick="switchModalTab('avatar')">Avatar</button>
                     <button class="modal-tab" id="tab-btn-frame" onclick="switchModalTab('frame')">Frame</button>
+                    <button class="modal-tab" id="tab-btn-color" onclick="switchModalTab('color')">Color</button>
+                    <button class="modal-tab" id="tab-btn-effect" onclick="switchModalTab('effect')">Effect</button>
                 </div>
 
                 <div class="avatar-grid" id="avatar-grid"></div>
                 <input type="file" id="custom-avatar-upload" accept="image/*" style="display: none;" onchange="handleCustomAvatar(event)">
                 
                 <div class="avatar-grid" id="frame-grid" style="display: none;"></div>
+                <div class="avatar-grid" id="color-grid" style="display: none;"></div>
+                <div class="avatar-grid" id="effect-grid" style="display: none;"></div>
             </div>
 
             <div class="avatar-preview-area">
-                <div id="preview-arch" class="preview-frame-container shape-arch">
+                <div id="preview-arch" class="preview-frame-container shape-arch color-gold effect-none">
                     <img src="static/image/defaultAvatar.jpg" id="avatar-preview-img" alt="Preview">
                 </div>
                 <h3 style="color:#ffd700; font-family:'Cinzel', serif; margin-bottom: 20px;">Your Current Look</h3>

@@ -880,9 +880,10 @@ li,
 /* ================= THE GLOWING FRAMES ================= */
 /* Base styles for the profile pages */
 .profile-frame-container {
-    width: 120px; 
-    height: 120px;
-    margin: 0 auto 10px;
+    width: 160px !important; /* Increased from 120px */
+    height: 160px !important;
+    margin: 0 auto 15px;
+    position: relative; /* Needed for effects */
     overflow: hidden;
     transition: all 0.4s ease;
     filter: drop-shadow(0 0 10px rgba(203, 178, 125, 0.5));
@@ -895,6 +896,7 @@ li,
     height: 180px;
     margin-bottom: 25px;
     background: #1a0a03;
+    position: relative; /* Needed for effects overlay */
     overflow: hidden;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     /* The active glowing light effect */
@@ -940,6 +942,76 @@ li,
 .shape-heart {
     clip-path: polygon(50% 25%, 75% 0%, 100% 25%, 100% 50%, 50% 100%, 0% 50%, 0% 25%, 25% 0%);
     border: none !important; border-radius: 0;
+}
+
+/* ================= NEW AVATAR COLORS (GLOW & BORDER) ================= */
+/* We use filter drop-shadow so the complex shapes glow properly */
+.color-gold { border-color: #ffd700 !important; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); }
+.color-silver { border-color: #e0e0e0 !important; filter: drop-shadow(0 0 15px rgba(224, 224, 224, 0.8)); }
+.color-ruby { border-color: #e0115f !important; filter: drop-shadow(0 0 15px rgba(224, 17, 95, 0.8)); }
+.color-diamond { border-color: #00ffff !important; filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)); }
+.color-emerald { border-color: #50c878 !important; filter: drop-shadow(0 0 15px rgba(80, 200, 120, 0.8)); }
+.color-bronze { border-color: #cd7f32 !important; filter: drop-shadow(0 0 15px rgba(205, 127, 50, 0.8)); }
+.color-purple { border-color: #8a2be2 !important; filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+.color-pink { border-color: #ff69b4 !important; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8)); }
+
+/* ================= AVATAR EFFECTS (Overlays via ::after) ================= */
+/* Setup the overlay */
+.profile-frame-container::after, .preview-frame-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; /* Let clicks pass through to image */
+    border-radius: inherit; /* Matches border radius shapes */
+    z-index: 2;
+}
+
+/* 1. Glowing: Adds a pulsing inner light */
+@keyframes pulse-inner { 0% { box-shadow: inset 0 0 10px currentColor; } 100% { box-shadow: inset 0 0 30px currentColor; } }
+.effect-glowing::after { animation: pulse-inner 2s infinite alternate; }
+
+/* 2. Stars: Twinkling overlay */
+@keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
+.effect-stars::after {
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 15px);
+    background-size: 50px 50px;
+    animation: twinkle 1.5s infinite alternate;
+}
+
+/* 3. Galaxy: Deep space purple/blue spinning hue */
+@keyframes galaxy-spin { 0% { transform: rotate(0deg) scale(1.5); } 100% { transform: rotate(360deg) scale(1.5); } }
+.effect-galaxy { overflow: hidden; }
+.effect-galaxy::after {
+    background: radial-gradient(circle, rgba(138,43,226,0.4) 0%, rgba(0,0,0,0) 70%);
+    mix-blend-mode: color-dodge;
+    animation: galaxy-spin 10s linear infinite;
+}
+
+/* 4. Particles: Moving light specs */
+@keyframes float-up { 0% { background-position: 0 100%; } 100% { background-position: 0 0; } }
+.effect-particles::after {
+    background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 2px);
+    background-size: 30px 40px;
+    animation: float-up 4s linear infinite;
+}
+
+/* 5. Winter: Falling snow */
+@keyframes fall-down { 0% { background-position: 0 0, 0 0, 0 0; } 100% { background-position: 500px 1000px, 400px 400px, 300px 300px; } }
+.effect-winter::after {
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.3) 2px, transparent 10px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 5px);
+    background-size: 100px 100px, 50px 50px;
+    animation: fall-down 10s linear infinite;
+}
+
+/* Style for text-based grid options (Colors/Effects) */
+.text-option {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: white;
+    text-align: center;
+    text-shadow: 1px 1px 2px black;
 }
 
 /* ================= GRID OPTIONS ================= */

@@ -406,7 +406,7 @@ window.confirmEditUsername = async function() {
     }
 }
 
-// ================= AVATAR & FRAME LOGIC =================
+// ================= AVATAR & CUSTOMIZATION LOGIC =================
 const AVATAR_LIST = [
     'static/image/defaultAvatar.jpg',
     'static/image/avatar2.jpg',
@@ -417,16 +417,42 @@ const AVATAR_LIST = [
     'static/image/avatar7.jpg'
 ];
 
+// Added Heart, Star, and Diamond
 const FRAME_LIST = [
     { id: 'shape-arch', name: 'Arch' },
     { id: 'shape-circle', name: 'Circle' },
     { id: 'shape-square', name: 'Square' },
     { id: 'shape-leaf', name: 'Leaf' },
-    { id: 'shape-blob', name: 'Blob' }
+    { id: 'shape-blob', name: 'Blob' },
+    { id: 'shape-heart', name: 'Heart' },
+    { id: 'shape-star', name: 'Star' },
+    { id: 'shape-diamond', name: 'Diamond' }
+];
+
+const COLOR_LIST = [
+    { id: 'color-gold', name: 'Gold', hex: '#ffd700' },
+    { id: 'color-silver', name: 'Silver', hex: '#e0e0e0' },
+    { id: 'color-ruby', name: 'Ruby', hex: '#e0115f' },
+    { id: 'color-diamond', name: 'Diamond', hex: '#00ffff' },
+    { id: 'color-emerald', name: 'Emerald', hex: '#50c878' },
+    { id: 'color-bronze', name: 'Bronze', hex: '#cd7f32' },
+    { id: 'color-purple', name: 'Purple', hex: '#8a2be2' },
+    { id: 'color-pink', name: 'Pink', hex: '#ff69b4' }
+];
+
+const EFFECT_LIST = [
+    { id: 'effect-none', name: 'None' },
+    { id: 'effect-glowing', name: 'Glowing' },
+    { id: 'effect-stars', name: 'Stars' },
+    { id: 'effect-galaxy', name: 'Galaxy' },
+    { id: 'effect-particles', name: 'Particles' },
+    { id: 'effect-winter', name: 'Winter' }
 ];
 
 let temporarySelectedAvatar = "";
 let temporarySelectedFrame = "shape-arch";
+let temporarySelectedColor = "color-gold";
+let temporarySelectedEffect = "effect-none";
 
 // 1. Initialize Appearance
 async function initializeUserAppearance() {
@@ -435,19 +461,27 @@ async function initializeUserAppearance() {
 
     let savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
     let savedFrame = localStorage.getItem('jct_frame_' + displayUser) || "shape-arch";
-    applyAppearanceToUI(savedAvatar, savedFrame);
+    let savedColor = localStorage.getItem('jct_color_' + displayUser) || "color-gold";
+    let savedEffect = localStorage.getItem('jct_effect_' + displayUser) || "effect-none";
+    
+    applyAppearanceToUI(savedAvatar, savedFrame, savedColor, savedEffect);
 
     try {
         const res = await fetch(`${BACKEND_URL}/api/users/profile/${displayUser}`);
         if (res.ok) {
             const data = await res.json();
-            if (data.avatar_url || data.avatar_frame) {
+            if (data.avatar_url || data.avatar_frame || data.avatar_color || data.avatar_effect) {
                 savedAvatar = data.avatar_url || savedAvatar;
                 savedFrame = data.avatar_frame || savedFrame;
+                savedColor = data.avatar_color || savedColor;
+                savedEffect = data.avatar_effect || savedEffect;
                 
                 localStorage.setItem('jct_avatar_' + displayUser, savedAvatar);
                 localStorage.setItem('jct_frame_' + displayUser, savedFrame);
-                applyAppearanceToUI(savedAvatar, savedFrame);
+                localStorage.setItem('jct_color_' + displayUser, savedColor);
+                localStorage.setItem('jct_effect_' + displayUser, savedEffect);
+                
+                applyAppearanceToUI(savedAvatar, savedFrame, savedColor, savedEffect);
             }
         }
     } catch(err) {
@@ -456,17 +490,17 @@ async function initializeUserAppearance() {
 }
 
 // Apply changes visually to the profile UI
-function applyAppearanceToUI(avatarSrc, frameClass) {
+function applyAppearanceToUI(avatarSrc, frameClass, colorClass, effectClass) {
     const mainProfileImg = document.getElementById("main-profile-avatar");
     const mainProfileFrame = document.getElementById("main-profile-frame");
     
     if (mainProfileImg) mainProfileImg.src = avatarSrc;
     if (mainProfileFrame) {
-        // Remove all previous shapes and add the new one
-        mainProfileFrame.className = `profile-frame-container ${frameClass}`;
+        mainProfileFrame.className = `profile-frame-container ${frameClass} ${colorClass} ${effectClass}`;
+        mainProfileFrame.style.color = getComputedStyle(mainProfileFrame).borderColor; // Helps effects inherit color
     }
     
-    // If you have a navbar avatar, update that too
+    // If you have a navbar avatar, update it (navbar usually shouldn't have effects to save space)
     const navProfileImg = document.getElementById("nav-avatar-img");
     if (navProfileImg) navProfileImg.src = avatarSrc;
 }
@@ -478,22 +512,30 @@ window.openAvatarModal = function() {
     const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
     temporarySelectedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
     temporarySelectedFrame = localStorage.getItem('jct_frame_' + displayUser) || "shape-arch";
+    temporarySelectedColor = localStorage.getItem('jct_color_' + displayUser) || "color-gold";
+    temporarySelectedEffect = localStorage.getItem('jct_effect_' + displayUser) || "effect-none";
 
     const modal = document.getElementById("avatar-modal");
     populateAvatarGrid(displayUser);
     populateFrameGrid();
+    populateColorGrid();
+    populateEffectGrid();
 
     // Set Previews
     document.getElementById("avatar-preview-img").src = temporarySelectedAvatar;
-    document.getElementById("preview-arch").className = `preview-frame-container ${temporarySelectedFrame}`;
+    const previewContainer = document.getElementById("preview-arch");
+    previewContainer.className = `preview-frame-container ${temporarySelectedFrame} ${temporarySelectedColor} ${temporarySelectedEffect}`;
+    
+    // Help inherited colors on effects
+    const selectedColorHex = COLOR_LIST.find(c => c.id === temporarySelectedColor)?.hex || '#ffd700';
+    previewContainer.style.color = selectedColorHex; 
 
-    // Default to avatar tab
     switchModalTab('avatar');
-
     modal.style.display = "flex";
     setTimeout(() => modal.classList.add("show"), 10);
 }
 
+// Grid Builders
 function populateAvatarGrid(displayUser) {
     const grid = document.getElementById("avatar-grid");
     const discardBtn = document.getElementById("discard-btn");
@@ -502,22 +544,15 @@ function populateAvatarGrid(displayUser) {
     AVATAR_LIST.forEach(src => {
         const div = document.createElement("div");
         div.className = `avatar-option ${src === temporarySelectedAvatar ? 'selected' : ''}`;
-        div.onclick = () => selectAvatar(src, div);
+        div.onclick = () => {
+            temporarySelectedAvatar = src;
+            document.getElementById("avatar-preview-img").src = src;
+            document.querySelectorAll(".avatar-option").forEach(el => el.classList.remove("selected"));
+            div.classList.add("selected");
+        };
         div.innerHTML = `<img src="${src}" alt="Avatar">`;
         grid.appendChild(div);
     });
-
-    const customSaved = localStorage.getItem('jct_custom_photo_' + displayUser);
-    if (customSaved) {
-        const customDiv = document.createElement("div");
-        customDiv.className = `avatar-option ${customSaved === temporarySelectedAvatar ? 'selected' : ''}`;
-        customDiv.onclick = () => selectAvatar(customSaved, customDiv);
-        customDiv.innerHTML = `<img src="${customSaved}" alt="Custom Avatar">`;
-        grid.appendChild(customDiv);
-        discardBtn.style.display = "block";
-    } else {
-        discardBtn.style.display = "none";
-    }
 
     const uploadBtn = document.createElement("div");
     uploadBtn.className = "avatar-option avatar-upload-box";
@@ -529,32 +564,63 @@ function populateAvatarGrid(displayUser) {
 function populateFrameGrid() {
     const grid = document.getElementById("frame-grid");
     grid.innerHTML = "";
-
     FRAME_LIST.forEach(frame => {
         const div = document.createElement("div");
         div.className = `frame-option ${frame.id === temporarySelectedFrame ? 'selected' : ''}`;
-        div.onclick = () => selectFrame(frame.id, div);
-        
-        // Mini preview inside the box
+        div.onclick = () => updatePreviewAttr('frame', frame.id, div, ".frame-option");
         div.innerHTML = `<div class="frame-mini-preview ${frame.id}"></div>`;
         grid.appendChild(div);
     });
 }
 
-// Modal Tab Switching
-window.switchModalTab = function(tabName) {
-    document.getElementById("tab-btn-avatar").classList.remove("active");
-    document.getElementById("tab-btn-frame").classList.remove("active");
-    document.getElementById("avatar-grid").style.display = "none";
-    document.getElementById("frame-grid").style.display = "none";
+function populateColorGrid() {
+    const grid = document.getElementById("color-grid");
+    grid.innerHTML = "";
+    COLOR_LIST.forEach(color => {
+        const div = document.createElement("div");
+        div.className = `frame-option text-option ${color.id === temporarySelectedColor ? 'selected' : ''}`;
+        div.style.background = color.hex;
+        div.onclick = () => {
+            updatePreviewAttr('color', color.id, div, "#color-grid .frame-option");
+            document.getElementById("preview-arch").style.color = color.hex; // Update glow tint
+        };
+        div.innerHTML = `<strong>${color.name}</strong>`;
+        grid.appendChild(div);
+    });
+}
 
-    if (tabName === 'avatar') {
-        document.getElementById("tab-btn-avatar").classList.add("active");
-        document.getElementById("avatar-grid").style.display = "grid";
-    } else {
-        document.getElementById("tab-btn-frame").classList.add("active");
-        document.getElementById("frame-grid").style.display = "grid";
-    }
+function populateEffectGrid() {
+    const grid = document.getElementById("effect-grid");
+    grid.innerHTML = "";
+    EFFECT_LIST.forEach(effect => {
+        const div = document.createElement("div");
+        div.className = `frame-option text-option ${effect.id === temporarySelectedEffect ? 'selected' : ''} ${effect.id}`;
+        div.onclick = () => updatePreviewAttr('effect', effect.id, div, "#effect-grid .frame-option");
+        div.innerHTML = `<strong>${effect.name}</strong>`;
+        grid.appendChild(div);
+    });
+}
+
+// Master update function for UI Selection
+function updatePreviewAttr(type, id, clickedElement, querySelector) {
+    if(type === 'frame') temporarySelectedFrame = id;
+    if(type === 'color') temporarySelectedColor = id;
+    if(type === 'effect') temporarySelectedEffect = id;
+
+    const preview = document.getElementById("preview-arch");
+    preview.className = `preview-frame-container ${temporarySelectedFrame} ${temporarySelectedColor} ${temporarySelectedEffect}`;
+    
+    document.querySelectorAll(querySelector).forEach(el => el.classList.remove("selected"));
+    clickedElement.classList.add("selected");
+}
+
+window.switchModalTab = function(tabName) {
+    ['avatar', 'frame', 'color', 'effect'].forEach(tab => {
+        document.getElementById(`tab-btn-${tab}`).classList.remove("active");
+        document.getElementById(`${tab}-grid`).style.display = "none";
+    });
+    document.getElementById(`tab-btn-${tabName}`).classList.add("active");
+    document.getElementById(`${tabName}-grid`).style.display = "grid";
 }
 
 window.closeAvatarModal = function() {
@@ -563,20 +629,6 @@ window.closeAvatarModal = function() {
         modal.classList.remove("show");
         setTimeout(() => modal.style.display = "none", 400);
     }
-}
-
-window.selectAvatar = function(src, clickedElement) {
-    temporarySelectedAvatar = src;
-    document.getElementById("avatar-preview-img").src = src;
-    document.querySelectorAll(".avatar-option").forEach(el => el.classList.remove("selected"));
-    clickedElement.classList.add("selected");
-}
-
-window.selectFrame = function(frameId, clickedElement) {
-    temporarySelectedFrame = frameId;
-    document.getElementById("preview-arch").className = `preview-frame-container ${frameId}`;
-    document.querySelectorAll(".frame-option").forEach(el => el.classList.remove("selected"));
-    clickedElement.classList.add("selected");
 }
 
 window.saveAvatar = async function() {
@@ -589,7 +641,10 @@ window.saveAvatar = async function() {
 
     localStorage.setItem('jct_avatar_' + displayUser, temporarySelectedAvatar);
     localStorage.setItem('jct_frame_' + displayUser, temporarySelectedFrame);
-    applyAppearanceToUI(temporarySelectedAvatar, temporarySelectedFrame);
+    localStorage.setItem('jct_color_' + displayUser, temporarySelectedColor);
+    localStorage.setItem('jct_effect_' + displayUser, temporarySelectedEffect);
+    
+    applyAppearanceToUI(temporarySelectedAvatar, temporarySelectedFrame, temporarySelectedColor, temporarySelectedEffect);
     closeAvatarModal();
 
     try {
@@ -599,7 +654,9 @@ window.saveAvatar = async function() {
             body: JSON.stringify({ 
                 username: displayUser, 
                 avatar_url: temporarySelectedAvatar,
-                avatar_frame: temporarySelectedFrame 
+                avatar_frame: temporarySelectedFrame,
+                avatar_color: temporarySelectedColor,
+                avatar_effect: temporarySelectedEffect
             })
         });
     } catch(err) {
