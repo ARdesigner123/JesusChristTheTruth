@@ -326,6 +326,17 @@ window.loadLeaderboard = function(periodOverride) {
 }
 
 // ================= EDIT USERNAME SYSTEM =================
+
+// Add the exact validation rules here
+function validateUsername(user) {
+    if (user.length < 8 || user.length > 20) return "Username must be 8 to 20 characters.";
+    if (!/^[A-Za-z0-9]/.test(user)) return "Username cannot start with a special character.";
+    if (!/[A-Z]/.test(user)) return "Username must contain at least one uppercase letter.";
+    if (!/[a-z]/.test(user)) return "Username must contain at least one lowercase letter.";
+    if (!/\d/.test(user)) return "Username must contain at least one number.";
+    return null; 
+}
+
 window.openEditUsernameModal = function() {
     const currentName = localStorage.getItem("jct_logged_in_user");
     const isGuest = localStorage.getItem("jct_guest_user");
@@ -350,6 +361,13 @@ window.confirmEditUsername = async function() {
     }
     if (newName === currentName) {
         alert("This is already your username!");
+        return;
+    }
+
+    // NEW: Strict validation check before sending to server
+    const validationError = validateUsername(newName);
+    if (validationError) {
+        alert(validationError);
         return;
     }
     
