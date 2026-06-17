@@ -1750,14 +1750,29 @@ async function finalizeQuiz(status) {
     const s = timeTakenSeconds % 60;
     const timeString = `${m}m ${s}s`;
 
+    // Define reward map for alerts
+    const diffRewards = {
+        'easy': { xp: 200, hp: 200 },
+        'medium': { xp: 500, hp: 300 },
+        'hard': { xp: 1000, hp: 500 },
+        'difficult': { xp: 2500, hp: 800 },
+        'extreme': { xp: 5000, hp: 1400 },
+        'insane': { xp: 8000, hp: 2000 },
+        'impossible': { xp: 14000, hp: 4000 }
+    };
+
     if (quizMode === 'daily') {
         if (status === 'pass') alert(`🎉 Congratulations! You passed the daily quiz in ${timeString}!\n+1000 Holy Power\n+500 XP`);
         else alert(`❌ You failed today's quiz after ${timeString}. You got ${questionsCorrect} correct. Read your Bible and try again tomorrow!`);
         window.userLastQuizDate = new Date(new Date().getTime() + (8 * 60 * 60 * 1000)).toISOString().split('T')[0];
     } else {
         const diffName = quizMode.toUpperCase();
-        if (status === 'pass') alert(`🎉 Great job! You conquered the ${diffName} challenge in ${timeString}!`);
-        else alert(`❌ You ran out of lives on the ${diffName} challenge after ${timeString}. You got ${questionsCorrect} correct. Keep studying and try again!`);
+        if (status === 'pass') {
+            const r = diffRewards[quizMode];
+            alert(`🎉 Great job! You conquered the ${diffName} challenge in ${timeString}!\n+${r.hp} Holy Power\n+${r.xp} XP`);
+        } else {
+            alert(`❌ You ran out of lives on the ${diffName} challenge after ${timeString}. You got ${questionsCorrect} correct. Keep studying and try again!`);
+        }
     }
 
     if (!isGuest && displayUser) {
