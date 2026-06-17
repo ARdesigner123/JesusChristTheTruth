@@ -322,7 +322,11 @@
         <div class="popup-modal-content chat-box-content">
             <div class="chat-header">
                 <i class="fas fa-arrow-left close-chat-icon" onclick="closeChatModal()"></i>
-                <img src="" id="chat-friend-avatar" class="chat-avatar-small">
+    
+                <div id="chat-frame-container" class="profile-frame-container shape-arch" style="width: 45px; height: 45px; margin-right: 12px; font-size: 0.5rem;">
+                    <img src="" id="chat-friend-avatar" class="chat-avatar-small" onerror="this.src='static/image/defaultAvatar.jpg'" style="width: 100%; height: 100%; border-radius: inherit; object-fit: cover;">
+                </div>
+    
                 <div class="chat-header-info">
                     <h3 id="chat-friend-name">Friend</h3>
                     <span id="chat-friend-status">Offline</span>

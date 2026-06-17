@@ -1005,13 +1005,19 @@ function initFriendsSystem() {
     // 2. Fetch Friend List (Now uses DB avatar)
     fetch(`${BACKEND_URL}/api/friends/list/${displayUser}`)
         .then(res => res.json())
+        // Inside fetch(`${BACKEND_URL}/api/friends/list/${displayUser}`)
         .then(friends => {
             const list = document.getElementById("friend-list");
             if (friends.length > 0) list.innerHTML = "";
             friends.forEach(friend => {
-                const avatar = friend.avatar_url; // From Database!
-                localStorage.setItem('jct_avatar_' + friend.username, avatar); // Cache it for chat
-                addFriendToUI(friend.username, avatar);
+                // Cache EVERYTHING for instant loading in chat later
+                localStorage.setItem('jct_avatar_' + friend.username, friend.avatar_url);
+                localStorage.setItem('jct_frame_' + friend.username, friend.avatar_frame);
+                localStorage.setItem('jct_color_' + friend.username, friend.avatar_color);
+                localStorage.setItem('jct_effect_' + friend.username, friend.avatar_effect);
+        
+                // Pass to your UI builder (you may need to update addFriendToUI if it renders avatars too)
+                addFriendToUI(friend.username, friend.avatar_url, friend.avatar_frame, friend.avatar_color, friend.avatar_effect); 
             });
         });
 }
@@ -1251,25 +1257,41 @@ window.openFriendProfile = async function(username, avatarSrc) {
         if (!res.ok) throw new Error("Profile not found");
         const data = await res.json();
         
+        // Extract full appearance with fallbacks
+        const fAvatar = data.avatar_url || avatarSrc;
+        const fFrame = data.avatar_frame || 'shape-arch';
+        const fColor = data.avatar_color || 'color-gold';
+        const fEffect = data.avatar_effect || 'effect-none';
+
         // REAL-TIME AVATAR UPDATE: Check if they updated their picture recently!
         if (data.avatar_url) {
-            document.getElementById("fp-avatar").src = data.avatar_url;
-            localStorage.setItem('jct_avatar_' + username, data.avatar_url);
+            document.getElementById("fp-avatar").src = fAvatar;
             
             // CRITICAL FIX 2: Use getElementById because querySelector crashes if IDs have spaces!
             const friendBar = document.getElementById(`friend-bar-${username}`);
             if (friendBar) {
                 const friendListImg = friendBar.querySelector('.friend-avatar');
-                if (friendListImg) friendListImg.src = data.avatar_url;
+                if (friendListImg) friendListImg.src = fAvatar;
             }
         }
 
-        // --- NEW: REAL-TIME FRAME UPDATE ---
+        // Cache the full appearance so the chat window can load it instantly later
+        localStorage.setItem('jct_avatar_' + username, fAvatar);
+        localStorage.setItem('jct_frame_' + username, fFrame);
+        localStorage.setItem('jct_color_' + username, fColor);
+        localStorage.setItem('jct_effect_' + username, fEffect);
+
+        // --- NEW: REAL-TIME FRAME, COLOR, AND EFFECT UPDATE ---
         const frameContainer = document.getElementById("fp-frame-container");
         if (frameContainer) {
-            frameContainer.className = `profile-frame-container ${data.avatar_frame || 'shape-arch'}`;
+            frameContainer.className = `profile-frame-container ${fFrame} ${fColor} ${fEffect}`;
+            
+            // Map the hex color so 'currentColor' in CSS acts as the background/border/glow color
+            const selectedColorHex = COLOR_LIST.find(c => c.id === fColor)?.hex || '#ffd700';
+            frameContainer.style.color = selectedColorHex;
         }
 
+        // Update stats
         document.getElementById("fp-time").innerText = data.active_time || 0;
         document.getElementById("fp-hp").innerText = data.holypower || 0;
         document.getElementById("fp-streak").innerText = data.daily_streak || 0;
@@ -1325,9 +1347,23 @@ window.openChat = function(username, avatarSrc) {
     activeChatFriend = username;
     document.getElementById("chat-friend-name").innerText = username;
     
-    // Pull the freshest avatar from the cache we just updated
+    // Pull the freshest appearance from the cache we just updated (or default fallbacks)
     const freshAvatar = localStorage.getItem('jct_avatar_' + username) || avatarSrc;
+    const fFrame = localStorage.getItem('jct_frame_' + username) || 'shape-arch';
+    const fColor = localStorage.getItem('jct_color_' + username) || 'color-gold';
+    const fEffect = localStorage.getItem('jct_effect_' + username) || 'effect-none';
+
     document.getElementById("chat-friend-avatar").src = freshAvatar;
+    
+    // Apply dynamic frames and effects to the chat header
+    const chatFrameContainer = document.getElementById("chat-frame-container");
+    if (chatFrameContainer) {
+        chatFrameContainer.className = `profile-frame-container chat-header-frame ${fFrame} ${fColor} ${fEffect}`;
+        
+        // Dynamically apply hex text color for rendering borders/glows
+        const selectedColorHex = COLOR_LIST.find(c => c.id === fColor)?.hex || '#ffd700';
+        chatFrameContainer.style.color = selectedColorHex;
+    }
     
     document.getElementById("emoji-picker").style.display = "none";
     cachedChatData = ""; 
