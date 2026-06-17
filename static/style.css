@@ -301,29 +301,39 @@ li,
     margin-bottom: 30px;
 }
 
-/* ================= EDIT USERNAME BUTTON ================= */
+/* ================= EDIT USERNAME TRIGGER BUTTON ================= */
 .edit-username-btn {
-    background: transparent;
-    border: none;
+    background: rgba(42, 21, 5, 0.6);
+    border: 1px solid #a67c52;
+    border-radius: 50%; 
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: #a67c52;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    margin-left: 10px;
 }
 
 .edit-username-btn:hover {
+    background: rgba(166, 124, 82, 0.15);
+    border-color: #ffd700;
     color: #ffd700;
-    transform: scale(1.1);
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 0 5px rgba(255, 215, 0, 0.2);
 }
 
 /* ================= POPUP MODALS & ANIMATIONS ================= */
 .custom-popup-modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(5px);
-    z-index: 1000;
+    background: rgba(5, 2, 0, 0.85); /* Deep dark overlay */
+    backdrop-filter: blur(8px); /* Stronger blur for better focus */
+    z-index: 9999;
     display: none; 
     align-items: center;
     justify-content: center;
@@ -336,57 +346,178 @@ li,
     opacity: 1;
 }
 
+/* ================= MODAL CONTENT BOX ================= */
 .popup-modal-content {
-    background: linear-gradient(135deg, #2b1a03, #1a0a03);
+    background: linear-gradient(145deg, #1e1104 0%, #0a0400 100%);
     border: 2px solid #8b5a2b;
     border-radius: 15px;
-    width: 600px;
+    width: 500px; /* Slimmed down slightly for a more elegant form */
     max-width: 95%;
-    padding: 30px;
+    padding: 40px 30px;
     position: relative;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(212, 175, 55, 0.2);
-    transform: scale(0.7);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(212, 175, 55, 0.05);
     
-    /* CRITICAL FIX: Forces modals to never exceed screen height and allows scrolling */
+    transform: scale(0.8) translateY(-30px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
     max-height: 85vh; 
     overflow-y: auto; 
 }
 
-/* Custom Scrollbar so it matches the theme */
+.custom-popup-modal.show .popup-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.custom-popup-modal.closing .popup-modal-content {
+    transform: scale(0.6);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar */
 .popup-modal-content::-webkit-scrollbar { width: 6px; }
 .popup-modal-content::-webkit-scrollbar-track { background: transparent; }
 .popup-modal-content::-webkit-scrollbar-thumb { background: #8b5a2b; border-radius: 10px; }
 
-.custom-popup-modal.show .popup-modal-content {
-    transform: scale(1);
-}
-
-/* Shrink Animation Class */
-.custom-popup-modal.closing .popup-modal-content {
-    transform: scale(0.5);
-    opacity: 0;
-}
-
+/* ================= CLOSE ICON ================= */
 .close-modal-icon {
     position: absolute;
-    top: 20px; left: 20px;
-    font-size: 1.5rem;
-    color: #cbb27d;
+    top: 20px; 
+    right: 25px; 
+    font-size: 1.6rem;
+    color: #8b5a2b;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 .close-modal-icon:hover {
+    color: #ff3333; 
+    transform: rotate(90deg) scale(1.1);
+    text-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
+}
+
+/* ================= HEADER & TITLE ================= */
+.modal-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* An elegant fading golden line beneath the title */
+.modal-header::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8b5a2b, transparent);
+    margin: 15px auto 0;
+}
+
+.title-icon {
+    font-size: 2.2rem;
     color: #ffd700;
-    transform: translateX(-3px);
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
 }
 
 .popup-title {
-    text-align: center;
     font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: #ffd700; 
+    margin: 0;
+    letter-spacing: 3px;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9), 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* ================= INPUT FIELD (ENGRAVED STYLE) ================= */
+.input-wrapper {
+    position: relative;
+    margin: 0 auto 30px auto;
+    width: 85%; /* Centers the input beautifully */
+}
+
+.input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b5a2b;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.ancient-input {
+    width: 100%;
+    padding: 16px 20px 16px 50px; /* Room for the icon */
+    background: rgba(5, 2, 0, 0.6); /* Deep, almost black background */
+    border: 1px solid #4a2e12;
+    color: #fffdf5;
+    font-family: 'Cardo', serif;
+    font-size: 1.15rem;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    /* Inner shadow gives an engraved, carved-in-stone look */
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.9), 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.ancient-input::placeholder {
+    color: rgba(139, 90, 43, 0.5);
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.ancient-input:focus {
+    border-color: #ffd700;
+    background: rgba(20, 10, 2, 0.8);
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+/* Glowing icon when input is focused */
+.input-wrapper:focus-within .input-icon {
     color: #ffd700;
-    margin-bottom: 20px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ================= CONFIRM BUTTON (POLISHED GOLD) ================= */
+.gold-confirm-btn {
+    width: 85%;
+    display: block;
+    margin: 0 auto;
+    padding: 15px;
+    background: linear-gradient(to bottom, #a67c52 0%, #5a3210 100%);
+    border: 1px solid #d4af37;
+    border-radius: 8px;
+    color: #fffdf5;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* Metallic button reflection */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.gold-confirm-btn:hover {
+    background: linear-gradient(to bottom, #d4af37 0%, #a67c52 100%);
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.gold-confirm-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.8), inset 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.gold-confirm-btn i {
+    margin-right: 8px;
 }
 
 /* ================= FRIEND LIST BARS ================= */

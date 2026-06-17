@@ -220,12 +220,22 @@
 
     <!-- EDIT USERNAME MODAL -->
     <div class="custom-popup-modal" id="edit-username-modal">
-        <div class="popup-modal-content" style="width: 400px; text-align: center;">
+        <div class="popup-modal-content">
             <i class="fas fa-times close-modal-icon" onclick="closeModal('edit-username-modal')"></i>
-            <h2 class="popup-title">Edit Username</h2>
-            
-            <input type="text" id="new-username-input" placeholder="Enter new username..." style="width: 90%; padding: 12px; margin-bottom: 20px; background: #3b2206; border: 2px solid #a67c52; color: #fffdf5; font-family: 'Cardo', serif; border-radius: 8px;">
-            <button class="profile-btn" onclick="confirmEditUsername()" style="width: 90%;"><i class="fas fa-check"></i> Confirm</button>
+        
+            <div class="modal-header">
+                <i class="fas fa-feather-alt title-icon"></i>
+                <h2 class="popup-title">Edit Username</h2>
+            </div>
+        
+            <div class="input-wrapper">
+                <i class="fas fa-user input-icon"></i>
+                <input type="text" id="new-username-input" class="ancient-input" placeholder="Enter new username...">
+            </div>
+        
+            <button class="gold-confirm-btn" onclick="confirmEditUsername()">
+                <i class="fas fa-check"></i> Confirm Change
+            </button>
         </div>
     </div>
 
