@@ -446,7 +446,9 @@ const EFFECT_LIST = [
     { id: 'effect-stars', name: 'Stars' },
     { id: 'effect-galaxy', name: 'Galaxy' },
     { id: 'effect-particles', name: 'Particles' },
-    { id: 'effect-winter', name: 'Winter' }
+    { id: 'effect-winter', name: 'Winter' },
+    { id: 'effect-fire', name: 'Fire' },
+    { id: 'effect-water', name: 'Water' }
 ];
 
 let temporarySelectedAvatar = "";
@@ -494,13 +496,16 @@ function applyAppearanceToUI(avatarSrc, frameClass, colorClass, effectClass) {
     const mainProfileImg = document.getElementById("main-profile-avatar");
     const mainProfileFrame = document.getElementById("main-profile-frame");
     
+    // Find exact hex for correct currentColor rendering
+    const selectedColorHex = COLOR_LIST.find(c => c.id === colorClass)?.hex || '#ffd700';
+
     if (mainProfileImg) mainProfileImg.src = avatarSrc;
     if (mainProfileFrame) {
         mainProfileFrame.className = `profile-frame-container ${frameClass} ${colorClass} ${effectClass}`;
-        mainProfileFrame.style.color = getComputedStyle(mainProfileFrame).borderColor; // Helps effects inherit color
+        // CRITICAL: Bind the text color so 'currentColor' in CSS acts as the background/border/glow color
+        mainProfileFrame.style.color = selectedColorHex; 
     }
     
-    // If you have a navbar avatar, update it (navbar usually shouldn't have effects to save space)
     const navProfileImg = document.getElementById("nav-avatar-img");
     if (navProfileImg) navProfileImg.src = avatarSrc;
 }
@@ -526,7 +531,7 @@ window.openAvatarModal = function() {
     const previewContainer = document.getElementById("preview-arch");
     previewContainer.className = `preview-frame-container ${temporarySelectedFrame} ${temporarySelectedColor} ${temporarySelectedEffect}`;
     
-    // Help inherited colors on effects
+    // Help inherited colors on effects map to the container immediately
     const selectedColorHex = COLOR_LIST.find(c => c.id === temporarySelectedColor)?.hex || '#ffd700';
     previewContainer.style.color = selectedColorHex; 
 
@@ -609,6 +614,10 @@ function updatePreviewAttr(type, id, clickedElement, querySelector) {
 
     const preview = document.getElementById("preview-arch");
     preview.className = `preview-frame-container ${temporarySelectedFrame} ${temporarySelectedColor} ${temporarySelectedEffect}`;
+    
+    // Dynamically apply hex text color immediately to the preview container
+    const selectedColorHex = COLOR_LIST.find(c => c.id === temporarySelectedColor)?.hex || '#ffd700';
+    preview.style.color = selectedColorHex;
     
     document.querySelectorAll(querySelector).forEach(el => el.classList.remove("selected"));
     clickedElement.classList.add("selected");

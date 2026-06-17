@@ -834,10 +834,10 @@ li,
 
 /* ================= NEW AVATAR & FRAME STYLES ================= */
 
-/* Glowing Animations */
+/* Glowing Animations - Now dynamically uses currentColor for matching colored glows! */
 @keyframes holy-glow {
-    0% { filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)) brightness(1); transform: translateY(0px); }
-    100% { filter: drop-shadow(0 0 35px rgba(255, 215, 0, 1)) brightness(1.1); transform: translateY(-5px); }
+    0% { filter: drop-shadow(0 0 15px currentColor) brightness(1); transform: translateY(0px); }
+    100% { filter: drop-shadow(0 0 35px currentColor) brightness(1.1); transform: translateY(-5px); }
 }
 
 @keyframes subtle-float {
@@ -878,97 +878,102 @@ li,
 }
 
 /* ================= THE GLOWING FRAMES ================= */
-/* Base styles for the profile pages */
+/* UNIFIED APPROACH: No more CSS borders. 
+   The background-color acts as the frame, and the image shrinks to 92%. */
 .profile-frame-container {
-    width: 160px !important; /* Increased from 120px */
+    width: 160px !important;
     height: 160px !important;
     margin: 0 auto 15px;
-    position: relative; /* Needed for effects */
-    overflow: hidden;
+    position: relative;
+    background-color: currentColor; /* Matches the selected frame color */
+    border: none !important;
     transition: all 0.4s ease;
-    filter: drop-shadow(0 0 10px rgba(203, 178, 125, 0.5));
-    border: 3px solid #cbb27d;
 }
 
-/* The impressive Preview Frame inside the modal */
 .preview-frame-container {
     width: 180px; 
     height: 180px;
     margin-bottom: 25px;
-    background: #1a0a03;
-    position: relative; /* Needed for effects overlay */
-    overflow: hidden;
+    position: relative;
+    background-color: currentColor; 
+    border: none !important;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* The active glowing light effect */
     animation: holy-glow 2.5s infinite alternate ease-in-out;
-    border: 4px solid #ffd700;
 }
 
+/* Center the scaled images */
+.profile-frame-container, .preview-frame-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Image scaling & inheritance so it matches ANY shape */
 .profile-frame-container img, .preview-frame-container img { 
-    width: 100%; 
-    height: 100%; 
+    width: 92%; 
+    height: 92%; 
     object-fit: cover; 
+    border-radius: inherit; /* Copies Arch/Circle/etc radius */
+    clip-path: inherit; /* Copies Star/Heart/etc clip paths */
     transition: transform 0.3s ease;
+    z-index: 1;
 }
 
-/* ================= THE SHAPES ================= 
-  Note: clip-path removes CSS borders, so for complex shapes 
-  we remove the border and rely entirely on the glowing drop-shadow!
-*/
+/* ================= THE SHAPES ================= */
+/* The base shapes using border-radius */
 .shape-arch { border-radius: 90px 90px 15px 15px; }
 .shape-circle { border-radius: 50%; }
 .shape-square { border-radius: 15px; }
 .shape-leaf { border-radius: 0 50% 0 50%; }
 .shape-blob { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
 
-/* NEW ADVANCED SHAPES */
-.shape-diamond { 
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); 
-    border: none !important; border-radius: 0; 
-}
-.shape-hexagon { 
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); 
-    border: none !important; border-radius: 0; 
-}
-.shape-star { 
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
-    border: none !important; border-radius: 0; 
-}
-.shape-shield { 
-    clip-path: polygon(50% 0%, 100% 0, 100% 75%, 50% 100%, 0 75%, 0 0); 
-    border: none !important; border-radius: 0; 
-}
-/* Geometric Crystal Heart */
-.shape-heart {
-    clip-path: polygon(50% 25%, 75% 0%, 100% 25%, 100% 50%, 50% 100%, 0% 50%, 0% 25%, 25% 0%);
-    border: none !important; border-radius: 0;
+/* Advanced shapes using clip-path (border-radius must be removed to avoid conflicts) */
+.shape-diamond, .shape-star, .shape-heart {
+    border-radius: 0;
 }
 
-/* ================= NEW AVATAR COLORS (GLOW & BORDER) ================= */
-/* We use filter drop-shadow so the complex shapes glow properly */
-.color-gold { border-color: #ffd700 !important; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); }
-.color-silver { border-color: #e0e0e0 !important; filter: drop-shadow(0 0 15px rgba(224, 224, 224, 0.8)); }
-.color-ruby { border-color: #e0115f !important; filter: drop-shadow(0 0 15px rgba(224, 17, 95, 0.8)); }
-.color-diamond { border-color: #00ffff !important; filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)); }
-.color-emerald { border-color: #50c878 !important; filter: drop-shadow(0 0 15px rgba(80, 200, 120, 0.8)); }
-.color-bronze { border-color: #cd7f32 !important; filter: drop-shadow(0 0 15px rgba(205, 127, 50, 0.8)); }
-.color-purple { border-color: #8a2be2 !important; filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
-.color-pink { border-color: #ff69b4 !important; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8)); }
+.shape-diamond {
+    clip-path: polygon(50% 2%, 54% 6%, 94% 46%, 98% 50%, 94% 54%, 54% 94%, 50% 98%, 46% 94%, 6% 54%, 2% 50%, 6% 46%, 46% 6%);
+}
+
+.shape-star {
+    clip-path: polygon(50% 3%, 53% 8%, 62% 31%, 86% 32%, 92% 33%, 96% 37%, 94% 41%, 74% 56%, 81% 81%, 82% 86%, 79% 91%, 74% 91%, 70% 88%, 50% 73%, 30% 88%, 26% 91%, 21% 91%, 18% 86%, 19% 81%, 26% 56%, 6% 41%, 4% 37%, 8% 33%, 14% 32%, 38% 31%, 47% 8%);
+}
+
+.shape-heart {
+    clip-path: polygon(50% 22%, 58% 10%, 68% 4%, 80% 4%, 90% 11%, 97% 22%, 99% 36%, 95% 52%, 84% 68%, 68% 84%, 50% 98%, 32% 84%, 16% 68%, 5% 52%, 1% 36%, 3% 22%, 10% 11%, 20% 4%, 32% 4%, 42% 10%);
+}
+
+/* ================= NEW AVATAR COLORS (GLOW & BASE) ================= */
+/* Applying standard text color here ensures currentColor propagates to backgrounds perfectly */
+.color-gold { color: #ffd700; filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); }
+.color-silver { color: #e0e0e0; filter: drop-shadow(0 0 15px rgba(224, 224, 224, 0.8)); }
+.color-ruby { color: #e0115f; filter: drop-shadow(0 0 15px rgba(224, 17, 95, 0.8)); }
+.color-diamond { color: #00ffff; filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.8)); }
+.color-emerald { color: #50c878; filter: drop-shadow(0 0 15px rgba(80, 200, 120, 0.8)); }
+.color-bronze { color: #cd7f32; filter: drop-shadow(0 0 15px rgba(205, 127, 50, 0.8)); }
+.color-purple { color: #8a2be2; filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.8)); }
+.color-pink { color: #ff69b4; filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8)); }
 
 /* ================= AVATAR EFFECTS (Overlays via ::after) ================= */
-/* Setup the overlay */
+/* Setup the overlay to match the 92% image scale exactly */
 .profile-frame-container::after, .preview-frame-container::after {
     content: '';
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none; /* Let clicks pass through to image */
-    border-radius: inherit; /* Matches border radius shapes */
+    top: 4%; left: 4%; right: 4%; bottom: 4%; /* Sits exactly over the 92% image */
+    pointer-events: none;
+    border-radius: inherit; 
+    clip-path: inherit; 
     z-index: 2;
 }
 
-/* 1. Glowing: Adds a pulsing inner light */
-@keyframes pulse-inner { 0% { box-shadow: inset 0 0 10px currentColor; } 100% { box-shadow: inset 0 0 30px currentColor; } }
-.effect-glowing::after { animation: pulse-inner 2s infinite alternate; }
+/* 1. Glowing: Replaced inset box-shadow with radial gradient (supports clip-path natively) */
+@keyframes pulse-inner { 0% { opacity: 0.1; } 100% { opacity: 0.7; } }
+.effect-glowing::after { 
+    background: radial-gradient(circle, transparent 40%, currentColor 100%);
+    mix-blend-mode: screen;
+    animation: pulse-inner 1.5s infinite alternate; 
+}
 
 /* 2. Stars: Twinkling overlay */
 @keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
@@ -980,14 +985,13 @@ li,
 
 /* 3. Galaxy: Deep space purple/blue spinning hue */
 @keyframes galaxy-spin { 0% { transform: rotate(0deg) scale(1.5); } 100% { transform: rotate(360deg) scale(1.5); } }
-.effect-galaxy { overflow: hidden; }
 .effect-galaxy::after {
     background: radial-gradient(circle, rgba(138,43,226,0.4) 0%, rgba(0,0,0,0) 70%);
     mix-blend-mode: color-dodge;
     animation: galaxy-spin 10s linear infinite;
 }
 
-/* 4. Particles: Moving light specs */
+/* 4. Particles */
 @keyframes float-up { 0% { background-position: 0 100%; } 100% { background-position: 0 0; } }
 .effect-particles::after {
     background-image: radial-gradient(rgba(255,255,255,0.8) 1px, transparent 2px);
@@ -995,7 +999,7 @@ li,
     animation: float-up 4s linear infinite;
 }
 
-/* 5. Winter: Falling snow */
+/* 5. Winter */
 @keyframes fall-down { 0% { background-position: 0 0, 0 0, 0 0; } 100% { background-position: 500px 1000px, 400px 400px, 300px 300px; } }
 .effect-winter::after {
     background-image: 
@@ -1003,6 +1007,45 @@ li,
         radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 5px);
     background-size: 100px 100px, 50px 50px;
     animation: fall-down 10s linear infinite;
+}
+
+/* 6. ADVANCED FIRE: Moving inner flames over the avatar */
+@keyframes fire-flames { 0% { background-position: 50% 100%; } 100% { background-position: 50% 0%; } }
+.effect-fire::after {
+    background: radial-gradient(circle at 50% 120%, rgba(255, 69, 0, 0.8) 0%, rgba(255, 140, 0, 0.4) 40%, transparent 80%);
+    background-size: 100% 200%;
+    animation: fire-flames 1.5s infinite linear;
+    mix-blend-mode: overlay;
+}
+.effect-fire { 
+    animation: fire-glow 1.5s infinite alternate ease-in-out !important; 
+}
+@keyframes fire-glow {
+    0% { filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.6)) brightness(1); transform: translateY(0px) scale(1); }
+    50% { filter: drop-shadow(0 0 25px rgba(255, 140, 0, 1)) brightness(1.15); transform: translateY(-3px) scale(1.02); }
+    100% { filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.8)) brightness(1.05); transform: translateY(-1px) scale(1); }
+}
+
+/* 7. ADVANCED WATER: Flowing liquid waves over the avatar */
+@keyframes water-waves { 0% { background-position: 0% 0%; } 100% { background-position: 0% 100%; } }
+.effect-water::after {
+    background: linear-gradient(180deg, rgba(0, 191, 255, 0) 0%, rgba(0, 119, 255, 0.3) 50%, rgba(0, 255, 255, 0.5) 100%);
+    background-size: 100% 200%;
+    animation: water-waves 3s infinite linear;
+    mix-blend-mode: color-dodge;
+}
+.effect-water { 
+    animation: water-glow 3s infinite alternate ease-in-out !important; 
+}
+@keyframes water-glow {
+    0% { filter: drop-shadow(0 0 15px rgba(0, 191, 255, 0.5)); transform: translateY(0px); }
+    50% { filter: drop-shadow(0 0 30px rgba(0, 119, 255, 0.9)); transform: translateY(-5px); }
+    100% { filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.7)); transform: translateY(-2px); }
+}
+
+/* When a color is selected, we give the mini preview a currentColor so the new clip-path shapes remain visible */
+.shape-diamond, .shape-star, .shape-heart {
+    background-color: currentColor; 
 }
 
 /* Style for text-based grid options (Colors/Effects) */
@@ -1042,10 +1085,13 @@ li,
     transform: scale(1.1);
 }
 
+/* ================= GRID OPTIONS (Fixing the Missing Previews) ================= */
 .frame-mini-preview {
-    width: 65%; height: 65%;
-    background: linear-gradient(135deg, #cbb27d, #8b5a2b);
-    animation: subtle-float 2s infinite alternate ease-in-out;
+    width: 60%; height: 60%;
+    /* Added base styling so the first 5 shapes clearly show their geometry */
+    background-color: #cbb27d; 
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5); 
+    transition: all 0.3s ease;
 }
 
 .change-avatar-btn {
