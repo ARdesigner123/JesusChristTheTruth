@@ -1485,8 +1485,10 @@ async function pollChatData() {
             body: JSON.stringify({ sender: activeChatFriend, receiver: displayUser })
         });
 
-        // 3. Fetch latest chat history
-        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${activeChatFriend}`);
+        // 3. Fetch latest chat history (Added encodeURIComponent to protect spaces)
+        const safeUser = encodeURIComponent(displayUser);
+        const safeFriend = encodeURIComponent(activeChatFriend);
+        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${safeUser}&user2=${safeFriend}`);
         const history = await res.json();
         
         // Prevent re-rendering the whole chat if nothing changed (stops flickering)
