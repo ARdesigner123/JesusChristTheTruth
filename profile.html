@@ -77,7 +77,11 @@
                 </div>
                 <button class="change-avatar-btn" onclick="openAvatarModal()"><i class="fas fa-camera"></i> Change Avatar</button>
 
-                <h2 class="profile-username" id="profile-username">Loading...</h2>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 5px;">
+                    <h2 class="profile-username" id="profile-username" style="margin: 0;">Loading...</h2>
+                    <button class="edit-username-btn" onclick="openEditUsernameModal()" title="Edit Username"><i class="fas fa-edit"></i></button>
+                </div>
+
                 <p class="profile-rank-title">Current Rank: <strong id="profile-rank-text" style="color: #ffd700;">Seeker</strong> (<span id="profile-xp-text" style="color:#4da6ff;">0</span> XP)</p>
 
                 <button class="add-friend-btn" onclick="openAddFriendModal()"><i class="fas fa-search"></i> Search & Add Friend</button>
@@ -211,6 +215,17 @@
                     <button class="discard-avatar-btn" onclick="discardCustomPhoto()" style="display: none;" id="discard-btn"><i class="fas fa-trash"></i> Discard Custom Photo</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- EDIT USERNAME MODAL -->
+    <div class="custom-popup-modal" id="edit-username-modal">
+        <div class="popup-modal-content" style="width: 400px; text-align: center;">
+            <i class="fas fa-times close-modal-icon" onclick="closeModal('edit-username-modal')"></i>
+            <h2 class="popup-title">Edit Username</h2>
+            
+            <input type="text" id="new-username-input" placeholder="Enter new username..." style="width: 90%; padding: 12px; margin-bottom: 20px; background: #3b2206; border: 2px solid #a67c52; color: #fffdf5; font-family: 'Cardo', serif; border-radius: 8px;">
+            <button class="profile-btn" onclick="confirmEditUsername()" style="width: 90%;"><i class="fas fa-check"></i> Confirm</button>
         </div>
     </div>
 

@@ -301,6 +301,22 @@ li,
     margin-bottom: 30px;
 }
 
+/* ================= EDIT USERNAME BUTTON ================= */
+.edit-username-btn {
+    background: transparent;
+    border: none;
+    color: #a67c52;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.edit-username-btn:hover {
+    color: #ffd700;
+    transform: scale(1.1);
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
 /* ================= POPUP MODALS & ANIMATIONS ================= */
 .custom-popup-modal {
     position: fixed;

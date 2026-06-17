@@ -325,6 +325,69 @@ window.loadLeaderboard = function(periodOverride) {
         });
 }
 
+// ================= EDIT USERNAME SYSTEM =================
+window.openEditUsernameModal = function() {
+    const currentName = localStorage.getItem("jct_logged_in_user");
+    const isGuest = localStorage.getItem("jct_guest_user");
+
+    if (isGuest || !currentName) {
+        alert("Guests cannot edit usernames. Please register an official account.");
+        return;
+    }
+
+    document.getElementById("new-username-input").value = currentName;
+    openModal("edit-username-modal");
+}
+
+window.confirmEditUsername = async function() {
+    const currentName = localStorage.getItem("jct_logged_in_user");
+    const newName = document.getElementById("new-username-input").value.trim();
+    
+    // Prevent empty or identical names
+    if (!newName || newName === "") {
+        alert("Username cannot be empty.");
+        return;
+    }
+    if (newName === currentName) {
+        alert("This is already your username!");
+        return;
+    }
+    
+    try {
+        const res = await fetch(`${BACKEND_URL}/api/users/edit-username`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ oldUsername: currentName, newUsername: newName })
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+            alert(data.error || "Failed to update username.");
+            return;
+        }
+        
+        // 1. Update the Local Storage identifier
+        localStorage.setItem("jct_logged_in_user", newName);
+        
+        // 2. Migrate their avatar cache to the new username so their picture doesn't break
+        const oldAvatar = localStorage.getItem('jct_avatar_' + currentName);
+        if (oldAvatar) {
+            localStorage.setItem('jct_avatar_' + newName, oldAvatar);
+            localStorage.removeItem('jct_avatar_' + currentName);
+        }
+        
+        closeModal("edit-username-modal");
+        alert("Username updated successfully! Reloading...");
+        
+        // 3. Reload the page to refresh friends list, chat, and profile UI with the new name
+        location.reload(); 
+    } catch (err) {
+        console.error("Username change error:", err);
+        alert("An error occurred while changing your username.");
+    }
+}
+
 // ================= AVATAR LOGIC =================
 const AVATAR_LIST = [
     'static/image/defaultAvatar.jpg',
