@@ -321,17 +321,17 @@
     <div id="chat-modal" class="custom-popup-modal">
         <div class="popup-modal-content chat-box-content">
             <div class="chat-header">
-                <i class="fas fa-arrow-left close-chat-icon" onclick="closeChatModal()"></i>
+    <i class="fas fa-arrow-left close-chat-icon" onclick="closeChatModal()"></i>
 
-                <div id="chat-frame-container" class="profile-frame-container shape-arch" style="width: 24px; height: 24px; margin-right: 10px; font-size: 0.2rem; flex-shrink: 0;">
-                    <img src="" id="chat-friend-avatar" onerror="this.src='static/image/defaultAvatar.jpg'" style="width: 100%; height: 100%; border-radius: inherit; object-fit: cover; border: none !important;">
-                </div>
+    <div id="chat-frame-container" class="profile-frame-container chat-header-frame shape-arch">
+        <img src="" id="chat-friend-avatar" onerror="this.src='static/image/defaultAvatar.jpg'">
+    </div>
 
-                <div class="chat-header-info">
-                    <h3 id="chat-friend-name">Friend</h3>
-                    <span id="chat-friend-status">Offline</span>
-                </div>
-            </div>
+    <div class="chat-header-info">
+        <h3 id="chat-friend-name">Friend</h3>
+        <span id="chat-friend-status">Offline</span>
+    </div>
+</div>
 
             <div class="chat-messages-area" id="chat-messages-area">
                 <div class="chat-date-divider">Today</div>

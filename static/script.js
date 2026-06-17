@@ -1157,27 +1157,6 @@ window.renderChatMessages = function(messages, currentUser, friendUsername) {
     }, 50);
 }
 
-// Make sure your openChat function calls renderChatMessages:
-window.openChat = async function(friendName, friendAvatar) {
-    activeChatFriend = friendName;
-    document.getElementById('chat-friend-name').innerText = friendName;
-    document.getElementById('chat-friend-avatar').src = friendAvatar;
-    document.getElementById('chat-friend-status').innerText = "Online"; 
-    
-    openModal('chat-modal');
-    
-    const displayUser = localStorage.getItem("jct_logged_in_user");
-    try {
-        const res = await fetch(`${BACKEND_URL}/api/chat/history?user1=${displayUser}&user2=${friendName}`);
-        const messages = await res.json();
-        
-        // Pass the messages into our new dynamic renderer!
-        renderChatMessages(messages, displayUser, friendName);
-    } catch (err) {
-        document.getElementById("chat-messages-area").innerHTML = "<p style='text-align:center; color:red;'>Failed to load messages.</p>";
-    }
-}
-
 window.sendFriendRequest = async function(receiver) {
     const displayUser = localStorage.getItem("jct_logged_in_user");
     try {
