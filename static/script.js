@@ -406,7 +406,7 @@ window.confirmEditUsername = async function() {
     }
 }
 
-// ================= AVATAR LOGIC =================
+// ================= AVATAR & FRAME LOGIC =================
 const AVATAR_LIST = [
     'static/image/defaultAvatar.jpg',
     'static/image/avatar2.jpg',
@@ -417,77 +417,100 @@ const AVATAR_LIST = [
     'static/image/avatar7.jpg'
 ];
 
+const FRAME_LIST = [
+    { id: 'shape-arch', name: 'Arch' },
+    { id: 'shape-circle', name: 'Circle' },
+    { id: 'shape-square', name: 'Square' },
+    { id: 'shape-leaf', name: 'Leaf' },
+    { id: 'shape-blob', name: 'Blob' }
+];
+
 let temporarySelectedAvatar = "";
+let temporarySelectedFrame = "shape-arch";
 
-// 1. Initialize Avatar on Page Load (NOW SYNCS WITH DATABASE)
-async function initializeUserAvatar() {
+// 1. Initialize Appearance
+async function initializeUserAppearance() {
     const displayUser = localStorage.getItem("jct_logged_in_user");
-    if (!displayUser) return; // Guests handle differently or fallback to default
+    if (!displayUser) return;
 
-    // Step A: Load instantly from local storage so the UI doesn't look empty
     let savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
-    applyAvatarToUI(savedAvatar);
+    let savedFrame = localStorage.getItem('jct_frame_' + displayUser) || "shape-arch";
+    applyAppearanceToUI(savedAvatar, savedFrame);
 
-    // Step B: Ask the database for the permanent avatar (in case they logged in on a new phone)
     try {
         const res = await fetch(`${BACKEND_URL}/api/users/profile/${displayUser}`);
         if (res.ok) {
             const data = await res.json();
-            if (data.avatar_url) {
-                // Save it locally and update the UI
-                localStorage.setItem('jct_avatar_' + displayUser, data.avatar_url);
-                applyAvatarToUI(data.avatar_url);
+            if (data.avatar_url || data.avatar_frame) {
+                savedAvatar = data.avatar_url || savedAvatar;
+                savedFrame = data.avatar_frame || savedFrame;
+                
+                localStorage.setItem('jct_avatar_' + displayUser, savedAvatar);
+                localStorage.setItem('jct_frame_' + displayUser, savedFrame);
+                applyAppearanceToUI(savedAvatar, savedFrame);
             }
         }
     } catch(err) {
-        console.warn("Could not sync avatar from database.");
+        console.warn("Could not sync appearance from database.");
     }
 }
 
-// Helper to update the images on screen
-function applyAvatarToUI(avatarSrc) {
+// Apply changes visually to the profile UI
+function applyAppearanceToUI(avatarSrc, frameClass) {
     const mainProfileImg = document.getElementById("main-profile-avatar");
-    if (mainProfileImg) mainProfileImg.src = avatarSrc;
+    const mainProfileFrame = document.getElementById("main-profile-frame");
     
+    if (mainProfileImg) mainProfileImg.src = avatarSrc;
+    if (mainProfileFrame) {
+        // Remove all previous shapes and add the new one
+        mainProfileFrame.className = `profile-frame-container ${frameClass}`;
+    }
+    
+    // If you have a navbar avatar, update that too
     const navProfileImg = document.getElementById("nav-avatar-img");
     if (navProfileImg) navProfileImg.src = avatarSrc;
 }
 
-// Run immediately on page load
-initializeUserAvatar();
+initializeUserAppearance();
 
-// 2. Open Modal and Generate Grid
+// 2. Open Modal and Generate Grids
 window.openAvatarModal = function() {
     const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
-    const savedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
-    temporarySelectedAvatar = savedAvatar;
+    temporarySelectedAvatar = localStorage.getItem('jct_avatar_' + displayUser) || AVATAR_LIST[0];
+    temporarySelectedFrame = localStorage.getItem('jct_frame_' + displayUser) || "shape-arch";
 
     const modal = document.getElementById("avatar-modal");
+    populateAvatarGrid(displayUser);
+    populateFrameGrid();
+
+    // Set Previews
+    document.getElementById("avatar-preview-img").src = temporarySelectedAvatar;
+    document.getElementById("preview-arch").className = `preview-frame-container ${temporarySelectedFrame}`;
+
+    // Default to avatar tab
+    switchModalTab('avatar');
+
+    modal.style.display = "flex";
+    setTimeout(() => modal.classList.add("show"), 10);
+}
+
+function populateAvatarGrid(displayUser) {
     const grid = document.getElementById("avatar-grid");
-    const previewImg = document.getElementById("avatar-preview-img");
     const discardBtn = document.getElementById("discard-btn");
-
-    if(!modal || !grid) return;
-
-    // Reset Grid
     grid.innerHTML = "";
 
-    // Generate Default Avatars
     AVATAR_LIST.forEach(src => {
         const div = document.createElement("div");
-        div.className = `avatar-option ${src === savedAvatar ? 'selected' : ''}`;
+        div.className = `avatar-option ${src === temporarySelectedAvatar ? 'selected' : ''}`;
         div.onclick = () => selectAvatar(src, div);
-        div.innerHTML = `<img src="${src}" alt="Avatar Option">`;
+        div.innerHTML = `<img src="${src}" alt="Avatar">`;
         grid.appendChild(div);
     });
 
-    // Generate Custom Upload Box
     const customSaved = localStorage.getItem('jct_custom_photo_' + displayUser);
-    
     if (customSaved) {
-        // Show their custom photo as a clickable option in the grid!
         const customDiv = document.createElement("div");
-        customDiv.className = `avatar-option ${customSaved === savedAvatar ? 'selected' : ''}`;
+        customDiv.className = `avatar-option ${customSaved === temporarySelectedAvatar ? 'selected' : ''}`;
         customDiv.onclick = () => selectAvatar(customSaved, customDiv);
         customDiv.innerHTML = `<img src="${customSaved}" alt="Custom Avatar">`;
         grid.appendChild(customDiv);
@@ -496,104 +519,91 @@ window.openAvatarModal = function() {
         discardBtn.style.display = "none";
     }
 
-    // Always add the Upload Button at the end
     const uploadBtn = document.createElement("div");
     uploadBtn.className = "avatar-option avatar-upload-box";
     uploadBtn.onclick = () => document.getElementById("custom-avatar-upload").click();
     uploadBtn.innerHTML = `<i class="fas fa-upload"></i> Upload`;
     grid.appendChild(uploadBtn);
-
-    // Set preview
-    previewImg.src = temporarySelectedAvatar;
-
-    // Show Modal with Fade/Grow Animation
-    modal.style.display = "flex";
-    setTimeout(() => modal.classList.add("show"), 10);
 }
 
-// 3. Close Modal
+function populateFrameGrid() {
+    const grid = document.getElementById("frame-grid");
+    grid.innerHTML = "";
+
+    FRAME_LIST.forEach(frame => {
+        const div = document.createElement("div");
+        div.className = `frame-option ${frame.id === temporarySelectedFrame ? 'selected' : ''}`;
+        div.onclick = () => selectFrame(frame.id, div);
+        
+        // Mini preview inside the box
+        div.innerHTML = `<div class="frame-mini-preview ${frame.id}"></div>`;
+        grid.appendChild(div);
+    });
+}
+
+// Modal Tab Switching
+window.switchModalTab = function(tabName) {
+    document.getElementById("tab-btn-avatar").classList.remove("active");
+    document.getElementById("tab-btn-frame").classList.remove("active");
+    document.getElementById("avatar-grid").style.display = "none";
+    document.getElementById("frame-grid").style.display = "none";
+
+    if (tabName === 'avatar') {
+        document.getElementById("tab-btn-avatar").classList.add("active");
+        document.getElementById("avatar-grid").style.display = "grid";
+    } else {
+        document.getElementById("tab-btn-frame").classList.add("active");
+        document.getElementById("frame-grid").style.display = "grid";
+    }
+}
+
 window.closeAvatarModal = function() {
     const modal = document.getElementById("avatar-modal");
     if(modal) {
         modal.classList.remove("show");
-        setTimeout(() => modal.style.display = "none", 400); // Wait for fade-out animation
+        setTimeout(() => modal.style.display = "none", 400);
     }
 }
 
-// 4. Handle Clicking a Grid Item
 window.selectAvatar = function(src, clickedElement) {
     temporarySelectedAvatar = src;
     document.getElementById("avatar-preview-img").src = src;
-
-    // Remove 'selected' class from all, add to clicked
     document.querySelectorAll(".avatar-option").forEach(el => el.classList.remove("selected"));
     clickedElement.classList.add("selected");
 }
 
-// 5. Handle Custom Photo Upload (Base64 conversion)
-window.handleCustomAvatar = function(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    // Optional: Size limit check (e.g., 2MB max for localStorage safety)
-    if (file.size > 2 * 1024 * 1024) {
-        alert("Image is too large! Please choose an image under 2MB.");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const dataUrl = e.target.result;
-        const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
-        
-        // Save the custom photo to storage
-        localStorage.setItem('jct_custom_photo_' + displayUser, dataUrl);
-        
-        // Automatically select it and refresh grid
-        localStorage.setItem('jct_avatar_' + displayUser, dataUrl); 
-        openAvatarModal(); 
-    };
-    reader.readAsDataURL(file);
+window.selectFrame = function(frameId, clickedElement) {
+    temporarySelectedFrame = frameId;
+    document.getElementById("preview-arch").className = `preview-frame-container ${frameId}`;
+    document.querySelectorAll(".frame-option").forEach(el => el.classList.remove("selected"));
+    clickedElement.classList.add("selected");
 }
 
-// 6. Discard Custom Photo
-window.discardCustomPhoto = function() {
-    if(!confirm("Are you sure you want to delete your custom uploaded photo?")) return;
-    
-    const displayUser = localStorage.getItem("jct_logged_in_user") || localStorage.getItem("jct_guest_user") || "Unknown";
-    localStorage.removeItem('jct_custom_photo_' + displayUser);
-    
-    // Revert to default avatar
-    localStorage.setItem('jct_avatar_' + displayUser, AVATAR_LIST[0]);
-    openAvatarModal();
-}
-
-// 7. Save Final Selection (NOW SAVES TO DATABASE)
 window.saveAvatar = async function() {
     const displayUser = localStorage.getItem("jct_logged_in_user");
     if (!displayUser) {
-        alert("Guests cannot save avatars permanently.");
+        alert("Guests cannot save appearance permanently.");
         closeAvatarModal();
         return;
     }
 
-    // 1. Save locally for instant speed
     localStorage.setItem('jct_avatar_' + displayUser, temporarySelectedAvatar);
-    applyAvatarToUI(temporarySelectedAvatar);
+    localStorage.setItem('jct_frame_' + displayUser, temporarySelectedFrame);
+    applyAppearanceToUI(temporarySelectedAvatar, temporarySelectedFrame);
     closeAvatarModal();
 
-    // 2. Push to Supabase Database so it saves across all phones/devices!
     try {
         await fetch(`${BACKEND_URL}/api/users/avatar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 username: displayUser, 
-                avatar_url: temporarySelectedAvatar 
+                avatar_url: temporarySelectedAvatar,
+                avatar_frame: temporarySelectedFrame 
             })
         });
     } catch(err) {
-        console.error("Failed to push avatar to database.");
+        console.error("Failed to push appearance to database.");
     }
 }
 
