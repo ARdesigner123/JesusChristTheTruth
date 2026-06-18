@@ -27,7 +27,10 @@ const questsDB = {
 let currentPeriod = 'daily';
 let currentPage = 0;
 const itemsPerPage = 3;
-let currentUser = localStorage.getItem('username') || 'guest'; // Assumes you have a way to grab the user
+
+// FIX 1: Use a unique variable name to prevent crashing against script.js
+// FIX 2: Use the correct localStorage key that your auth system relies on
+const activeQuestUser = localStorage.getItem('jct_logged_in_user') || 'guest'; 
 
 // ================= CORE FUNCTIONS =================
 
@@ -37,7 +40,6 @@ window.onload = async () => {
     renderQuests();
 };
 
-// FIX: Force the timer to calculate immediately instead of waiting 1 second
 function startQuestCountdown() {
     const updateTimer = () => {
         const now = new Date();
@@ -61,12 +63,16 @@ function startQuestCountdown() {
     setInterval(updateTimer, 1000);
 }
 
-// FIX: Safely parse incoming data to prevent the blank screen crash
 async function fetchDailyQuests() {
-    if(currentUser === 'guest') return; 
+    if(activeQuestUser === 'guest') {
+        questsDB.daily = []; // Ensure it doesn't crash for guests
+        return; 
+    }
     
     try {
-        const response = await fetch(`/api/quests/daily/${currentUser}`);
+        // FIX 3: Pull the BACKEND_URL from script.js, with a fallback
+        const baseURL = typeof BACKEND_URL !== 'undefined' ? BACKEND_URL : "https://jesusbackend.onrender.com";
+        const response = await fetch(`${baseURL}/api/quests/daily/${activeQuestUser}`);
         const data = await response.json();
         
         if(data && data.assigned_quests) {
@@ -185,7 +191,9 @@ function renderQuests() {
         });
 
         const btns = document.querySelectorAll('.q-page-btn');
-        btns[0].disabled = currentPage === 0;
-        btns[1].disabled = currentPage === maxPage - 1 || maxPage === 0;
+        if(btns.length >= 2) {
+            btns[0].disabled = currentPage === 0;
+            btns[1].disabled = currentPage === maxPage - 1 || maxPage === 0;
+        }
     }
 }
