@@ -1763,6 +1763,236 @@ li,
 .status-pass { color: #52c41a; font-weight: bold; }
 .status-fail { color: #ff4d4d; font-weight: bold; }
 
+/* ================= QUESTS PAGE SYSTEM ================= */
+
+.quest-section {
+    padding: 60px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.back-nav-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #cbb27d;
+    text-decoration: none;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    z-index: 10;
+}
+
+.back-nav-btn:hover {
+    color: #ffd700;
+}
+
+.quest-main-container {
+    background: rgba(43, 26, 3, 0.95);
+    border: 2px solid #a67c52;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    text-align: center;
+}
+
+.quest-main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(166, 124, 82, 0.3);
+    padding-bottom: 15px;
+}
+
+.q-main-tab {
+    background: none;
+    border: none;
+    color: #cbb27d;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.q-main-tab:hover { color: #ffd700; }
+.q-main-tab.active {
+    color: #ffd700;
+    border-bottom: 3px solid #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.quest-title-header {
+    font-size: 2.2rem;
+    color: #fff8e1;
+    margin-bottom: 5px;
+}
+
+.quest-subtitle {
+    font-family: 'Cardo', serif;
+    color: #a67c52;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.quest-period-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.q-period-tab {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #a67c52;
+    color: #cbb27d;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-family: 'Cinzel', serif;
+    transition: 0.3s;
+}
+
+.q-period-tab.active {
+    background: #4b2e05;
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+/* Quest Cards */
+.quest-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-height: 380px; /* Prevents layout jumping when switching pages */
+}
+
+.quest-card {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(166, 124, 82, 0.5);
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    transition: 0.3s;
+}
+
+.quest-card:hover {
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+.quest-info {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.quest-info h3 {
+    color: #fff8e1;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.quest-info p {
+    font-family: 'Cardo', serif;
+    color: #cbb27d;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+
+/* Progress Bar */
+.q-progress-bg {
+    background: #2b1a03;
+    border: 1px solid #a67c52;
+    border-radius: 10px;
+    height: 10px;
+    width: 100%;
+    max-width: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.q-progress-fill {
+    background: linear-gradient(90deg, #b8860b, #ffd700);
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.q-progress-text {
+    font-family: 'Cardo', serif;
+    font-size: 0.85rem;
+    color: #fff;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Reward Area */
+.quest-rewards {
+    text-align: right;
+    min-width: 120px;
+}
+
+.reward-holy {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.reward-xp {
+    color: #4da6ff;
+    font-weight: bold;
+    font-size: 1rem;
+    display: block;
+}
+
+/* Pagination */
+.quest-pagination {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.q-page-btn {
+    background: #4b2e05;
+    border: 1px solid #a67c52;
+    color: #ffd700;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.q-page-btn:hover:not(:disabled) {
+    background: #ffd700;
+    color: #2b1a03;
+}
+
+.q-page-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.q-page-text {
+    font-family: 'Cardo', serif;
+    color: #cbb27d;
+    font-size: 1.1rem;
+}
+
 /* ================= DROPDOWN (Mobile Menu) ================= */
 .dropdown {
     position: absolute;
@@ -3179,6 +3409,27 @@ li,
     
     /* Table tweaks */
     .lb-table th, .lb-table td { padding: 8px 5px; font-size: 0.85rem; }
+
+    /* Quest Cards */
+    .quest-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .quest-info {
+        padding-right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .quest-rewards {
+        text-align: center;
+        border-top: 1px solid rgba(166, 124, 82, 0.3);
+        padding-top: 15px;
+        width: 100%;
+    }
 }
 
 /* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Quests</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cardo:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+    <a href="profile.html" class="back-nav-btn"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+
+    <section class="quest-section">
+        <div class="quest-main-container">
+            
+            <div class="quest-main-tabs">
+                <button class="q-main-tab active" id="tab-quests" onclick="switchMainTab('quests')"><i class="fas fa-scroll"></i> Quests</button>
+                <button class="q-main-tab" id="tab-achievements" onclick="switchMainTab('achievements')"><i class="fas fa-trophy"></i> Achievements</button>
+            </div>
+
+            <div id="view-quests" class="quest-view-area">
+                <h1 class="quest-title-header">Spiritual Quests</h1>
+                <p class="quest-subtitle">Complete sacred tasks to earn Holy Power and XP.</p>
+
+                <div id="quest-timer-container" style="text-align: center; margin-bottom: 25px; font-family: 'Cinzel', serif; color: #a67c52; font-size: 1.1rem; font-weight: bold; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                    <i class="fas fa-hourglass-half"></i> Quests Refresh In: <span id="quest-countdown" style="color: #d4af37;">--:--:--</span>
+                </div>
+
+                <div class="quest-period-tabs">
+                    <button class="q-period-tab active" id="period-daily" onclick="switchPeriod('daily')">Daily</button>
+                    <button class="q-period-tab" id="period-weekly" onclick="switchPeriod('weekly')">Weekly</button>
+                    <button class="q-period-tab" id="period-monthly" onclick="switchPeriod('monthly')">Monthly</button>
+                </div>
+
+                <h2 id="active-quests-title" style="display:none; color: #d4af37; font-family: 'Cinzel', serif; font-size: 1.3rem; margin-top: 10px; border-bottom: 1px solid #444; padding-bottom: 5px;">Active Quests</h2>
+                <div class="quest-list" id="quest-list-container"></div>
+
+                <h2 id="completed-quests-title" style="display:none; color: #7f8c8d; font-family: 'Cinzel', serif; font-size: 1.3rem; margin-top: 30px; border-bottom: 1px solid #444; padding-bottom: 5px;">Completed Quests</h2>
+                <div class="quest-list" id="completed-quest-list-container" style="opacity: 0.7;"></div>
+
+                <div class="quest-pagination" id="quest-pagination-ui">
+                    <button class="q-page-btn" onclick="changeQuestPage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <span id="q-page-indicator" class="q-page-text">Page 1 of 3</span>
+                    <button class="q-page-btn" onclick="changeQuestPage(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <div id="view-achievements" class="quest-view-area" style="display: none;">
+                <h1 class="quest-title-header">Achievements</h1>
+                <p class="quest-subtitle" style="margin-bottom: 30px;">Legendary feats of faith.</p>
+                
+                <div style="text-align: center; padding: 40px 10px;">
+                    <i class="fas fa-lock" style="font-size: 3rem; color: #a67c52; margin-bottom: 15px;"></i>
+                    <p style="color: #cbb27d; font-family: 'Cardo', serif; font-size: 1.2rem;">More legendary achievements are being forged.<br>Check back soon.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="static/script.js"></script>
+    <script src="static/quests.js"></script>
+</body>
+</html>
