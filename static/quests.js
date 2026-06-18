@@ -37,15 +37,15 @@ window.onload = async () => {
     renderQuests();
 };
 
-// SG Countdown Timer Function
+// FIX: Force the timer to calculate immediately instead of waiting 1 second
 function startQuestCountdown() {
-    setInterval(() => {
+    const updateTimer = () => {
         const now = new Date();
         // Calculate Singapore time by forcing UTC + 8
         const sgTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (8 * 3600000));
         
         const nextMidnight = new Date(sgTime);
-        nextMidnight.setHours(24, 0, 0, 0); // Next day at 00:00:00
+        nextMidnight.setHours(24, 0, 0, 0); 
         
         const diff = nextMidnight - sgTime;
         
@@ -55,10 +55,13 @@ function startQuestCountdown() {
         
         document.getElementById('quest-countdown').innerText = 
             `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
-    }, 1000);
+    };
+    
+    updateTimer(); // Trigger calculation instantly
+    setInterval(updateTimer, 1000);
 }
 
-// Fetch dynamic daily quests from server
+// FIX: Safely parse incoming data to prevent the blank screen crash
 async function fetchDailyQuests() {
     if(currentUser === 'guest') return; 
     
@@ -67,14 +70,15 @@ async function fetchDailyQuests() {
         const data = await response.json();
         
         if(data && data.assigned_quests) {
-            // Map the progress to the quests before inserting them into our frontend DB
             questsDB.daily = data.assigned_quests.map(quest => ({
                 ...quest,
-                progress: data.progress[quest.id] || 0
+                // Safely handle missing progress data
+                progress: (data.progress && data.progress[quest.id]) ? data.progress[quest.id] : 0
             }));
         }
     } catch (error) {
-        console.error("Failed to load daily quests");
+        console.error("Failed to load daily quests:", error);
+        questsDB.daily = []; // Keep it an array so the render loop doesn't crash the UI
     }
 }
 
