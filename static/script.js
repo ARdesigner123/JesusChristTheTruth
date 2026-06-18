@@ -668,6 +668,10 @@ window.saveAvatar = async function() {
                 avatar_effect: temporarySelectedEffect
             })
         });
+
+        // --- NEW: TRIGGER DIVINE VISAGE QUEST ---
+        await triggerQuestProgress(displayUser, 'dq_visage', 1);
+
     } catch(err) {
         console.error("Failed to push appearance to database.");
     }
@@ -1615,6 +1619,24 @@ const QUIZ_BANK = [
     { q: "In Acts 27, what was the specific name of the Alexandrian ship that Paul sailed on toward Rome?", opts: ["It is not named", "Castor and Pollux", "The Adramyttium", "The Euroclydon"], ans: 0, diff: "impossible" }
 ];
 
+// ================= QUEST PROGRESS HELPER =================
+async function triggerQuestProgress(username, questId, amount = 1) {
+    try {
+        const baseURL = typeof BACKEND_URL !== 'undefined' ? BACKEND_URL : "https://jesusbackend.onrender.com";
+        await fetch(`${baseURL}/api/quests/progress`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                quest_id: questId,
+                amount_added: amount
+            })
+        });
+    } catch (error) {
+        console.error(`Failed to update quest ${questId}:`, error);
+    }
+}
+
 let activeQuestions = [];
 let currentQIndex = 0;
 let quizLives = 3;
@@ -1887,6 +1909,19 @@ async function finalizeQuiz(status) {
                     time_taken: timeTakenSeconds
                 })
             });
+
+            // --- NEW: TRIGGER QUIZ QUESTS ON PASS ---
+            if (status === 'pass') {
+                if (quizMode === 'easy') {
+                    await triggerQuestProgress(displayUser, 'dq_step', 1);
+                } else if (quizMode === 'medium') {
+                    await triggerQuestProgress(displayUser, 'dq_scholar', 1);
+                } else if (quizMode === 'daily') {
+                    // Bonus: Might as well trigger "Daily Devotion" here if they pass a daily quiz!
+                    await triggerQuestProgress(displayUser, 'dq_devotion', 1); 
+                }
+            }
+
         } catch (err) { console.error("Failed to save quiz stats"); }
     }
 

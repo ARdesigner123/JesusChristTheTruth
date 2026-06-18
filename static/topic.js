@@ -381,6 +381,8 @@ window.saveEdit = async function(table, id, isTopic) {
 }
 
 window.interact = async function(table, id, column, btnElement) {
+    if (!activeAcc) return alert("Please login to interact."); // Prevent guests from ghost-liking
+    
     const isActive = btnElement.classList.toggle('active');
     const span = btnElement.querySelector('.count');
     span.textContent = parseInt(span.textContent) + (isActive ? 1 : -1);
@@ -390,8 +392,10 @@ window.interact = async function(table, id, column, btnElement) {
     setTimeout(() => icon.style.transform = "", 200);
 
     await fetch(`${forumApiUrl}/api/interact`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ table, id, column, increment: isActive })
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        // ADDED: username is passed to backend for Quest tracking
+        body: JSON.stringify({ table, id, column, increment: isActive, username: forumUser })
     });
 
     if (column === 'favorites_count') {
