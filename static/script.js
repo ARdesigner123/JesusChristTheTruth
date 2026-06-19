@@ -147,6 +147,79 @@ function sendHeartbeat() {
         .catch(() => {});
 }
 
+// ================= LIVE USERS UI MODAL =================
+
+// 1. Automatically make the navbar Live Badge clickable
+document.addEventListener("DOMContentLoaded", () => {
+    const liveBadgeContainer = document.querySelector('.live-user-container');
+    if (liveBadgeContainer) {
+        liveBadgeContainer.setAttribute("onclick", "openLiveUsersModal()");
+    }
+});
+
+// 2. Open the Modal and Fetch the Users
+window.openLiveUsersModal = async function() {
+    openModal('live-users-modal');
+    
+    const ownerList = document.getElementById('live-owner-list');
+    const othersList = document.getElementById('live-others-list');
+    
+    ownerList.innerHTML = "<p style='color:#a67c52; text-align:center;'>Scanning network...</p>";
+    othersList.innerHTML = "<p style='color:#a67c52; text-align:center;'>Scanning network...</p>";
+
+    try {
+        const baseURL = typeof BACKEND_URL !== 'undefined' ? BACKEND_URL : "https://jesusbackend.onrender.com";
+        const res = await fetch(`${baseURL}/api/live-details`);
+        const data = await res.json();
+        
+        const users = data.users || [];
+        
+        // Define the Owner's Username Here (Must match exactly how you login)
+        const OWNER_USERNAME = 'ArchAngel123'; // Change this if you use a different admin name!
+        
+        const isOwnerOnline = users.includes(OWNER_USERNAME);
+
+        // Render Owner Frame
+        ownerList.innerHTML = `
+            <div class="live-user-bar">
+                <div class="${isOwnerOnline ? 'online-dot' : 'offline-dot'}"></div>
+                <span class="live-name" style="${isOwnerOnline ? 'color: #ffd700;' : 'color: #888;'}">${OWNER_USERNAME}</span>
+                <span class="live-badge ${isOwnerOnline ? 'badge-owner-online' : 'badge-owner-offline'}">
+                    ${isOwnerOnline ? 'Online' : 'Offline'}
+                </span>
+            </div>
+        `;
+
+        // Filter out the owner to render everyone else
+        const others = users.filter(u => u !== OWNER_USERNAME);
+        
+        if (others.length === 0) {
+            othersList.innerHTML = `
+                <div style="text-align:center; padding: 20px 0;">
+                    <i class="fas fa-wind" style="font-size: 2rem; color: #5c3a21; margin-bottom:10px;"></i>
+                    <p style="color:#a67c52; font-family:'Cardo', serif;">No other believers online right now.</p>
+                </div>
+            `;
+        } else {
+            othersList.innerHTML = others.map(u => {
+                const isGuest = u.startsWith('Guest_');
+                return `
+                    <div class="live-user-bar">
+                        <div class="online-dot"></div>
+                        <span class="live-name">${u}</span>
+                        ${isGuest ? `<span class="live-badge badge-guest">Guest</span>` : `<span class="live-badge badge-owner-online" style="border-color:#4da6ff; color:#4da6ff; background:rgba(77, 166, 255, 0.1);">User</span>`}
+                    </div>
+                `;
+            }).join('');
+        }
+
+    } catch (err) {
+        console.error("Failed to fetch live users:", err);
+        ownerList.innerHTML = "<p style='color:#ff4d4d; text-align:center;'>Server connection lost.</p>";
+        othersList.innerHTML = "<p style='color:#ff4d4d; text-align:center;'>Server connection lost.</p>";
+    }
+}
+
 if (currentUser) {
     // Fire immediately upon load
     sendHeartbeat();
