@@ -1,16 +1,7 @@
 // ================= QUEST DATA =================
 const questsDB = {
-    daily: [], // Will be dynamically loaded from the database
-    weekly: [
-        { title: "Weekly Scholar", desc: "Pass 7 quizzes this week.", progress: 2, max: 7, rewardHP: 50, rewardXP: 100 },
-        { title: "Sabbath Rest", desc: "Spend 2 hours active this week.", progress: 45, max: 120, rewardHP: 40, rewardXP: 80 },
-        { title: "Social Butterfly", desc: "Make 3 new friends.", progress: 1, max: 3, rewardHP: 20, rewardXP: 50 },
-        { title: "Knowledge Seeker", desc: "Complete a Hard Quiz.", progress: 0, max: 1, rewardHP: 30, rewardXP: 60 },
-        { title: "Consecration", desc: "Earn 100 Holy Power this week.", progress: 30, max: 100, rewardHP: 50, rewardXP: 0 },
-        { title: "Messenger", desc: "Send 10 chat messages.", progress: 4, max: 10, rewardHP: 15, rewardXP: 30 },
-        { title: "Steadfast", desc: "Maintain a 5-day streak.", progress: 2, max: 5, rewardHP: 60, rewardXP: 120 },
-        { title: "Champion of Light", desc: "Rank top 10 on Weekly Leaderboard.", progress: 0, max: 1, rewardHP: 100, rewardXP: 200 }
-    ],
+    daily: [],
+    weekly: [], // Now dynamic!
     monthly: [
         { title: "Monthly Devotion", desc: "Pass 30 quizzes this month.", progress: 5, max: 30, rewardHP: 150, rewardXP: 300 },
         { title: "True Believer", desc: "Maintain a 20-day streak.", progress: 2, max: 20, rewardHP: 200, rewardXP: 400 },
@@ -27,64 +18,64 @@ const questsDB = {
 let currentPeriod = 'daily';
 let currentPage = 0;
 const itemsPerPage = 3;
-
-// FIX 1: Use a unique variable name to prevent crashing against script.js
-// FIX 2: Use the correct localStorage key that your auth system relies on
 const activeQuestUser = localStorage.getItem('jct_logged_in_user') || 'guest'; 
 
 // ================= CORE FUNCTIONS =================
 
 window.onload = async () => {
     startQuestCountdown();
-    await fetchDailyQuests();
+    await fetchAssignedQuests('daily');
     renderQuests();
 };
 
 function startQuestCountdown() {
-    const updateTimer = () => {
+    setInterval(() => {
         const now = new Date();
-        // Calculate Singapore time by forcing UTC + 8
         const sgTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (8 * 3600000));
+        const target = new Date(sgTime);
+
+        if (currentPeriod === 'daily') {
+            target.setHours(24, 0, 0, 0); 
+        } else if (currentPeriod === 'weekly') {
+            const day = target.getDay();
+            const dist = (day === 0 ? 1 : 8 - day); // Distance to next Monday
+            target.setDate(target.getDate() + dist);
+            target.setHours(0, 0, 0, 0);
+        } else {
+            target.setMonth(target.getMonth() + 1, 1);
+            target.setHours(0, 0, 0, 0);
+        }
         
-        const nextMidnight = new Date(sgTime);
-        nextMidnight.setHours(24, 0, 0, 0); 
+        const diff = target - sgTime;
         
-        const diff = nextMidnight - sgTime;
-        
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((diff % (1000 * 60)) / 1000);
         
+        const dayStr = d > 0 ? `${d}d ` : '';
         document.getElementById('quest-countdown').innerText = 
-            `${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
-    };
-    
-    updateTimer(); // Trigger calculation instantly
-    setInterval(updateTimer, 1000);
+            `${dayStr}${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`;
+    }, 1000);
 }
 
-async function fetchDailyQuests() {
-    if(activeQuestUser === 'guest') {
-        questsDB.daily = []; // Ensure it doesn't crash for guests
-        return; 
-    }
+async function fetchAssignedQuests(period) {
+    if(activeQuestUser === 'guest') return; 
     
     try {
-        // FIX 3: Pull the BACKEND_URL from script.js, with a fallback
         const baseURL = typeof BACKEND_URL !== 'undefined' ? BACKEND_URL : "https://jesusbackend.onrender.com";
-        const response = await fetch(`${baseURL}/api/quests/daily/${activeQuestUser}`);
+        const response = await fetch(`${baseURL}/api/quests/${period}/${activeQuestUser}`);
         const data = await response.json();
         
         if(data && data.assigned_quests) {
-            questsDB.daily = data.assigned_quests.map(quest => ({
+            questsDB[period] = data.assigned_quests.map(quest => ({
                 ...quest,
-                // Safely handle missing progress data
                 progress: (data.progress && data.progress[quest.id]) ? data.progress[quest.id] : 0
             }));
         }
     } catch (error) {
-        console.error("Failed to load daily quests:", error);
-        questsDB.daily = []; // Keep it an array so the render loop doesn't crash the UI
+        console.error(`Failed to load ${period} quests:`, error);
+        questsDB[period] = []; 
     }
 }
 
@@ -95,11 +86,17 @@ window.switchMainTab = function(view) {
     document.getElementById('tab-achievements').classList.toggle('active', view === 'achievements');
 };
 
-window.switchPeriod = function(period) {
+window.switchPeriod = async function(period) {
     currentPeriod = period;
     currentPage = 0;
     document.querySelectorAll('.q-period-tab').forEach(tab => tab.classList.remove('active'));
     document.getElementById(`period-${period}`).classList.add('active');
+    
+    // Fetch dynamically if it's daily or weekly before rendering
+    if(period === 'daily' || period === 'weekly') {
+        await fetchAssignedQuests(period);
+    }
+    
     renderQuests();
 };
 
@@ -113,6 +110,9 @@ window.changeQuestPage = function(direction) {
 };
 
 function generateQuestCardHTML(quest, progressPercent) {
+    // Round down progress visually so tracking minutes (like 120.5 mins) looks clean
+    const visualProgress = Math.floor(quest.progress);
+    
     return `
         <div class="quest-card">
             <div class="quest-info">
@@ -121,7 +121,7 @@ function generateQuestCardHTML(quest, progressPercent) {
                 <div class="q-progress-bg">
                     <div class="q-progress-fill" style="width: ${progressPercent}%;"></div>
                 </div>
-                <span class="q-progress-text">${quest.progress} / ${quest.max}</span>
+                <span class="q-progress-text">${visualProgress} / ${quest.max}</span>
             </div>
             <div class="quest-rewards">
                 <span class="reward-holy">+${quest.rewardHP} <i class="fas fa-coins"></i></span>
@@ -137,7 +137,6 @@ function renderQuests() {
     const paginationUI = document.getElementById('quest-pagination-ui');
     const indicator = document.getElementById('q-page-indicator');
     
-    // UI Elements for Daily Splitting
     const activeTitle = document.getElementById('active-quests-title');
     const completedTitle = document.getElementById('completed-quests-title');
 
@@ -146,9 +145,9 @@ function renderQuests() {
     
     const list = questsDB[currentPeriod];
 
-    // ================= DAILY LOGIC =================
-    if (currentPeriod === 'daily') {
-        paginationUI.style.display = 'none'; // Hide pagination for daily
+    // ================= DAILY & WEEKLY (SPLIT UI) =================
+    if (currentPeriod === 'daily' || currentPeriod === 'weekly') {
+        paginationUI.style.display = 'none'; 
         activeTitle.style.display = 'block';
         completedTitle.style.display = 'block';
         
@@ -168,12 +167,11 @@ function renderQuests() {
             }
         });
 
-        // Fallbacks if sections are empty
-        if(activeCount === 0) container.innerHTML = `<p style="text-align:center; padding: 20px; color: #a67c52;">All daily quests completed! Rest well.</p>`;
-        if(completedCount === 0) completedContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: #7f8c8d;">No quests completed yet today.</p>`;
+        if(activeCount === 0) container.innerHTML = `<p style="text-align:center; padding: 20px; color: #a67c52;">All ${currentPeriod} quests completed! Rest well.</p>`;
+        if(completedCount === 0) completedContainer.innerHTML = `<p style="text-align:center; padding: 20px; color: #7f8c8d;">No quests completed yet this period.</p>`;
 
     } else {
-        // ================= WEEKLY / MONTHLY LOGIC =================
+        // ================= MONTHLY LOGIC (PAGINATION) =================
         paginationUI.style.display = 'flex';
         activeTitle.style.display = 'none';
         completedTitle.style.display = 'none';
