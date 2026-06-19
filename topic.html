@@ -57,6 +57,27 @@
         <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
     </nav>
 
+    <!-- LIVE USERS MODAL -->
+    <div id="live-users-modal" class="custom-popup-modal">
+    <div class="popup-modal-content" style="max-width: 500px; text-align: center;">
+        <i class="fas fa-times close-modal-icon" onclick="closeModal('live-users-modal')"></i>
+        
+        <div class="modal-header" style="margin-bottom: 25px;">
+            <i class="fas fa-users title-icon" style="color: #4da6ff; font-size: 2.5rem; margin-bottom: 10px;"></i>
+            <h2 class="popup-title">Live Believers</h2>
+            <p style="color: #a67c52; font-family: 'Cardo', serif;">Brethren currently online</p>
+        </div>
+        
+        <div class="live-list-container" style="text-align: left;">
+            <h3 class="live-section-title"><i class="fas fa-crown" style="color: gold;"></i> Owner</h3>
+            <div id="live-owner-list"></div>
+            
+            <h3 class="live-section-title" style="margin-top: 30px;"><i class="fas fa-globe" style="color: #cbb27d;"></i> Users</h3>
+            <div id="live-others-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+        </div>
+    </div>
+</div>
+
     <section class="hero" style="padding-bottom: 20px;">
         <div class="hero-container">
             <h1 class="main-title">

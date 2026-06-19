@@ -174,8 +174,8 @@ window.openLiveUsersModal = async function() {
         
         const users = data.users || [];
         
-        // Define the Owner's Username Here (Must match exactly how you login)
-        const OWNER_USERNAME = 'ArchAngel123'; // Change this if you use a different admin name!
+        // NEW: Pull the dynamic owner username directly from the backend response
+        const OWNER_USERNAME = data.owner; 
         
         const isOwnerOnline = users.includes(OWNER_USERNAME);
 
