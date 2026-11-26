@@ -2,94 +2,144 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Jesus Christ The Truth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="static/login.css">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Jesus Christ The Truth</title>
+    <meta name="description" content="Discover the true Gospel of Jesus Christ — the Bible, church history, discussions, quizzes and a community of believers.">
+    <meta name="theme-color" content="#090f2e">
+    <meta property="og:title" content="Jesus Christ The Truth">
+    <meta property="og:description" content="I am the Alpha and the Omega, the First and the Last, the Beginning and the End.">
+    <meta property="og:image" content="static/image/jesusLogo.png">
+    <link rel="icon" href="static/image/jesusLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="static/css/theme.css">
+    <link rel="stylesheet" href="static/css/intro.css">
 </head>
-<body>
+<body class="intro-page">
 
-    <video id="bg-video" loop muted src="static/jesusIntro.mp4"></video>
     <audio id="intro-audio" src="static/jesus.mp3" preload="auto"></audio>
 
-    <div id="intro-overlay">
-        <div id="start-screen" style="display: none;">
-            <p>Click anywhere to begin</p>
-        </div>
+    <!-- ================= THE PORTAL (login) ================= -->
+    <div id="portal" class="portal" aria-hidden="true">
+        <video id="portal-video" class="portal-video" src="static/jesusIntro.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="portal-shade"></div>
+        <div class="portal-rays"></div>
+        <canvas id="portal-canvas" class="portal-canvas"></canvas>
 
-        <div id="skip-hint" style="display: none;">Click anywhere to skip</div>
-        
-        <div id="bible-reference">Revelation 22:13 (NKJV)</div>
+        <main class="portal-grid">
+            <section class="portal-title">
+                <svg class="portal-cross" viewBox="0 0 60 90" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="crossGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#ffe9a8"/><stop offset="1" stop-color="#d9a93f"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M30 2 V88 M6 26 H54" stroke="url(#crossGrad)" stroke-width="7" stroke-linecap="round" fill="none"/>
+                </svg>
+                <p class="eyebrow portal-eyebrow">Welcome, beloved</p>
+                <h1 class="portal-h1" id="portal-h1" aria-label="Jesus Christ The Truth">
+                    <span class="line">Jesus Christ</span>
+                    <span class="line small">The Truth</span>
+                </h1>
+                <p class="portal-verse">“I am the Alpha and the Omega, the First and the Last, the Beginning and the End.”</p>
+                <p class="verse-reference">Revelation 22:13</p>
+            </section>
 
-        <div id="text-sequence"></div>
-        
-        <svg class="cracks-svg" id="cracks-svg" preserveAspectRatio="none" viewBox="0 0 100 100">
-            <path d="M50,50 L45,45 L48,35 L40,25 L45,15 L35,0 M48,35 L35,30 L30,20" />
-            <path d="M50,50 L55,40 L52,30 L65,25 L70,10 L80,0 M65,25 L75,35 L90,30" />
-            <path d="M50,50 L40,55 L45,65 L30,70 L25,85 L10,100 M45,65 L35,80 L20,85" />
-            <path d="M50,50 L60,55 L55,65 L70,75 L65,90 L85,100 M70,75 L85,80 L95,70 M55,65 L50,85 L60,95" />
-            <path d="M50,50 L35,48 L25,55 L10,45 L0,50 M50,50 L65,52 L75,45 L90,55 L100,50" />
+            <section class="portal-card glass gold-edge" id="auth-card" aria-label="Sign in">
+                <!-- Returning user -->
+                <div id="welcome-back" class="welcome-back" hidden>
+                    <div class="wb-avatar" id="wb-avatar"></div>
+                    <p class="eyebrow">Welcome back</p>
+                    <h2 id="wb-name">Believer</h2>
+                    <p class="text-muted" id="wb-sub">Your journey continues where you left it.</p>
+                    <button class="btn btn-lg btn-block" id="wb-continue"><i class="fas fa-door-open"></i> Enter</button>
+                    <button class="btn btn-ghost btn-block" id="wb-switch" style="margin-top:10px">Use another account</button>
+                </div>
+
+                <!-- Login / Register -->
+                <div id="auth-forms">
+                    <div class="auth-tabs" role="tablist">
+                        <span class="auth-tab-pill"></span>
+                        <button class="auth-tab active" role="tab" id="tab-login" aria-selected="true">Login</button>
+                        <button class="auth-tab" role="tab" id="tab-register" aria-selected="false">Register</button>
+                    </div>
+                    <h2 class="auth-heading" id="auth-heading">Enter the gates</h2>
+                    <p class="auth-sub text-muted" id="auth-sub">Log in to continue your spiritual journey.</p>
+
+                    <form id="auth-form" novalidate>
+                        <div class="field">
+                            <i class="fas fa-user"></i>
+                            <input class="input" type="text" id="username" placeholder="Username" autocomplete="username" maxlength="20" required>
+                        </div>
+                        <div class="field">
+                            <i class="fas fa-lock"></i>
+                            <input class="input" type="password" id="password" placeholder="Password" autocomplete="current-password" maxlength="30" required>
+                            <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password"><i class="fas fa-eye"></i></button>
+                        </div>
+
+                        <ul class="rules" id="rules" hidden>
+                            <li data-rule="ulen">Username 8–20 characters, with upper, lower &amp; a number</li>
+                            <li data-rule="plen">Password 8–30 characters</li>
+                            <li data-rule="pcase">Password has upper &amp; lower case</li>
+                            <li data-rule="pnum">Password has a number</li>
+                            <li data-rule="pspec">Password has a special character</li>
+                        </ul>
+
+                        <div class="form-msg" id="auth-msg" role="alert"></div>
+                        <button type="submit" class="btn btn-lg btn-block" id="submit-btn"><i class="fas fa-key"></i> <span>Login</span></button>
+                    </form>
+
+                    <div class="or"><span>or</span></div>
+                    <button type="button" class="btn btn-ghost btn-block" id="btn-guest"><i class="fas fa-feather"></i> Continue as Guest</button>
+                    <p class="guest-note">Guests can read, discuss and chat with GuideBot. Register to earn Holy Power, ranks, quests &amp; friends.</p>
+                </div>
+            </section>
+        </main>
+
+        <button class="sound-toggle" id="sound-toggle" aria-label="Toggle music" title="Music"><i class="fas fa-volume-xmark"></i></button>
+        <footer class="portal-foot">© <span id="year"></span> Jesus Christ The Truth</footer>
+    </div>
+
+    <!-- ================= THE INTRO ================= -->
+    <div id="intro" class="intro">
+        <canvas id="intro-canvas" class="intro-canvas"></canvas>
+
+        <button class="intro-gate" id="intro-gate" type="button" aria-label="Enter">
+            <span class="gate-orb"><span class="gate-ring r1"></span><span class="gate-ring r2"></span><span class="gate-ring r3"></span><i class="fas fa-cross"></i></span>
+            <span class="gate-label">Enter the Light</span>
+            <span class="gate-hint">Tap anywhere · sound on <i class="fas fa-volume-high"></i></span>
+        </button>
+
+        <div class="intro-text" id="intro-text" aria-live="polite"></div>
+        <div class="intro-ref" id="intro-ref">Revelation 22:13</div>
+
+        <svg class="intro-cracks" id="intro-cracks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path pathLength="100" d="M50,50 L45,45 L48,35 L40,25 L45,15 L35,0 M48,35 L35,30 L30,20" />
+            <path pathLength="100" d="M50,50 L55,40 L52,30 L65,25 L70,10 L80,0 M65,25 L75,35 L90,30" />
+            <path pathLength="100" d="M50,50 L40,55 L45,65 L30,70 L25,85 L10,100 M45,65 L35,80 L20,85" />
+            <path pathLength="100" d="M50,50 L60,55 L55,65 L70,75 L65,90 L85,100 M70,75 L85,80 L95,70 M55,65 L50,85 L60,95" />
+            <path pathLength="100" d="M50,50 L35,48 L25,55 L10,45 L0,50 M50,50 L65,52 L75,45 L90,55 L100,50" />
         </svg>
+        <div class="intro-core" id="intro-core"></div>
+        <svg class="intro-bolt" id="intro-bolt" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M45,0 L58,0 L45,35 L62,35 L35,100 L42,48 L28,48 Z" />
+        </svg>
+        <div class="intro-shards" id="intro-shards"></div>
+        <div class="intro-flash" id="intro-flash"></div>
 
-        <div id="particle-container"></div>
-
-        <div id="shatter-container"></div>
+        <button class="intro-skip" id="intro-skip" type="button">Skip intro <i class="fas fa-forward"></i></button>
     </div>
 
-    <div id="lightning"></div>
-    
-    <svg id="lightning-bolt" preserveAspectRatio="none" viewBox="0 0 100 100">
-        <path d="M45,0 L58,0 L45,35 L62,35 L35,100 L42,48 L28,48 Z" />
-    </svg>
-
-    <div id="main-ui" class="hidden">
-        
-        <div class="title-wrapper">
-            <div class="custom-cross" id="cross-container">
-                <div class="cross-vertical"></div>
-                <div class="cross-horizontal"></div>
-            </div>
-            <h1 class="main-title">Jesus Christ The Truth</h1>
-        </div>
-
-        <div class="auth-container">
-            <div class="toggle-buttons">
-                <button id="btn-login" class="ancient-btn active">Login</button>
-                <button id="btn-register" class="ancient-btn">Register</button>
-            </div>
-
-            <form id="auth-form" class="ancient-form">
-                <h2 id="form-title">Login to Your Account</h2>
-                
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="username" placeholder="Username" required>
-                </div>
-                
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" placeholder="Password" required>
-                </div>
-
-                <div id="auth-message" class="auth-message"></div>
-
-                <button type="submit" id="submit-btn" class="submit-btn">Login</button>
-                
-                <div class="guest-divider"><span>OR</span></div>
-                <button type="button" id="btn-guest" class="guest-btn">Continue as Guest</button>
-            </form>
-        </div>
-
-        <footer class="footer">
-            <span class="bible-icon">📖</span>
-            <p>© 2026 Jesus Christ The Truth. All Rights Reserved.</p>
-        </footer>
+    <!-- Clouds that part to reveal the portal -->
+    <div class="clouds" id="clouds" aria-hidden="true">
+        <div class="cloud-bank left"></div>
+        <div class="cloud-bank right"></div>
     </div>
 
-    <script src="static/login.js"></script>
+    <script src="static/js/config.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/intro.js"></script>
 </body>
 </html>
