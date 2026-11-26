@@ -6,11 +6,11 @@
 }
 
 .genesis-container {
-    background: radial-gradient(circle at top center, rgba(30, 15, 8, 0.9), rgba(10, 5, 2, 0.95));
-    border: 1px solid #6b3f0d;
+    background: radial-gradient(circle at top center, rgba(26, 32, 84, 0.9), rgba(8, 11, 34, 0.95));
+    border: 1px solid #2a3170;
     border-radius: 20px;
     padding: 50px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(255, 215, 0, 0.05);
+    box-shadow: 0 15px 40px rgba(12,16,46,0.8), inset 0 0 30px rgba(246, 217, 139, 0.05);
 }
 
 .genesis-intro {
@@ -21,13 +21,13 @@
 .genesis-intro h2 {
     font-family: 'Cinzel', serif;
     font-size: 2.5rem;
-    color: #ffd700;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    color: #f6d98b;
+    text-shadow: 0 0 15px rgba(246, 217, 139, 0.5);
     margin-bottom: 15px;
 }
 
 .genesis-intro p {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 1.2rem;
     color: #e6e6e6;
     max-width: 800px;
@@ -39,8 +39,8 @@
 .hebrew-block {
     text-align: center;
     background: rgba(0, 0, 0, 0.6);
-    border-top: 2px dashed rgba(255, 215, 0, 0.3);
-    border-bottom: 2px dashed rgba(255, 215, 0, 0.3);
+    border-top: 2px dashed rgba(246, 217, 139, 0.3);
+    border-bottom: 2px dashed rgba(246, 217, 139, 0.3);
     padding: 30px 20px;
     margin-bottom: 50px;
     border-radius: 10px;
@@ -48,7 +48,7 @@
 
 .hebrew-text {
     font-size: 3.5rem;
-    color: #ffd700;
+    color: #f6d98b;
     font-family: "Times New Roman", Times, serif; /* Best for standard Hebrew rendering */
     letter-spacing: 5px;
     margin-bottom: 15px;
@@ -56,14 +56,14 @@
 }
 
 @keyframes holyGlow {
-    0% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.4); }
-    100% { text-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 40px gold; }
+    0% { text-shadow: 0 0 10px rgba(246, 217, 139, 0.4); }
+    100% { text-shadow: 0 0 25px rgba(246, 217, 139, 0.9), 0 0 40px gold; }
 }
 
 .transliteration {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 1.1rem;
-    color: #a67c52;
+    color: #b9b6cc;
     font-style: italic;
     margin-bottom: 10px;
 }
@@ -84,8 +84,8 @@
 }
 
 .genesis-card {
-    background: rgba(20, 10, 5, 0.8);
-    border: 1px solid #4b2e05;
+    background: rgba(14, 19, 52, 0.8);
+    border: 1px solid #1d2463;
     border-radius: 15px;
     padding: 30px;
     transition: all 0.4s ease;
@@ -97,24 +97,24 @@
     content: "";
     position: absolute;
     top: 0; left: 0; width: 4px; height: 100%;
-    background: linear-gradient(to bottom, #ffd700, #a67c52);
+    background: linear-gradient(to bottom, #f6d98b, #b9b6cc);
     opacity: 0.5;
     transition: opacity 0.4s ease;
 }
 
 .genesis-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 215, 0, 0.1);
-    border-color: #8b5a2b;
+    box-shadow: 0 10px 25px rgba(12,16,46,0.8), inset 0 0 20px rgba(246, 217, 139, 0.1);
+    border-color: #b9862b;
 }
 
 .genesis-card:hover::before { opacity: 1; }
 
 .gen-icon {
     font-size: 2rem;
-    color: #d4af37;
+    color: #e0b252;
     margin-bottom: 15px;
-    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    text-shadow: 0 0 10px rgba(224, 178, 82, 0.5);
 }
 
 .genesis-card h3 {
@@ -122,12 +122,12 @@
     font-size: 1.4rem;
     color: #fff8e1;
     margin-bottom: 15px;
-    border-bottom: 1px solid #4b2e05;
+    border-bottom: 1px solid #1d2463;
     padding-bottom: 10px;
 }
 
 .genesis-card p {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 1.05rem;
     color: #cccccc;
     line-height: 1.6;
@@ -135,7 +135,7 @@
 }
 
 .genesis-card strong {
-    color: #ffd700;
+    color: #f6d98b;
 }
 
 
@@ -158,11 +158,11 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: rgba(10, 5, 2, 0.8);
-    border: 1px solid #5c3a21;
+    background: rgba(8, 11, 34, 0.8);
+    border: 1px solid #3a4290;
     border-radius: 15px;
     padding: 40px 25px 25px; /* Bottom padding adjusted for button */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    box-shadow: 0 10px 30px rgba(12,16,46,0.7);
     transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
     position: relative;
     overflow: hidden;
@@ -182,8 +182,8 @@
 
 .bible-col:hover {
     transform: translateY(-10px);
-    background: rgba(20, 10, 5, 0.95);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    background: rgba(14, 19, 52, 0.95);
+    box-shadow: 0 20px 50px rgba(9,12,38,0.88);
 }
 
 /* Titles */
@@ -196,11 +196,11 @@
     letter-spacing: 1px;
 }
 
-.orthodox-text { color: #d4af37; text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+.orthodox-text { color: #e0b252; text-shadow: 0 0 5px rgba(224, 178, 82, 0.5); }
 .catholic-text { color: #ff6666; text-shadow: 0 0 5px rgba(255, 102, 102, 0.5); }
 .protestant-text { color: #e6e6e6; text-shadow: 0 0 5px rgba(230, 230, 230, 0.5); }
 
-.bible-col:hover .orthodox-text { text-shadow: 0 0 20px #d4af37, 0 0 10px #fff; }
+.bible-col:hover .orthodox-text { text-shadow: 0 0 20px #e0b252, 0 0 10px #fff; }
 .bible-col:hover .catholic-text { text-shadow: 0 0 20px #ff4d4d, 0 0 10px #fff; }
 .bible-col:hover .protestant-text { text-shadow: 0 0 20px #c0c0c0, 0 0 10px #fff; }
 
@@ -214,13 +214,13 @@
     transition: all 0.4s ease;
     z-index: 2; 
     padding: 10px; 
-    background: linear-gradient(135deg, #6b3f0d 0%, #d4af37 50%, #4b2e05 100%);
+    background: linear-gradient(135deg, #2a3170 0%, #e0b252 50%, #1d2463 100%);
     border-radius: 12px; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+    box-shadow: 0 5px 15px rgba(12,16,46,0.8);
 }
 
 .bible-image-container {
-    width: 100%; height: 100%; border-radius: 8px; overflow: hidden; position: relative; border: 2px solid #2b1a03; box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+    width: 100%; height: 100%; border-radius: 8px; overflow: hidden; position: relative; border: 2px solid #121a48; box-shadow: inset 0 0 25px rgba(9,12,38,0.88);
 }
 
 .bible-image-frame img {
@@ -228,22 +228,22 @@
 }
 
 .bible-image-frame::before, .bible-image-frame::after {
-    content: ""; position: absolute; width: 25px; height: 25px; border: 3px solid #ffd700; transition: all 0.4s ease; z-index: 1; 
+    content: ""; position: absolute; width: 25px; height: 25px; border: 3px solid #f6d98b; transition: all 0.4s ease; z-index: 1; 
 }
 
 .bible-image-frame::before { top: -5px; left: -5px; border-right: none; border-bottom: none; border-top-left-radius: 15px; }
 .bible-image-frame::after { bottom: -5px; right: -5px; border-left: none; border-top: none; border-bottom-right-radius: 15px; }
 
-.bible-col:hover .bible-image-frame { transform: scale(1.03); box-shadow: 0 10px 30px rgba(0,0,0,0.9); }
+.bible-col:hover .bible-image-frame { transform: scale(1.03); box-shadow: 0 10px 30px rgba(9,12,38,0.88); }
 .bible-col:hover .bible-image-frame img { transform: scale(1.1); filter: brightness(1.1) sepia(0) contrast(1); }
 
-.bible-col:hover .orthodox-frame { background: linear-gradient(135deg, #d4af37 0%, #fff 50%, #d4af37 100%); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 10px 30px rgba(0,0,0,0.8); }
+.bible-col:hover .orthodox-frame { background: linear-gradient(135deg, #e0b252 0%, #fff 50%, #e0b252 100%); box-shadow: 0 0 30px rgba(224, 178, 82, 0.6), 0 10px 30px rgba(12,16,46,0.8); }
 .bible-col:hover .orthodox-frame::before, .bible-col:hover .orthodox-frame::after { border-color: #fff; box-shadow: 0 0 10px #fff; }
 
-.bible-col:hover .catholic-frame { background: linear-gradient(135deg, #ff4d4d 0%, #fff 50%, #800000 100%); box-shadow: 0 0 30px rgba(255, 77, 77, 0.6), 0 10px 30px rgba(0,0,0,0.8); }
+.bible-col:hover .catholic-frame { background: linear-gradient(135deg, #ff4d4d 0%, #fff 50%, #800000 100%); box-shadow: 0 0 30px rgba(255, 77, 77, 0.6), 0 10px 30px rgba(12,16,46,0.8); }
 .bible-col:hover .catholic-frame::before, .bible-col:hover .catholic-frame::after { border-color: #ffcccc; box-shadow: 0 0 10px #ffcccc; }
 
-.bible-col:hover .protestant-frame { background: linear-gradient(135deg, #c0c0c0 0%, #fff 50%, #666 100%); box-shadow: 0 0 30px rgba(192, 192, 192, 0.6), 0 10px 30px rgba(0,0,0,0.8); }
+.bible-col:hover .protestant-frame { background: linear-gradient(135deg, #c0c0c0 0%, #fff 50%, #666 100%); box-shadow: 0 0 30px rgba(192, 192, 192, 0.6), 0 10px 30px rgba(12,16,46,0.8); }
 .bible-col:hover .protestant-frame::before, .bible-col:hover .protestant-frame::after { border-color: #fff; box-shadow: 0 0 10px #fff; }
 
 
@@ -253,13 +253,13 @@
 }
 
 .bible-details h4 {
-    font-family: 'Cinzel', serif; color: #ffd700; font-size: 1.25rem; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border-bottom: 1px dashed rgba(255, 215, 0, 0.3); padding-bottom: 8px; text-shadow: 1px 1px 2px #000;
+    font-family: 'Cinzel', serif; color: #f6d98b; font-size: 1.25rem; margin-top: 25px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; border-bottom: 1px dashed rgba(246, 217, 139, 0.3); padding-bottom: 8px; text-shadow: 1px 1px 2px #000;
 }
 
 .bible-details h4 i { color: #cbb27d; font-size: 1.1rem; transition: transform 0.3s ease; }
 .bible-col:hover .bible-details h4 i { transform: rotate(15deg) scale(1.1); color: #fff; }
 
-.bible-details p { font-family: 'Cardo', serif; color: #dddddd; font-size: 1.05rem; line-height: 1.7; margin-bottom: 15px; }
+.bible-details p { font-family: 'EB Garamond', serif; color: #dddddd; font-size: 1.05rem; line-height: 1.7; margin-bottom: 15px; }
 .bible-details strong { color: #fff; font-weight: bold; text-shadow: 0 0 2px rgba(255,255,255,0.5); }
 
 /* BIBLE SOURCE LINKS (NEW) */
@@ -272,7 +272,7 @@
     font-family: 'Cinzel', serif;
     font-weight: bold;
     font-size: 1.1rem;
-    border: 1px solid #6b3f0d;
+    border: 1px solid #2a3170;
     border-radius: 5px;
     background: rgba(0,0,0,0.5);
     color: #e6e6e6;
@@ -281,16 +281,16 @@
 
 .bible-source-link i { margin-left: 8px; font-size: 0.9rem; }
 
-.orthodox-link:hover { background: #d4af37; color: #000; border-color: #d4af37; box-shadow: 0 0 15px #d4af37; }
+.orthodox-link:hover { background: #e0b252; color: #000; border-color: #e0b252; box-shadow: 0 0 15px #e0b252; }
 .catholic-link:hover { background: #ff4d4d; color: #fff; border-color: #ff4d4d; box-shadow: 0 0 15px #ff4d4d; }
 .protestant-link:hover { background: #c0c0c0; color: #000; border-color: #c0c0c0; box-shadow: 0 0 15px #c0c0c0; }
 
 /* DIVIDERS */
 .bible-divider {
     width: 2px;
-    background: linear-gradient(to bottom, transparent, #ffd700, transparent);
+    background: linear-gradient(to bottom, transparent, #f6d98b, transparent);
     opacity: 0.5;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 15px rgba(246, 217, 139, 0.6);
     border-radius: 50%;
 }
 
@@ -305,7 +305,7 @@
     background: transparent;
 }
 
-.orthodox-read-btn:hover { background: #d4af37; color: #000; border-color: #d4af37; box-shadow: 0 0 15px #d4af37; }
+.orthodox-read-btn:hover { background: #e0b252; color: #000; border-color: #e0b252; box-shadow: 0 0 15px #e0b252; }
 .catholic-read-btn:hover { background: #ff4d4d; color: #fff; border-color: #ff4d4d; box-shadow: 0 0 15px #ff4d4d; }
 .protestant-read-btn:hover { background: #c0c0c0; color: #000; border-color: #c0c0c0; box-shadow: 0 0 15px #c0c0c0; }
 
@@ -334,10 +334,10 @@
     min-width: 400px;
     max-width: 900px; 
     height: 100vh;
-    background: linear-gradient(to bottom, #2b1a03, #150b01);
+    background: linear-gradient(to bottom, #121a48, #150b01);
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
-    box-shadow: -15px 0 50px rgba(0,0,0,0.9);
+    box-shadow: -15px 0 50px rgba(9,12,38,0.88);
     z-index: 1000;
     transition: right 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
@@ -347,10 +347,10 @@
 .side-panel.open { right: 0; }
 
 /* Panel Specific Borders & Colors */
-#orthodox-reader-panel { border-left: 2px solid #d4af37; }
-.orthodox-header { border-bottom: 1px solid rgba(212, 175, 55, 0.3); }
-.orthodox-header h2 { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-.orthodox-header .close-btn { color: #d4af37; }
+#orthodox-reader-panel { border-left: 2px solid #e0b252; }
+.orthodox-header { border-bottom: 1px solid rgba(224, 178, 82, 0.3); }
+.orthodox-header h2 { color: #f6d98b; text-shadow: 0 0 10px rgba(246, 217, 139, 0.5); }
+.orthodox-header .close-btn { color: #e0b252; }
 
 #catholic-reader-panel { border-left: 2px solid #ff4d4d; }
 .catholic-header { border-bottom: 1px solid rgba(255, 77, 77, 0.3); }
@@ -384,7 +384,7 @@
 }
 .panel-content::-webkit-scrollbar { width: 8px; }
 .panel-content::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-.panel-content::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+.panel-content::-webkit-scrollbar-thumb { background: #e0b252; border-radius: 10px; }
 #catholic-reader-panel .panel-content::-webkit-scrollbar-thumb { background: #ff4d4d; }
 #protestant-reader-panel .panel-content::-webkit-scrollbar-thumb { background: #c0c0c0; }
 
@@ -394,9 +394,9 @@
     color: #fffdf5;
     text-align: center;
     margin-bottom: 25px;
-    border-bottom: 2px solid rgba(212, 175, 55, 0.5);
+    border-bottom: 2px solid rgba(224, 178, 82, 0.5);
     padding-bottom: 10px;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    text-shadow: 0 0 10px rgba(246, 217, 139, 0.3);
 }
 
 .books-grid {
@@ -407,16 +407,16 @@
 
 .book-category {
     background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(224, 178, 82, 0.2);
     border-radius: 12px;
     padding: 15px;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+    box-shadow: inset 0 0 15px rgba(12,16,46,0.8);
 }
 
 .book-section {
     font-family: 'Cinzel', serif;
     font-size: 1.2rem;
-    color: #a67c52;
+    color: #b9b6cc;
     margin-bottom: 15px;
     border-bottom: 1px dashed rgba(166, 124, 82, 0.4);
     padding-bottom: 8px;
@@ -425,7 +425,7 @@
 
 .book-list { list-style: none; padding: 0; margin: 0; }
 .book-item {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 1.15rem;
     color: #e6e6e6;
     padding: 8px 10px;
@@ -437,11 +437,11 @@
 }
 
 .book-item:hover {
-    color: #ffd700;
-    background: rgba(255, 215, 0, 0.08);
-    border-left: 3px solid #ffd700;
+    color: #f6d98b;
+    background: rgba(246, 217, 139, 0.08);
+    border-left: 3px solid #f6d98b;
     transform: translateX(8px);
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 8px rgba(246, 217, 139, 0.5);
 }
 
 /* ================= ULTIMATE RESPONSIVE DESIGN (BIBLE PAGE) ================= */
@@ -459,8 +459,6 @@
     .nav-links { display: none; }
     .nav-right { display: none; } 
     .menu-icon { display: block; } 
-    .navbar { padding: 0 30px; }
-
     /* Genesis Section */
     .genesis-container { padding: 40px 30px; }
     .hebrew-text { font-size: 2.8rem; }
@@ -473,7 +471,7 @@
     /* Turn vertical divider into horizontal divider */
     .bible-divider {
         width: 80%; max-width: 400px; height: 2px;
-        background: linear-gradient(to right, transparent, #ffd700, transparent);
+        background: linear-gradient(to right, transparent, #f6d98b, transparent);
         margin: 10px auto 40px; opacity: 0.7;
     }
 }
@@ -481,9 +479,7 @@
 /* --- TABLET PORTRAIT (Max 900px) --- */
 @media (max-width: 900px) {
     /* Hero */
-    .navbar { height: 70px; padding: 0 40px; }
     .logo { height: 60px; }
-    .hero { padding: 140px 20px 60px; }
     .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
     .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
 
@@ -507,11 +503,7 @@
 /* --- MOBILE PHONES (Max 600px) --- */
 @media (max-width: 600px) {
     /* Navbar & Hero Shrink */
-    .navbar { height: 60px; padding: 0 15px; }
     .logo { height: 45px; }
-    .hero { padding: 120px 15px 40px; }
-    .main-title { font-size: 1.6rem; white-space: normal; }
-    .description { font-size: 1rem; line-height: 1.6; }
     .verse-reference { font-size: 0.9rem; }
     
     /* Genesis Section Mobile Squeeze */
@@ -535,7 +527,6 @@
 
 /* --- EXTRA SMALL MOBILE (Max 400px - e.g. iPhone SE) --- */
 @media (max-width: 400px) {
-    .main-title { font-size: 1.4rem; }
     .hebrew-text { font-size: 1.5rem; }
     .bible-image-frame { width: 100%; }
     .orthodox-read-btn, .catholic-read-btn, .protestant-read-btn { font-size: 1rem; padding: 10px 0; }

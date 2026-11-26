@@ -2,186 +2,82 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Topics & Testimonies - Jesus Christ The Truth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/topic.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Topics &amp; Testimonies · Jesus Christ The Truth</title>
+    <meta name="description" content="Discuss biblical truths, ask questions and share testimonies with believers.">
+    <meta name="theme-color" content="#090f2e">
+    <link rel="icon" href="static/image/jesusLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="static/css/theme.css">
+    <link rel="stylesheet" href="static/css/topic.css">
 </head>
-<body>
-
-    <nav class="navbar">
-        <div class="nav-left">
-            <img src="static/image/jesusLogo.png" alt="Jesus Logo" class="logo">
-            <a href="profile.html" class="nav-profile-icon" title="My Profile">
-                <img src="static/image/profileIcon.png" alt="Profile" class="profile-img-icon">
-            </a>
+<body data-page="topics" data-auth="none">
+<main>
+    <header class="page-hero">
+        <div class="hero-halo"></div>
+        <div class="hero-container hero-enter">
+            <span class="eyebrow">Iron Sharpens Iron</span>
+            <h1 class="page-title">Spiritual Topics</h1>
+            <p class="lead">Ask questions, seek answers and share your testimony to encourage the brethren.</p>
+            <p class="verse-reference">“Therefore encourage one another and build each other up.” — 1 Thessalonians 5:11</p>
         </div>
-        
-        <ul class="nav-links">
-            <div class="nav-indicator"></div>
-            <li><a href="main.html">Home</a></li>
-            <li><a href="bible.html">Bible</a></li>
-            <li><a href="church.html">Church</a></li>
-            <li><a href="topic.html" class="active">Topics</a></li>
-            <li><a href="#">About Me</a></li>
-            <li><a href="#">Games</a></li> <li><a href="#">Store</a></li>
-        </ul>
-        
-        <div class="nav-right">
-            <div class="live-user-container" title="Live Believers Online">
-                <i class="fas fa-users" style="color: #4da6ff;"></i>
-                <span id="live-user-count" class="live-count-badge">1</span>
+    </header>
+
+    <div class="container forum">
+        <div class="center" data-reveal="up">
+            <div class="tabs" id="forum-tabs">
+                <button class="tab active" data-tab="topics"><i class="fas fa-comments"></i> Discussions</button>
+                <button class="tab" data-tab="testimonies"><i class="fas fa-hands-praying"></i> Testimonies</button>
             </div>
-            
-            <a href="chatbot.html" class="nav-icon" title="Chatbot"><i class="fas fa-robot"></i></a>
-            <a href="index.html" class="nav-icon logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
         </div>
-        
-        <div class="dropdown" id="dropdownMenu">
-            <ul class="mobile-nav-links">
-                <li><a href="main.html">Home</a></li>
-                <li><a href="bible.html">Bible</a></li>
-                <li><a href="church.html">Church</a></li>
-                <li><a href="topic.html" class="active">Topics</a></li>
-                <li><a href="#">About Me</a></li>
-                <li><a href="#">Games</a></li> <li><a href="#">Store</a></li>
-                <hr class="mobile-divider">
-                <li><a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot</a></li>
-                <li><a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
-        </div>
-        <div class="menu-icon" id="menuIcon"><i class="fas fa-bars"></i></div>
-    </nav>
 
-    <!-- LIVE USERS MODAL -->
-    <div id="live-users-modal" class="custom-popup-modal">
-    <div class="popup-modal-content" style="max-width: 500px; text-align: center;">
-        <i class="fas fa-times close-modal-icon" onclick="closeModal('live-users-modal')"></i>
-        
-        <div class="modal-header" style="margin-bottom: 25px;">
-            <i class="fas fa-users title-icon" style="color: #4da6ff; font-size: 2.5rem; margin-bottom: 10px;"></i>
-            <h2 class="popup-title">Live Believers</h2>
-            <p style="color: #a67c52; font-family: 'Cardo', serif;">Brethren currently online</p>
+        <!-- composer -->
+        <div class="composer glass" id="composer" data-reveal="up">
+            <div class="composer-head">
+                <div class="me-badge" id="me-badge"><i class="fas fa-user"></i></div>
+                <div>
+                    <strong id="composer-title">Start a new topic</strong>
+                    <span class="text-muted" id="composer-sub">What biblical question is on your heart?</span>
+                </div>
+            </div>
+            <div class="editor" id="composer-editor">
+                <div class="editor-toolbar" data-for="composer-input">
+                    <button type="button" data-cmd="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                    <button type="button" data-cmd="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                    <button type="button" data-cmd="underline" title="Underline"><i class="fas fa-underline"></i></button>
+                    <button type="button" data-cmd="insertUnorderedList" title="Bullet list"><i class="fas fa-list-ul"></i></button>
+                    <button type="button" data-cmd="insertOrderedList" title="Numbered list"><i class="fas fa-list-ol"></i></button>
+                </div>
+                <div class="rich-input" id="composer-input" contenteditable="true" data-placeholder="Type your question or topic…"></div>
+            </div>
+            <div class="composer-foot">
+                <span class="text-muted" id="composer-note"></span>
+                <button class="btn" id="composer-post"><i class="fas fa-paper-plane"></i> <span>Post Topic</span></button>
+            </div>
         </div>
-        
-        <div class="live-list-container" style="text-align: left;">
-            <h3 class="live-section-title"><i class="fas fa-crown" style="color: gold;"></i> Owner</h3>
-            <div id="live-owner-list"></div>
-            
-            <h3 class="live-section-title" style="margin-top: 30px;"><i class="fas fa-globe" style="color: #cbb27d;"></i> Users</h3>
-            <div id="live-others-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+
+        <div class="controls" data-reveal="up">
+            <div class="field search"><i class="fas fa-magnifying-glass"></i><input class="input" id="search" placeholder="Search…" autocomplete="off"></div>
+            <select class="select" id="sort" aria-label="Sort">
+                <option value="favorites">Most favorited</option>
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="active">Most active</option>
+                <option value="az">A – Z</option>
+            </select>
         </div>
+
+        <div id="topics-feed" class="feed"></div>
+        <div id="testimonies-feed" class="testimony-grid" hidden></div>
     </div>
-</div>
+</main>
 
-    <section class="hero" style="padding-bottom: 20px;">
-        <div class="hero-container">
-            <h1 class="main-title">
-                Spiritual Topics
-                <span class="cross-effect"></span>
-                <span class="cross-wings"></span>
-            </h1>
-            <p class="description">
-                Discuss biblical truths to grow your spiritual journey. Ask questions, seek answers, and share your testimony to encourage the brethren.
-            </p>
-            <p class="verse-reference">"Therefore encourage one another and build each other up..." - 1 Thess 5:11</p>
-        </div>
-    </section>
-
-    <section class="testimony-section">
-        <div class="testimony-header">
-            <h2><i class="fas fa-hands-praying"></i> Testimonies & Spiritual Walk</h2>
-            <p>Share what the Lord has done in your life to encourage others.</p>
-        </div>
-
-        <div class="add-testimony-box">
-            <div class="editor-toolbar">
-                <button type="button" onclick="formatDoc('bold')" title="Bold"><i class="fas fa-bold"></i></button>
-                <button type="button" onclick="formatDoc('italic')" title="Italic"><i class="fas fa-italic"></i></button>
-                <button type="button" onclick="formatDoc('insertUnorderedList')" title="Bullet List"><i class="fas fa-list-ul"></i></button>
-                <button type="button" onclick="formatDoc('insertOrderedList')" title="Numbered List"><i class="fas fa-list-ol"></i></button>
-                <select onchange="formatDoc('fontSize', this.value)" title="Font Size">
-                    <option value="3">Normal Font</option>
-                    <option value="4">Large Font</option>
-                    <option value="5">Huge Title</option>
-                </select>
-            </div>
-            <div id="testimony-text" class="rich-input" contenteditable="true" data-placeholder="Share your testimony here..."></div>
-            <button onclick="submitTestimony()" class="submit-testimony-btn"><i class="fas fa-paper-plane"></i> Post Testimony</button>
-        </div>
-
-        <div class="controls-bar">
-            <div class="search-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" id="testimony-search" placeholder="Search testimonies..." onkeyup="applyTestimonyFilters()">
-            </div>
-            <select id="testimony-sort" class="sort-dropdown" onchange="applyTestimonyFilters()">
-                <option value="favorites">Most Favorited</option>
-                <option value="newest">Latest to Oldest</option>
-                <option value="oldest">Oldest to Latest</option>
-                <option value="az">A - Z</option>
-                <option value="za">Z - A</option>
-            </select>
-        </div>
-
-        <div class="horizontal-feed" id="testimonies-container">
-            <p style="color: #a67c52; font-family: 'Cinzel', serif; font-size: 1.2rem; width:100%; text-align:center;">Loading testimonies...</p>
-        </div>
-    </section>
-
-    <section class="forum-section">
-        
-        <div class="testimony-header">
-            <h2><i class="fas fa-comments"></i> Topics & Discussions</h2>
-            <p>Explore theology, ask questions, and grow together in the Word.</p>
-        </div>
-        
-        <div class="add-testimony-box" style="margin-bottom: 30px;">
-            <h3 style="color:#ffd700; font-family:'Cinzel', serif; margin-bottom: 15px;"><i class="fas fa-plus-circle"></i> Start a New Topic</h3>
-            <div class="editor-toolbar">
-                <button type="button" onclick="formatDoc('bold')" title="Bold"><i class="fas fa-bold"></i></button>
-                <button type="button" onclick="formatDoc('italic')" title="Italic"><i class="fas fa-italic"></i></button>
-                <button type="button" onclick="formatDoc('insertUnorderedList')" title="Bullet List"><i class="fas fa-list-ul"></i></button>
-                <button type="button" onclick="formatDoc('insertOrderedList')" title="Numbered List"><i class="fas fa-list-ol"></i></button>
-                <select onchange="formatDoc('fontSize', this.value)" title="Font Size">
-                    <option value="3">Normal Font</option>
-                    <option value="4">Large Font</option>
-                    <option value="5">Huge Title</option>
-                </select>
-            </div>
-            <div id="new-topic-title" class="rich-input" contenteditable="true" data-placeholder="What is your biblical question or topic?"></div>
-            <button onclick="submitTopic()" class="submit-testimony-btn"><i class="fas fa-paper-plane"></i> Post Topic</button>
-        </div>
-
-        <div class="controls-bar">
-            <div class="search-wrapper">
-                <i class="fas fa-search"></i>
-                <input type="text" id="topic-search" placeholder="Search topics..." onkeyup="applyTopicFilters()">
-            </div>
-            <select id="topic-sort" class="sort-dropdown" onchange="applyTopicFilters()">
-                <option value="favorites">Most Favorited</option>
-                <option value="newest">Latest to Oldest</option>
-                <option value="oldest">Oldest to Latest</option>
-                <option value="az">A - Z</option>
-                <option value="za">Z - A</option>
-            </select>
-        </div>
-
-        <div class="horizontal-feed" id="topics-container">
-            <p style="color: #a67c52; font-family: 'Cinzel', serif; font-size: 1.2rem; width:100%; text-align:center;">Loading topics...</p>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <span class="bible-icon">📖</span>
-        <p>© 2026 Jesus Christ The Truth. All Rights Reserved.</p>
-    </footer>
-
-    <script src="static/script.js"></script>
-    <script src="static/topic.js"></script>
+<script src="static/js/config.js"></script>
+<script src="static/js/api.js"></script>
+<script src="static/js/layout.js"></script>
+<script src="static/js/forum.js"></script>
 </body>
 </html>

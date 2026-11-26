@@ -19,7 +19,7 @@
     transform: translateX(-50%);
     width: 4px;
     height: 100%;
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(246, 217, 139, 0.1);
     border-radius: 2px;
 }
 
@@ -31,9 +31,9 @@
     transform: translateX(-50%);
     width: 6px;
     height: 0%; /* JS will control this */
-    background: linear-gradient(to bottom, #fffdf0, #ffd700, #ff8c00);
+    background: linear-gradient(to bottom, #fffdf0, #f6d98b, #ff8c00);
     border-radius: 3px;
-    box-shadow: 0 0 20px gold, 0 0 40px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px gold, 0 0 40px rgba(246, 217, 139, 0.5);
     z-index: 1;
 }
 
@@ -71,7 +71,7 @@
     width: 24px;
     height: 24px;
     background: radial-gradient(circle, #fff, gold);
-    border: 4px solid #4b2e05;
+    border: 4px solid #1d2463;
     border-radius: 50%;
     z-index: 2;
     box-shadow: 0 0 15px gold;
@@ -101,8 +101,8 @@
 
 /* The Text Box */
 .timeline-box {
-    background: rgba(43, 26, 3, 0.85);
-    border: 2px solid #6b3f0d;
+    background: rgba(16, 22, 58, 0.85);
+    border: 2px solid #2a3170;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -145,7 +145,7 @@
     border-radius: 10px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,0,0,0.9);
+    box-shadow: 0 10px 25px rgba(12,16,46,0.7), inset 0 0 15px rgba(9,12,38,0.88);
     transition: all 0.5s ease;
     filter: brightness(0.6);
 }
@@ -179,7 +179,7 @@
 .timeline-item:hover .square-frame {
     filter: brightness(1.2);
     border-color: gold;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), inset 0 0 20px gold;
+    box-shadow: 0 0 30px rgba(246, 217, 139, 0.4), inset 0 0 20px gold;
     transform: scale(1.05);
 }
 
@@ -206,11 +206,11 @@
 
 .timeline-item.left .timeline-box::before {
     right: -15px;
-    border-left: 15px solid #6b3f0d;
+    border-left: 15px solid #2a3170;
 }
 .timeline-item.right .timeline-box::before {
     left: -15px;
-    border-right: 15px solid #6b3f0d;
+    border-right: 15px solid #2a3170;
 }
 
 .timeline-item:hover .timeline-box::before {
@@ -222,24 +222,24 @@
 .century-tag {
     display: inline-block;
     background: gold;
-    color: #2b1a03;
+    color: #121a48;
     padding: 5px 15px;
     border-radius: 20px;
     font-family: 'Cinzel', serif;
     font-size: 0.9rem;
     margin-bottom: 15px;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 10px rgba(246, 217, 139, 0.5);
 }
 
 .timeline-box h3 {
     font-family: 'Cinzel', serif;
-    color: #ffd700;
+    color: #f6d98b;
     font-size: 1.6rem;
     margin-bottom: 15px;
 }
 
 .timeline-box p {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     color: #fff8e1;
     font-size: 1.1rem;
     line-height: 1.7;
@@ -248,9 +248,9 @@
 /* ================= CHRISTIAN CROSS SYMBOLS SECTION ================= */
 .cross-symbols-section {
     padding: 80px 20px;
-    background: radial-gradient(circle at top center, #1a1005 0%, #0a0602 100%);
-    border-top: 2px dashed rgba(255, 215, 0, 0.2);
-    border-bottom: 2px dashed rgba(255, 215, 0, 0.2);
+    background: radial-gradient(circle at top center, rgba(255,226,160,.08) 0%, transparent 70%);
+    border-top: 2px dashed rgba(246, 217, 139, 0.2);
+    border-bottom: 2px dashed rgba(246, 217, 139, 0.2);
 }
 
 .cross-grid {
@@ -284,7 +284,7 @@
     margin-bottom: 30px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    border-bottom: 1px solid rgba(246, 217, 139, 0.3);
     padding-bottom: 10px;
 }
 
@@ -316,12 +316,12 @@
 
 /* 2. Orthodox Cross (Byzantine Gold Glow) */
 .orthodox-cross {
-    color: #d4af37;
-    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    color: #e0b252;
+    filter: drop-shadow(0 0 10px rgba(224, 178, 82, 0.4));
 }
 .cross-col:hover .orthodox-cross {
     transform: scale(1.1);
-    filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.8));
+    filter: drop-shadow(0 0 25px rgba(224, 178, 82, 0.8));
 }
 
 /* 3. Catholic Cross (Wood & Glowing Gold Corpus) */
@@ -336,13 +336,13 @@
 /* Text Details */
 .cross-details h4 {
     font-family: 'Cinzel', serif;
-    color: #ffd700;
+    color: #f6d98b;
     font-size: 1.3rem;
     margin-bottom: 15px;
 }
 
 .cross-details p {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     color: #cccccc;
     font-size: 1.1rem;
     line-height: 1.6;
@@ -351,7 +351,7 @@
 /* Vertical Dividers */
 .cross-divider {
     width: 2px;
-    background: linear-gradient(to bottom, transparent, rgba(255, 215, 0, 0.5), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(246, 217, 139, 0.5), transparent);
     border-radius: 50%;
     margin: 0 10px;
 }
@@ -359,7 +359,7 @@
 /* ================= TRUE CHURCH SECTION ================= */
 .true-church-section {
     padding: 80px 20px;
-    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(246, 217, 139, 0.05) 0%, transparent 70%);
 }
 
 .church-subtitle {
@@ -368,7 +368,7 @@
     color: #fff8e1;
     font-size: 1.8rem;
     margin-bottom: 50px;
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    text-shadow: 0 0 10px rgba(12,16,46,0.8);
     letter-spacing: 2px;
 }
 
@@ -376,10 +376,10 @@
 .church-tabs-container {
     max-width: 1100px;
     margin: 0 auto;
-    background: rgba(43, 26, 3, 0.85);
+    background: rgba(16, 22, 58, 0.85);
     border-radius: 20px;
-    border: 2px solid #6b3f0d;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    border: 2px solid #2a3170;
+    box-shadow: 0 15px 40px rgba(12,16,46,0.6);
     overflow: hidden;
 }
 
@@ -400,14 +400,14 @@
 .tab-buttons {
     display: flex;
     justify-content: center;
-    background: rgba(26, 15, 2, 0.9);
-    border-bottom: 2px solid #6b3f0d;
+    background: rgba(16, 22, 58, 0.88);
+    border-bottom: 2px solid #2a3170;
 }
 
 .tab-btn {
     flex: 1;
     background: transparent;
-    color: #ffd700;
+    color: #f6d98b;
     border: none;
     padding: 25px 15px;
     font-family: 'Cinzel', serif;
@@ -418,12 +418,12 @@
 }
 
 .tab-btn:hover {
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(246, 217, 139, 0.1);
     color: #fff;
 }
 
 .tab-btn.active {
-    background: rgba(255, 215, 0, 0.15);
+    background: rgba(246, 217, 139, 0.15);
     color: #fff;
     border-bottom: 4px solid gold;
     text-shadow: 0 0 10px gold;
@@ -457,11 +457,11 @@
     color: gold;
     font-size: 1.8rem;
     margin-bottom: 20px;
-    text-shadow: 0 0 15px rgba(255,215,0,0.3);
+    text-shadow: 0 0 15px rgba(246,217,139,0.3);
 }
 
 .tab-text p {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     color: #fff8e1;
     font-size: 1.15rem;
     line-height: 1.8;
@@ -481,7 +481,7 @@
     width: 8px;
 }
 .scrollable-tab::-webkit-scrollbar-track {
-    background: rgba(43, 26, 3, 0.5);
+    background: rgba(16, 22, 58, 0.5);
     border-radius: 4px;
 }
 .scrollable-tab::-webkit-scrollbar-thumb {
@@ -498,7 +498,7 @@
     margin-top: 25px;
     font-family: 'Cinzel', serif;
     font-size: 0.95rem;
-    color: #ffd700;
+    color: #f6d98b;
     text-decoration: none;
     border-bottom: 1px solid transparent;
     transition: all 0.3s ease;
@@ -516,7 +516,7 @@
     margin-top: 20px;
 }
 .bible-books-list li {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     color: #fff8e1;
     font-size: 1.1rem;
     line-height: 1.6;
@@ -547,7 +547,7 @@
 }
 .saint-info h4 {
     font-family: 'Cinzel', serif;
-    color: #ffd700;
+    color: #f6d98b;
     font-size: 1.3rem;
     margin-bottom: 10px;
 }
@@ -559,10 +559,10 @@
     flex-shrink: 0;
     width: 120px;
     height: 120px;
-    border: 3px solid #6b3f0d;
+    border: 3px solid #2a3170;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0 0 15px rgba(0,0,0,0.8);
+    box-shadow: 0 0 15px rgba(12,16,46,0.8);
 }
 .saint-img-frame img {
     width: 100%;
@@ -581,9 +581,9 @@
     width: 100%;
     max-width: 400px;
     padding: 10px;
-    background: linear-gradient(135deg, #ffd700, #8b6b23, #ffd700);
+    background: linear-gradient(135deg, #f6d98b, #8b6b23, #f6d98b);
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 10px rgba(255,255,255,0.5);
+    box-shadow: 0 10px 30px rgba(12,16,46,0.8), inset 0 0 10px rgba(255,255,255,0.5);
     transition: transform 0.5s ease, filter 0.5s ease;
     filter: brightness(0.85);
 }
@@ -591,14 +591,14 @@
 .tab-content:hover .ornate-frame {
     transform: scale(1.03);
     filter: brightness(1.1);
-    box-shadow: 0 15px 40px rgba(255,215,0,0.4), inset 0 0 15px #fff;
+    box-shadow: 0 15px 40px rgba(246,217,139,0.4), inset 0 0 15px #fff;
 }
 
 .ornate-frame img {
     width: 100%;
     height: auto;
     display: block;
-    border: 6px solid #1a0f02;
+    border: 6px solid #0a0f2e;
     border-radius: 5px;
 }
 
@@ -609,7 +609,7 @@
 }
 
 .catholic-theme .tab-btn:hover {
-    background: rgba(255, 215, 0, 0.05);
+    background: rgba(246, 217, 139, 0.05);
 }
 
 .catholic-theme .tab-btn.active {
@@ -624,10 +624,10 @@
     max-width: 380px;
     height: 500px;
     padding: 8px;
-    background: linear-gradient(135deg, #8b2323, #4a0e0e, #ffd700);
+    background: linear-gradient(135deg, #8b2323, #4a0e0e, #f6d98b);
     /* The Gothic Cathedral Arch Shape */
     border-radius: 150px 150px 10px 10px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,215,0,0.4);
+    box-shadow: 0 15px 40px rgba(12,16,46,0.8), inset 0 0 15px rgba(246,217,139,0.4);
     transition: transform 0.6s ease, filter 0.6s ease;
     filter: brightness(0.9);
     position: relative;
@@ -638,7 +638,7 @@
     content: '';
     position: absolute;
     inset: 12px;
-    border: 2px solid rgba(255, 215, 0, 0.5);
+    border: 2px solid rgba(246, 217, 139, 0.5);
     border-radius: 140px 140px 5px 5px;
     pointer-events: none;
     z-index: 5;
@@ -692,9 +692,9 @@
     background: linear-gradient(135deg, #1e3c72, #2a5298);
     border-radius: 3px;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.7),
-        0 0 0 6px #1a0f02, /* Inner dark border */
-        0 0 0 10px #ffd700; /* Outer gold border */
+        0 15px 35px rgba(12,16,46,0.7),
+        0 0 0 6px #0a0f2e, /* Inner dark border */
+        0 0 0 10px #f6d98b; /* Outer gold border */
     transition: transform 0.6s ease, filter 0.6s ease;
     filter: brightness(0.9);
     margin: 10px; /* Space for the box-shadow expansion */
@@ -705,7 +705,7 @@
     filter: brightness(1.1);
     box-shadow: 
         0 20px 45px rgba(77, 168, 218, 0.3),
-        0 0 0 6px #1a0f02, 
+        0 0 0 6px #0a0f2e, 
         0 0 0 12px #fff; /* Outer border turns white on hover */
 }
 
@@ -747,7 +747,7 @@
     /* Unique Shape: 2 rounded corners, 2 sharp corners */
     border-radius: 40px 5px 40px 5px; 
     box-shadow: 
-        0 10px 30px rgba(0,0,0,0.6),
+        0 10px 30px rgba(12,16,46,0.6),
         inset 0 0 10px rgba(0, 229, 255, 0.3);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
     filter: brightness(0.85);
@@ -799,14 +799,14 @@
     width: 100%;
     max-width: 380px;
     padding: 10px;
-    background: #2b1a03;
-    border: 12px solid #1a0f02; /* Thick outer dark wood border */
+    background: #121a48;
+    border: 12px solid #0a0f2e; /* Thick outer dark wood border */
     border-radius: 8px;
     position: relative;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.8),
+        0 15px 35px rgba(12,16,46,0.8),
         inset 0 0 0 4px #5c3a0a, /* Inner lighter wood trim */
-        inset 0 0 15px rgba(0,0,0,0.9);
+        inset 0 0 15px rgba(9,12,38,0.88);
     transition: transform 0.6s ease, filter 0.6s ease;
     filter: brightness(0.9) sepia(0.2); /* Slight vintage parchment feel */
 }
@@ -817,7 +817,7 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background: #0d0802;
+    background: #0a0f2e;
     border-radius: 50%;
     box-shadow: inset 1px 1px 2px rgba(255,255,255,0.2);
     z-index: 5;
@@ -860,8 +860,8 @@
 
 .anglican-theme .tab-btn.active {
     background: rgba(65, 30, 90, 0.8);
-    border-bottom: 4px solid #d4af37; /* Royal Metallic Gold */
-    text-shadow: 0 0 10px #d4af37;
+    border-bottom: 4px solid #e0b252; /* Royal Metallic Gold */
+    text-shadow: 0 0 10px #e0b252;
 }
 
 /* Tudor Arch Frame Design (Rounded top, flat bottom) */
@@ -871,11 +871,11 @@
     padding: 8px;
     background: linear-gradient(135deg, #462066, #2a1040);
     border-radius: 180px 180px 8px 8px; /* High arch top */
-    border: 3px solid #d4af37;
+    border: 3px solid #e0b252;
     position: relative;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.8),
-        inset 0 0 20px rgba(0,0,0,0.6);
+        0 15px 35px rgba(12,16,46,0.8),
+        inset 0 0 20px rgba(12,16,46,0.6);
     transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.9);
 }
@@ -885,7 +885,7 @@
     content: '';
     position: absolute;
     inset: 12px;
-    border: 2px dashed rgba(212, 175, 55, 0.6);
+    border: 2px dashed rgba(224, 178, 82, 0.6);
     border-radius: 170px 170px 5px 5px;
     pointer-events: none;
     z-index: 5;
@@ -897,11 +897,11 @@
     filter: brightness(1.1);
     box-shadow: 
         0 25px 45px rgba(70, 32, 102, 0.6), /* Purple glowing shadow */
-        0 0 0 4px rgba(212, 175, 55, 0.3); /* Outer faint gold halo */
+        0 0 0 4px rgba(224, 178, 82, 0.3); /* Outer faint gold halo */
 }
 
 .tab-content:hover .tudor-frame::before {
-    border: 2px solid #d4af37; /* Dashes become solid on hover */
+    border: 2px solid #e0b252; /* Dashes become solid on hover */
 }
 
 .tudor-frame img {
@@ -911,7 +911,7 @@
     display: block;
     object-fit: cover;
     border-radius: 170px 170px 4px 4px;
-    border: 4px solid #1a0f02;
+    border: 4px solid #0a0f2e;
     transition: transform 0.8s ease;
 }
 
@@ -948,8 +948,8 @@
     border-radius: 4px;
     position: relative;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.8),
-        inset 0 0 15px rgba(0,0,0,0.9);
+        0 15px 35px rgba(12,16,46,0.8),
+        inset 0 0 15px rgba(9,12,38,0.88);
     transition: transform 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.9);
 }
@@ -971,7 +971,7 @@
     filter: brightness(1.1);
     box-shadow: 
         0 25px 45px rgba(45, 94, 64, 0.4), /* Green glowing shadow */
-        inset 0 0 20px rgba(0,0,0,0.7);
+        inset 0 0 20px rgba(12,16,46,0.7);
 }
 
 .tab-content:hover .geneva-frame::before {
@@ -1013,14 +1013,14 @@
     width: 100%;
     max-width: 360px;
     padding: 6px;
-    background: #120804;
+    background: #0a0f2e;
     border-radius: 8px;
     position: relative;
     /* Offset fiery shadow to give it movement */
     box-shadow: 
         8px 8px 0px rgba(255, 69, 0, 0.4),
         -8px -8px 0px rgba(255, 140, 0, 0.4),
-        0 15px 35px rgba(0,0,0,0.8);
+        0 15px 35px rgba(12,16,46,0.8);
     transition: transform 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
     filter: brightness(0.9);
 }
@@ -1044,11 +1044,11 @@
     box-shadow: 
         0px 0px 30px rgba(255, 69, 0, 0.7),
         0px 0px 50px rgba(255, 140, 0, 0.5),
-        0 15px 35px rgba(0,0,0,0.8);
+        0 15px 35px rgba(12,16,46,0.8);
 }
 
 .tab-content:hover .flame-frame::after {
-    border-color: rgba(255, 215, 0, 0.8);
+    border-color: rgba(246, 217, 139, 0.8);
 }
 
 .flame-frame img {
@@ -1110,7 +1110,7 @@
     position: relative;
     box-shadow: 
         20px 20px 0px rgba(10, 15, 20, 0.9), /* Heavy dark offset */
-        inset 0 0 20px rgba(0,0,0,1);
+        inset 0 0 20px rgba(6,9,30,1);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.5s ease;
     filter: brightness(0.8) contrast(1.2);
 }
@@ -1291,7 +1291,7 @@
     position: relative;
     box-shadow: 
         0 -15px 30px rgba(0,0,0,0.5), /* Shadow pushes up */
-        inset 0 15px 30px rgba(0,0,0,0.8);
+        inset 0 15px 30px rgba(12,16,46,0.8);
     transition: transform 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.7) grayscale(60%); /* Drained of color and life */
     /* CSS Mask to fade the image into nothingness at the bottom */
@@ -1304,7 +1304,7 @@
     filter: brightness(1) grayscale(20%); /* Regains slight color on hover */
     box-shadow: 
         0 -20px 45px rgba(196, 183, 143, 0.15), /* Ghostly gold glow */
-        inset 0 20px 40px rgba(0,0,0,0.9);
+        inset 0 20px 40px rgba(9,12,38,0.88);
 }
 
 .hollow-frame img {
@@ -1370,7 +1370,7 @@
     box-shadow: 
         5px 5px 15px rgba(255, 0, 127, 0.15),
         -5px -5px 15px rgba(0, 255, 255, 0.15),
-        inset 0 0 20px rgba(0,0,0,0.9);
+        inset 0 0 20px rgba(9,12,38,0.88);
     transition: transform 0.6s ease, filter 0.6s ease;
     filter: brightness(0.85);
     z-index: 1;
@@ -1473,7 +1473,7 @@
     border-left: 6px solid #00ffcc; /* Sci-fi accent line */
     position: relative;
     box-shadow: 
-        10px 10px 25px rgba(0,0,0,0.8),
+        10px 10px 25px rgba(12,16,46,0.8),
         inset 0 0 15px rgba(0, 255, 204, 0.05);
     transition: transform 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.9);
@@ -1572,7 +1572,7 @@
     border-radius: 180px 180px 10px 10px; /* High arch */
     position: relative;
     box-shadow: 
-        0 20px 30px rgba(0,0,0,0.8),
+        0 20px 30px rgba(12,16,46,0.8),
         inset 0 0 15px rgba(212, 160, 23, 0.1);
     transition: transform 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.9);
@@ -1595,7 +1595,7 @@
     transform: translateY(-8px);
     filter: brightness(1.05);
     box-shadow: 
-        0 25px 40px rgba(0,0,0,0.9),
+        0 25px 40px rgba(9,12,38,0.88),
         0 0 20px rgba(212, 160, 23, 0.2); /* Bronze glow */
 }
 
@@ -1661,7 +1661,7 @@
     border-radius: 50% 50% 10px 10px; /* Bulbous top, flat bottom */
     position: relative;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.9),
+        0 15px 35px rgba(9,12,38,0.88),
         inset 0 0 0 2px #333;
     transition: transform 0.6s ease, filter 0.6s ease;
     filter: brightness(0.85);
@@ -1684,7 +1684,7 @@
     transform: scale(1.02);
     filter: brightness(1.1);
     box-shadow: 
-        0 20px 45px rgba(0,0,0,1),
+        0 20px 45px rgba(6,9,30,1),
         0 0 30px rgba(255, 255, 255, 0.1); /* Silver glow */
 }
 
@@ -1749,7 +1749,7 @@
     /* Uses clip-path to literally cut the frame into a sharp, irregular shard */
     clip-path: polygon(5% 0, 100% 5%, 95% 100%, 0 95%);
     border: 4px solid #ff0055;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.9);
+    box-shadow: 0 15px 30px rgba(9,12,38,0.88);
     transition: transform 0.4s ease, filter 0.4s ease;
     filter: brightness(0.8) contrast(1.2);
 }
@@ -1792,7 +1792,7 @@
 .moonie-theme .tab-btn { color: #a8a38c; }
 
 .moonie-theme .tab-btn:hover {
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(246, 217, 139, 0.1);
     color: #fff;
 }
 
@@ -1823,7 +1823,7 @@
     border-radius: 50% 50% 10px 10px; /* Dome/Mirror shape */
     border: 2px solid #807340;
     position: relative;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+    box-shadow: 0 15px 35px rgba(12,16,46,0.8);
     transition: transform 0.6s ease, box-shadow 0.6s ease;
     filter: brightness(0.9);
 }
@@ -1844,7 +1844,7 @@
     transform: scale(1.02) translateY(-5px);
     filter: brightness(1.1);
     box-shadow: 
-        0 20px 40px rgba(0,0,0,1),
+        0 20px 40px rgba(6,9,30,1),
         0 0 30px rgba(255, 230, 128, 0.3); /* Bright golden glow */
     border-color: #ffe680;
 }
@@ -1908,7 +1908,7 @@
     position: relative;
     clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); /* Slanted parallelogram */
     border: 3px solid #5a6e50;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 15px 30px rgba(12,16,46,0.8);
     transition: transform 0.5s ease, clip-path 0.5s ease, filter 0.5s ease;
     filter: brightness(0.9) sepia(0.2);
 }
@@ -1975,7 +1975,7 @@
     border: 3px solid #ff6600;
     position: relative;
     box-shadow: 
-        0 15px 35px rgba(0,0,0,0.9),
+        0 15px 35px rgba(9,12,38,0.88),
         inset 0 0 20px rgba(255, 102, 0, 0.3);
     transition: transform 0.6s ease, border-radius 0.6s ease, filter 0.6s ease;
     filter: brightness(0.85);
@@ -1992,7 +1992,7 @@
     transform: scale(1.02) rotate(3deg);
     filter: brightness(1.1);
     box-shadow: 
-        0 20px 45px rgba(0,0,0,1),
+        0 20px 45px rgba(6,9,30,1),
         0 0 40px rgba(255, 102, 0, 0.4), /* Toxic orange glow */
         inset 0 0 30px rgba(255, 153, 255, 0.3); /* Magenta inner glow */
     border-color: #ff99ff;
@@ -2039,7 +2039,7 @@
     padding: 35px 25px;
     text-align: center;
     position: relative;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+    box-shadow: 0 10px 25px rgba(9,12,38,0.88);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
     overflow: hidden;
     display: flex;
@@ -2061,7 +2061,7 @@
     transform: translateY(-12px);
     border-color: #ff3333;
     box-shadow: 
-        0 20px 40px rgba(0,0,0,1),
+        0 20px 40px rgba(6,9,30,1),
         0 0 25px rgba(255, 51, 51, 0.15); /* Crimson warning glow */
 }
 
@@ -2100,9 +2100,9 @@
 }
 
 .doc-origin {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 0.95rem;
-    color: #a67c52; /* Faded bronze for history */
+    color: #b9b6cc; /* Faded bronze for history */
     margin-bottom: 15px;
     font-style: italic;
     border-bottom: 1px solid #331414;
@@ -2111,7 +2111,7 @@
 .doc-origin strong { color: #cc9966; }
 
 .doc-lie, .doc-truth {
-    font-family: 'Cardo', serif;
+    font-family: 'EB Garamond', serif;
     font-size: 1.05rem;
     line-height: 1.6;
     margin-bottom: 15px;
@@ -2170,17 +2170,13 @@
     .nav-links { display: none; }
     .nav-right { display: none; } 
     .menu-icon { display: block; } 
-    .navbar { padding: 0 30px; }
-    
     .doctrine-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* --- TABLET (Max 900px) --- */
 @media (max-width: 900px) {
     /* 1. Navbar & Hero */
-    .navbar { height: 70px; padding: 0 40px; }
     .logo { height: 60px; }
-    .hero { padding: 140px 20px 80px; }
     .hero-container { padding: 30px 20px; }
     .cross-effect { transform: translateX(-50%) scale(0.8); top: -120px; }
     .cross-wings { transform: translateX(-50%) scale(0.6); top: -160px; }
@@ -2206,7 +2202,7 @@
     .timeline-item.left .timeline-box::before, .timeline-item.right .timeline-box::before {
         left: -15px; 
         right: auto;
-        border-right: 15px solid #6b3f0d;
+        border-right: 15px solid #2a3170;
         border-left: none;
     }
 
@@ -2233,7 +2229,7 @@
         width: 80%; 
         height: 2px;
         margin: 30px 0;
-        background: linear-gradient(to right, transparent, rgba(255, 215, 0, 0.5), transparent);
+        background: linear-gradient(to right, transparent, rgba(246, 217, 139, 0.5), transparent);
     }
 
     /* 4. Tab Buttons & Content */
@@ -2259,13 +2255,8 @@
 /* --- MOBILE PHONES (Max 600px) --- */
 @media (max-width: 600px) {
     /* Navbar & Hero Shrink */
-    .navbar { height: 60px; padding: 0 15px; }
     .logo { height: 45px; }
-    .hero { padding: 120px 15px 60px; }
     .hero-container { padding: 25px 15px; border-radius: 15px; }
-    .main-title { font-size: 1.6rem; white-space: normal; }
-    .description { font-size: 1rem; line-height: 1.6; }
-    
     /* Typography Adjustments */
     .gospel-title, .church-subtitle { font-size: 1.5rem; margin-bottom: 30px; }
     .timeline-box h3 { font-size: 1.4rem; }

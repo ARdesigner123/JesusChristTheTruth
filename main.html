@@ -2,549 +2,248 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Jesus Christ The Truth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="static/style.css">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Home · Jesus Christ The Truth</title>
+    <meta name="description" content="The true Gospel of Jesus Christ, the Holy Trinity, the Holy Family and the Twelve Apostles.">
+    <meta name="theme-color" content="#090f2e">
+    <link rel="icon" href="static/image/jesusLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="static/css/theme.css">
+    <link rel="stylesheet" href="static/css/home.css">
 </head>
-<body>
+<body data-page="home" data-auth="none">
+<main>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-left">
-            <img src="static/image/jesusLogo.png" alt="Jesus Logo" class="logo">
-            <a href="profile.html" class="nav-profile-icon" title="My Profile">
-                <img src="static/image/profileIcon.png" alt="Profile" class="profile-img-icon">
-            </a>
-        </div>
-
-        <ul class="nav-links">
-            <div class="nav-indicator"></div>
-            <li><a href="main.html" class="active">Home</a></li>
-            <li><a href="bible.html">Bible</a></li>
-            <li><a href="church.html">Church</a></li>
-            <li><a href="topic.html">Topics</a></li>
-            <li><a href="#">About Me</a></li>
-            <li><a href="#">Games</a></li> <li><a href="#">Store</a></li>
-        </ul>
-
-        <div class="nav-right">
-            <div class="live-user-container" title="Live Believers Online">
-                <i class="fas fa-users" style="color: #4da6ff;"></i>
-                <span id="live-user-count" class="live-count-badge">1</span>
+    <!-- ================= HERO ================= -->
+    <section class="home-hero">
+        <div class="hero-halo"></div>
+        <div class="hero-container hero-enter">
+            <div class="hero-cross"></div>
+            <p class="eyebrow">The Way · The Truth · The Life</p>
+            <h1 class="main-title shimmer-text">Jesus Christ The Truth</h1>
+            <p class="description">“For God so loved the world that He gave His one and only Son, that whoever believes in Him shall not perish but have eternal life.”</p>
+            <p class="verse-reference">John 3:16 (NIV)</p>
+            <div class="hero-ctas">
+                <a href="#gospel" class="btn btn-lg"><i class="fas fa-book-bible"></i> Read the Gospel</a>
+                <a href="topic.html" class="btn btn-ghost btn-lg"><i class="fas fa-comments"></i> Join the Discussion</a>
             </div>
-            
-            <a href="chatbot.html" class="nav-icon" title="Chatbot"><i class="fas fa-robot"></i></a>
-            <a href="index.html" class="nav-icon logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
         </div>
-
-        <div class="dropdown" id="dropdownMenu">
-            <ul class="mobile-nav-links">
-                <li><a href="main.html" class="active">Home</a></li>
-                <li><a href="bible.html">Bible</a></li>
-                <li><a href="church.html">Church</a></li>
-                <li><a href="topic.html">Topics</a></li>
-                <li><a href="#">About Me</a></li>
-                <li><a href="#">Games</a></li> 
-                <li><a href="#">Store</a></li>
-                <hr class="mobile-divider">
-                <li><a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot</a></li>
-                <li><a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
+        <div class="stats-strip glass" data-reveal="up" style="--d:.9s">
+            <div class="stat"><span class="num" data-count="users">—</span><span class="lbl">Believers</span></div>
+            <div class="stat"><span class="num" data-count="live">—</span><span class="lbl">Online now</span></div>
+            <div class="stat"><span class="num" data-count="topics">—</span><span class="lbl">Topics</span></div>
+            <div class="stat"><span class="num" data-count="testimonies">—</span><span class="lbl">Testimonies</span></div>
         </div>
+        <a href="#painting" class="scroll-cue" aria-label="Scroll down"><span></span></a>
+    </section>
 
-        <div class="menu-icon" id="menuIcon">
-            <i class="fas fa-bars"></i>
-        </div>
-    </nav>
+    <!-- ================= PRINCE OF PEACE ================= -->
+    <section class="section" id="painting">
+        <div class="container">
+            <div class="section-head" data-reveal="up">
+                <span class="eyebrow">Sacred Art</span>
+                <h2>Prince of Peace</h2>
+                <p>A painting by Akiane Kramarik</p>
+            </div>
 
-    <!-- LIVE USERS MODAL -->
-    <div id="live-users-modal" class="custom-popup-modal">
-    <div class="popup-modal-content" style="max-width: 500px; text-align: center;">
-        <i class="fas fa-times close-modal-icon" onclick="closeModal('live-users-modal')"></i>
-        
-        <div class="modal-header" style="margin-bottom: 25px;">
-            <i class="fas fa-users title-icon" style="color: #4da6ff; font-size: 2.5rem; margin-bottom: 10px;"></i>
-            <h2 class="popup-title">Live Believers</h2>
-            <p style="color: #a67c52; font-family: 'Cardo', serif;">Brethren currently online</p>
-        </div>
-        
-        <div class="live-list-container" style="text-align: left;">
-            <h3 class="live-section-title"><i class="fas fa-crown" style="color: gold;"></i> Owner</h3>
-            <div id="live-owner-list"></div>
-            
-            <h3 class="live-section-title" style="margin-top: 30px;"><i class="fas fa-globe" style="color: #cbb27d;"></i> Users</h3>
-            <div id="live-others-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
-        </div>
-    </div>
-</div>
+            <div class="art-showcase">
+                <figure class="art-frame main" data-reveal="left">
+                    <img src="static/image/jesusPainting.jpg" alt="Prince of Peace painting of Jesus by Akiane Kramarik" loading="lazy">
+                    <figcaption>“Prince of Peace”, 2003</figcaption>
+                </figure>
+                <figure class="art-frame side" data-reveal="right">
+                    <img src="static/image/akiane.jpg" alt="Akiane Kramarik" loading="lazy">
+                    <figcaption>Akiane Kramarik</figcaption>
+                </figure>
+            </div>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-container">
-            <h1 class="main-title">
-                Jesus Christ The Truth
-                <span class="cross-effect"></span>
-                <span class="cross-wings"></span>
-            </h1>
+            <div class="art-grid">
+                <article class="card card-hover" data-reveal="up">
+                    <h3><i class="fas fa-palette"></i> The Painting</h3>
+                    <p><strong>“Prince of Peace”</strong> is a world-renowned portrait of Jesus Christ painted in 2003 by Akiane Kramarik when she was just eight years old. The artwork is celebrated for its extraordinary realism, emotional depth, and its powerful expression of peace, love, and compassion.</p>
+                </article>
+                <article class="card card-hover" data-reveal="up" style="--d:.1s">
+                    <h3><i class="fas fa-eye"></i> How It Came About</h3>
+                    <p>From a very young age, Akiane experienced vivid spiritual visions that inspired her to create art. She spent years searching for a face that matched what she saw in her visions.</p>
+                    <p>Eventually, a traveling carpenter came to her home and became the model for the painting, allowing her to bring her vision of Jesus Christ to life.</p>
+                </article>
+                <article class="card card-hover" data-reveal="up" style="--d:.2s">
+                    <h3><i class="fas fa-gem"></i> Details Of The Artwork</h3>
+                    <p>The painting was completed in approximately <strong>40 hours</strong> using oil on canvas. It is known for its luminous quality, intricate detail, and lifelike expression.</p>
+                    <p>The original piece was later stolen and remained hidden for nearly <strong>16 years</strong> before being recovered. Today, it is displayed at the Belóved Gallery in Texas.</p>
+                </article>
+                <article class="card card-hover" data-reveal="up" style="--d:.3s">
+                    <h3><i class="fas fa-feather-pointed"></i> About Akiane Kramarik</h3>
+                    <p>Akiane Kramarik is a child prodigy artist and poet who began painting at a very young age. Her works are often inspired by her spiritual experiences and have gained global recognition.</p>
+                    <p>She has created multiple paintings of Jesus Christ, including <em>“Father Forgive Them”</em> and other powerful interpretations of faith and divinity.</p>
+                </article>
+            </div>
 
-            <p class="description">
-                "For God so loved the world that He gave His one and only Son,
-                that whoever believes in Him shall not perish but have eternal life."
-            </p>
+            <blockquote class="art-quote" data-reveal="zoom">
+                <p>“Art is not what you see, but what you make others see.”</p>
+                <cite>— Akiane Kramarik</cite>
+            </blockquote>
 
-            <p class="verse-reference">
-                — John 3:16 (NIV)
-            </p>
+            <details class="references" data-reveal="up">
+                <summary><i class="fas fa-book"></i> References (Harvard style)</summary>
+                <ul>
+                    <li>Akiane Kramarik (2023). <i>Prince of Peace</i>. Available at: <a href="https://akiane.com" target="_blank" rel="noopener">https://akiane.com</a></li>
+                    <li>Belóved Gallery (2023). <i>Prince of Peace Exhibition</i>. Available at: <a href="https://belovedgallery.org" target="_blank" rel="noopener">https://belovedgallery.org</a></li>
+                    <li>Art &amp; Faith Journal (2020). <i>The Story Behind Akiane's Paintings</i>. Available at: <a href="https://artandfaithjournal.com" target="_blank" rel="noopener">https://artandfaithjournal.com</a></li>
+                </ul>
+            </details>
         </div>
     </section>
 
-    <!-- GOSPEL SECTION -->
-    <section class="gospel">
-    <div class="gospel-container">
-
-        <!-- PRINCE OF PEACE SECTION -->
-        <div class="art-container">
-            <h2 class="art-title">
-                Prince of Peace — Painting by Akiane Kramarik
-            </h2>
-
-            <!-- Images Row -->
-            <div class="art-images">
-                <img src="static/image/jesusPainting.jpg" alt="Prince of Peace Painting">
-                <img src="static/image/akiane.jpg" alt="Akiane Kramarik">
+    <!-- ================= THE GOSPEL ================= -->
+    <section class="section gospel" id="gospel">
+        <div class="container">
+            <div class="section-head" data-reveal="up">
+                <span class="eyebrow">Good News</span>
+                <h2>The True Gospel of Jesus Christ</h2>
+                <p>Twelve truths of Scripture, from the holiness of God to the gift of eternal life.</p>
             </div>
+            <ol class="gospel-path" id="gospel-path"></ol>
+        </div>
+    </section>
 
-            <!-- SECTION 1: THE PAINTING -->
-            <div class="art-section">
-                <h3>✧ The Painting</h3>
-                <p>
-                    <strong>“Prince of Peace”</strong> is a world-renowned portrait of Jesus Christ painted in 2003 by Akiane Kramarik when she was just eight years old.
-                    The artwork is celebrated for its extraordinary realism, emotional depth, and its powerful expression of peace, love, and compassion.
-                </p>
+    <!-- ================= TRINITY ================= -->
+    <section class="section trinity">
+        <div class="container">
+            <div class="section-head" data-reveal="up">
+                <span class="eyebrow">One God</span>
+                <h2>The Holy Trinity</h2>
             </div>
-
-            <!-- SECTION 2: HOW IT CAME ABOUT -->
-            <div class="art-section">
-                <h3>✧ How The Painting Came About</h3>
-                <p>
-                    From a very young age, Akiane experienced vivid spiritual visions that inspired her to create art.
-                    She spent years searching for a face that matched what she saw in her visions.
-                </p>
-                <p>
-                    Eventually, a traveling carpenter came to her home and became the model for the painting,
-                    allowing her to bring her vision of Jesus Christ to life.
-                </p>
-            </div>
-
-            <!-- SECTION 3: DETAILS OF THE PAINTING -->
-            <div class="art-section">
-                <h3>✧ Details Of The Artwork</h3>
-                <p>
-                    The painting was completed in approximately <strong>40 hours</strong> using oil on canvas.
-                    It is known for its luminous quality, intricate detail, and lifelike expression.
-                </p>
-                <p>
-                    The original piece was later stolen and remained hidden for nearly <strong>16 years</strong>
-                    before being recovered. Today, it is displayed at the Belóved Gallery in Texas.
-                </p>
-            </div>
-
-            <!-- SECTION 4: ABOUT THE ARTIST -->
-            <div class="art-section">
-                <h3>✧ About Akiane Kramarik</h3>
-                <p>
-                    Akiane Kramarik is a child prodigy artist and poet who began painting at a very young age.
-                    Her works are often inspired by her spiritual experiences and have gained global recognition.
-                </p>
-                <p>
-                    She has created multiple paintings of Jesus Christ, including
-                    <em>“Father Forgive Them”</em> and other powerful interpretations of faith and divinity.
-                </p>
-            </div>
-
-            <!-- QUOTE -->
-            <div class="art-quote">
-                <p>“Art is not what you see, but what you make others see.”</p>
-                <span>— Akiane Kramarik</span>
-            </div>
-
-            <!-- REFERENCES -->
-            <div class="art-references">
-                <p><strong>References (Harvard Style):</strong></p>
-                <ul>
-                    <li>
-                        Akiane Kramarik (2023). <i>Prince of Peace</i>. 
-                        Available at: 
-                        <a href="https://akiane.com" target="_blank">https://akiane.com</a>
-                    </li>
-                    <li>
-                        Belóved Gallery (2023). <i>Prince of Peace Exhibition</i>. 
-                        Available at: 
-                        <a href="https://belovedgallery.org" target="_blank">https://belovedgallery.org</a>
-                    </li>
-                    <li>
-                        Art & Faith Journal (2020). <i>The Story Behind Akiane's Paintings</i>.
-                        Available at: 
-                        <a href="https://artandfaithjournal.com" target="_blank">https://artandfaithjournal.com</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <h2 class="gospel-title">The True Gospel Of Jesus Christ</h2>
-
-        <div class="gospel-grid">
-
-        <div class="gospel-block">
-            <h3>1. God Is Holy</h3>
-            <p>
-                “Holy, holy, holy is the Lord Almighty;
-                the whole earth is full of His glory.”
-            </p>
-            <span>— Isaiah 6:3 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>2. All Have Sinned</h3>
-            <p>
-                “For all have sinned and fall short of the glory of God.”
-            </p>
-            <span>— Romans 3:23 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>3. The Consequence Of Sin</h3>
-            <p>
-                “For the wages of sin is death, but the gift of God is eternal life
-                in Christ Jesus our Lord.”
-            </p>
-            <span>— Romans 6:23 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>4. Christ Died For Us</h3>
-            <p>
-                “But God demonstrates His own love for us in this:
-                While we were still sinners, Christ died for us.”
-            </p>
-            <span>— Romans 5:8 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>5. Salvation Through Jesus Alone</h3>
-            <p>
-                “Jesus answered, 'I am the way and the truth and the life.
-                No one comes to the Father except through me.'”
-            </p>
-            <span>— John 14:6 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>6. Believe And Be Saved</h3>
-            <p>
-                “If you declare with your mouth, 'Jesus is Lord,' and believe in your heart
-                that God raised Him from the dead, you will be saved.”
-            </p>
-            <span>— Romans 10:9 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-            <h3>7. Grace, Not Works</h3>
-            <p>
-                “For it is by grace you have been saved, through faith—and this is not from yourselves,
-                it is the gift of God—not by works, so that no one can boast.”
-            </p>
-            <span>— Ephesians 2:8-9 (NIV)</span>
-        </div>
-
-        <div class="gospel-block">
-    <h3>8. Repent And Turn To God</h3>
-    <p>
-        “Repent, then, and turn to God, so that your sins may be wiped out,
-        that times of refreshing may come from the Lord.”
-    </p>
-    <span>— Acts 3:19 (NIV)</span>
-</div>
-
-<div class="gospel-block">
-    <h3>9. Faith Without Works Is Dead</h3>
-    <p>
-        “As the body without the spirit is dead, so faith without deeds is dead.”
-    </p>
-    <span>— James 2:26 (NIV)</span>
-</div>
-
-<div class="gospel-block">
-    <h3>10. Christ Rose Again</h3>
-    <p>
-        “He is not here; He has risen, just as He said.”
-    </p>
-    <span>— Matthew 28:6 (NIV)</span>
-</div>
-
-<div class="gospel-block">
-    <h3>11. New Life In Christ</h3>
-    <p>
-        “Therefore, if anyone is in Christ, the new creation has come:
-        The old has gone, the new is here!”
-    </p>
-    <span>— 2 Corinthians 5:17 (NIV)</span>
-</div>
-
-<div class="gospel-block">
-    <h3>12. The Gift Of Eternal Life</h3>
-    <p>
-        “And this is the testimony: God has given us eternal life,
-        and this life is in His Son.”
-    </p>
-    <span>— 1 John 5:11 (NIV)</span>
-</div>
-    </div></div>
-</section>
-
-<section class="trinity">
-    <h2 class="gospel-title" style="text-align: center; margin-bottom: 50px;">The Holy Trinity</h2>
-
-    <div class="trinity-diagram trinity-reveal">
-        
-        <svg class="trinity-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <polygon points="50,15 15,85 85,85" fill="none" stroke="#ffd700" stroke-width="0.3" stroke-dasharray="2,2"/>
-            <line x1="50" y1="15" x2="50" y2="55" stroke="#ffd700" stroke-width="0.5"/>
-            <line x1="15" y1="85" x2="50" y2="55" stroke="#ffd700" stroke-width="0.5"/>
-            <line x1="85" y1="85" x2="50" y2="55" stroke="#ffd700" stroke-width="0.5"/>
-        </svg>
-
-        <div class="trinity-node node-father">
-            <div class="arch-frame small-arch"><img src="static/image/god.jpg" alt="The Father"></div>
-            <h3>The Father</h3>
-        </div>
-
-        <div class="trinity-node node-son">
-            <div class="arch-frame small-arch"><img src="static/image/jesus.jpg" alt="The Son"></div>
-            <h3>The Son</h3>
-        </div>
-
-        <div class="trinity-node node-spirit">
-            <div class="arch-frame small-arch"><img src="static/image/spirit.jpg" alt="The Holy Spirit"></div>
-            <h3>The Holy Spirit</h3>
-        </div>
-
-        <div class="trinity-center">
-            <h1 class="god-text">GOD</h1>
-        </div>
-    </div>
-
-    <div class="trinity-description trinity-reveal">
-    <h3>One God, Three Distinct Persons</h3>
-    <p>
-        The doctrine of the Holy Trinity is the profound mystery at the very center of the Christian faith. It reveals that there is only one true God, but He exists eternally as three distinct persons: <strong>God the Father, God the Son, and God the Holy Spirit.</strong>
-    </p>
-    <p>
-        <strong>Distinct but Undivided:</strong> As shown in the symbol, the Father is not the Son, the Son is not the Holy Spirit, and the Holy Spirit is not the Father. They possess distinct relational roles. Yet, all three share the exact same infinite, divine essence. 
-    </p>
-    <p>
-        <strong>Co-equal and Co-eternal:</strong> The Father is perfectly God, the Son is perfectly God, and the Holy Spirit is perfectly God. There are not three gods, nor is God simply "changing masks." They are eternally unified in perfect love and purpose—creating, redeeming, and sustaining the universe together as One.
-    </p>
-
-    <hr style="border: 0; height: 1px; background: rgba(255, 215, 0, 0.3); margin: 30px 0;">
-
-    <h3 style="font-size: 1.5rem; margin-bottom: 20px;">The Divine Roles</h3>
-    <p>
-        <strong>✧ God The Father (The Architect):</strong> The ultimate source and sovereign ruler of all creation. He is the master architect of salvation who so loved the world that He sent His only Son to redeem it. Every good and perfect gift originates from Him.
-    </p>
-    <p>
-        <strong>✧ God The Son (The Redeemer):</strong> The Word made flesh, Jesus Christ. He stepped into human history to execute the Father’s plan of salvation. Through His sinless life, sacrificial death on the cross, and victorious resurrection, He serves as the sole mediator between God and humanity.
-    </p>
-    <p>
-        <strong>✧ God The Holy Spirit (The Sustainer):</strong> The Comforter and active presence of God on Earth today. The Spirit dwells within believers, empowering them with spiritual gifts, convicting the world of sin, and guiding the Church into all truth.
-    </p>
-</div>
-</section>
-
-<section class="family-tree">
-    <h2 class="gospel-title" style="text-align: center; margin-bottom: 50px;">The Holy Family Tree</h2>
-    
-    <div class="tree-wrapper">
-        <div class="tree-row parents-row">
-            <div class="tree-card tree-reveal">
-                <div class="arch-frame"><img src="static/image/god.jpg" alt="God The Father"></div>
-                <div class="tree-text">
-                    <h3>God The Father</h3>
-                    <p class="occupation">The One True Creator</p>
+            <div class="trinity-layout">
+                <div class="trinity-diagram" data-reveal="zoom">
+                    <svg class="trinity-lines" viewBox="0 0 100 100" aria-hidden="true">
+                        <polygon points="50,12 12,84 88,84" fill="none" stroke="url(#tgrad)" stroke-width=".5" stroke-dasharray="2 2"/>
+                        <line x1="50" y1="12" x2="50" y2="58" stroke="url(#tgrad)" stroke-width=".7"/>
+                        <line x1="12" y1="84" x2="50" y2="58" stroke="url(#tgrad)" stroke-width=".7"/>
+                        <line x1="88" y1="84" x2="50" y2="58" stroke="url(#tgrad)" stroke-width=".7"/>
+                        <defs><linearGradient id="tgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#e0b252"/></linearGradient></defs>
+                    </svg>
+                    <div class="t-node t-father"><div class="t-img"><img src="static/image/god.jpg" alt="God the Father" loading="lazy"></div><span>The Father</span></div>
+                    <div class="t-node t-son"><div class="t-img"><img src="static/image/jesus.jpg" alt="God the Son" loading="lazy"></div><span>The Son</span></div>
+                    <div class="t-node t-spirit"><div class="t-img"><img src="static/image/spirit.jpg" alt="God the Holy Spirit" loading="lazy"></div><span>The Holy Spirit</span></div>
+                    <div class="t-center">GOD</div>
                 </div>
-                <button class="more-info-btn">More Info</button>
-            </div>
-            
-            <div class="tree-card tree-reveal">
-                <div class="arch-frame"><img src="static/image/mary.jpg" alt="Mary"></div>
-                <div class="tree-text">
-                    <h3>Virgin Mary</h3>
-                    <p class="occupation">The Mother of Jesus</p>
+                <div class="card trinity-text" data-reveal="right">
+                    <h3>One God, Three Distinct Persons</h3>
+                    <p>The doctrine of the Holy Trinity is the profound mystery at the very center of the Christian faith. It reveals that there is only one true God, but He exists eternally as three distinct persons: <strong>God the Father, God the Son, and God the Holy Spirit.</strong></p>
+                    <p><strong>Distinct but Undivided:</strong> As shown in the symbol, the Father is not the Son, the Son is not the Holy Spirit, and the Holy Spirit is not the Father. They possess distinct relational roles. Yet, all three share the exact same infinite, divine essence.</p>
+                    <p><strong>Co-equal and Co-eternal:</strong> The Father is perfectly God, the Son is perfectly God, and the Holy Spirit is perfectly God. There are not three gods, nor is God simply "changing masks." They are eternally unified in perfect love and purpose—creating, redeeming, and sustaining the universe together as One.</p>
+                    <div class="divine-divider"><i class="fas fa-dove"></i></div>
+                    <h4>The Divine Roles</h4>
+                    <ul class="roles">
+                        <li><strong>God The Father (The Architect):</strong> The ultimate source and sovereign ruler of all creation. He is the master architect of salvation who so loved the world that He sent His only Son to redeem it. Every good and perfect gift originates from Him.</li>
+                        <li><strong>God The Son (The Redeemer):</strong> The Word made flesh, Jesus Christ. He stepped into human history to execute the Father’s plan of salvation. Through His sinless life, sacrificial death on the cross, and victorious resurrection, He serves as the sole mediator between God and humanity.</li>
+                        <li><strong>God The Holy Spirit (The Sustainer):</strong> The Comforter and active presence of God on Earth today. The Spirit dwells within believers, empowering them with spiritual gifts, convicting the world of sin, and guiding the Church into all truth.</li>
+                    </ul>
                 </div>
-                <button class="more-info-btn">More Info</button>
-            </div>
-
-            <div class="tree-card tree-reveal">
-                <div class="arch-frame"><img src="static/image/joseph.jpg" alt="Joseph"></div>
-                <div class="tree-text">
-                    <h3>Saint Joseph</h3>
-                    <p class="occupation">The Earthly Father & Carpenter</p>
-                </div>
-                <button class="more-info-btn">More Info</button>
             </div>
         </div>
+    </section>
 
-        <div class="tree-row children-row">
-            <div class="tree-branch divine-branch">
-                <div class="tree-card tree-reveal jesus-card">
-                    <div class="arch-frame"><img src="static/image/jesus.jpg" alt="Jesus Christ"></div>
-                    <div class="tree-text">
-                        <h3>Jesus Christ</h3>
-                        <p class="occupation">The Messiah & Son of God</p>
+    <!-- ================= HOLY FAMILY ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head" data-reveal="up">
+                <span class="eyebrow">Lineage</span>
+                <h2>The Holy Family Tree</h2>
+            </div>
+            <div class="family-tree">
+                <div class="tree-row parents">
+                    <button class="person" data-person="God The Father" data-role="The One True Creator" data-img="static/image/god.jpg" data-reveal="up"></button>
+                    <button class="person" data-person="Virgin Mary" data-role="The Mother of Jesus" data-img="static/image/mary.jpg" data-reveal="up" style="--d:.1s"></button>
+                    <button class="person" data-person="Saint Joseph" data-role="The Earthly Father & Carpenter" data-img="static/image/joseph.jpg" data-reveal="up" style="--d:.2s"></button>
+                </div>
+                <div class="tree-connector" aria-hidden="true"></div>
+                <div class="tree-row children">
+                    <div class="branch divine">
+                        <span class="branch-label">The Son of God</span>
+                        <button class="person featured" data-person="Jesus Christ" data-role="The Messiah & Son of God" data-img="static/image/jesus.jpg" data-reveal="zoom"></button>
                     </div>
-                    <button class="more-info-btn">More Info</button>
-                </div>
-            </div>
-
-            <div class="tree-branch earthly-branch">
-                <div class="tree-card tree-reveal">
-                    <div class="arch-frame"><img src="static/image/james_brother.jpg" alt="James"></div>
-                    <div class="tree-text"><h3>James the Just</h3><p class="occupation">Brother of Jesus</p></div>
-                    <button class="more-info-btn">More Info</button>
-                </div>
-                <div class="tree-card tree-reveal">
-                    <div class="arch-frame"><img src="static/image/jude_brother.jpg" alt="Jude"></div>
-                    <div class="tree-text"><h3>Jude</h3><p class="occupation">Brother of Jesus</p></div>
-                    <button class="more-info-btn">More Info</button>
-                </div>
-                <div class="tree-card tree-reveal">
-                    <div class="arch-frame"><img src="static/image/simon_brother.jpg" alt="Simon"></div>
-                    <div class="tree-text"><h3>Simon</h3><p class="occupation">Brother of Jesus</p></div>
-                    <button class="more-info-btn">More Info</button>
-                </div>
-                <div class="tree-card tree-reveal">
-                    <div class="arch-frame"><img src="static/image/joses.jpg" alt="Joses"></div>
-                    <div class="tree-text"><h3>Joses</h3><p class="occupation">Brother of Jesus</p></div>
-                    <button class="more-info-btn">More Info</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Disciples SECTION -->
-<section class="disciples">
-    <h2 class="gospel-title" style="text-align: center; margin-bottom: 50px;">The Twelve Apostles</h2>
-    
-    <div class="disciples-grid">
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/peter.jpg" alt="Peter"></div>
-            <div class="disciple-text"><h3>Saint Simon Peter</h3><p class="occupation">Fisherman from Bethsaida</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/andrew.jpg" alt="Andrew"></div>
-            <div class="disciple-text"><h3>Saint Andrew</h3><p class="occupation">Fisherman and First-Called</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/james_g.jpg" alt="James"></div>
-            <div class="disciple-text"><h3>Saint James the Greater</h3><p class="occupation">Son of Zebedee, Fisherman</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/john.jpg" alt="John"></div>
-            <div class="disciple-text"><h3>Saint John the Beloved</h3><p class="occupation">The Evangelist, Son of Thunder</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/philip.jpg" alt="Philip"></div>
-            <div class="disciple-text"><h3>Saint Philip</h3><p class="occupation">Disciple from Bethsaida</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/bartholomew.jpg" alt="Bartholomew"></div>
-            <div class="disciple-text"><h3>Saint Bartholomew</h3><p class="occupation">Also known as Nathanael</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/matthew.jpg" alt="Matthew"></div>
-            <div class="disciple-text"><h3>Saint Matthew</h3><p class="occupation">The Tax Collector from Capernaum</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/thomas.jpg" alt="Thomas"></div>
-            <div class="disciple-text"><h3>Saint Thomas</h3><p class="occupation">Known as Didymus (The Twin)</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/james_l.jpg" alt="James Lesser"></div>
-            <div class="disciple-text"><h3>Saint James the Lesser</h3><p class="occupation">Son of Alphaeus</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/jude.jpg" alt="Jude"></div>
-            <div class="disciple-text"><h3>Saint Jude Thaddeus</h3><p class="occupation">Patron Saint of Lost Causes</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/simon.jpg" alt="Simon"></div>
-            <div class="disciple-text"><h3>Saint Simon the Zealot</h3><p class="occupation">The Canaanite</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-        <div class="disciple-card reveal">
-            <div class="window-frame"><img src="static/image/matthias.jpg" alt="Matthias"></div>
-            <div class="disciple-text"><h3>Saint Matthias</h3><p class="occupation">Chosen to replace Judas</p></div>
-            <button class="more-info-btn">More Info</button>
-        </div>
-    <div class="disciple-card reveal judas-card">
-    <div class="window-frame">
-        <img src="static/image/judas.jpg" alt="Judas Iscariot">
-    </div>
-    <div class="disciple-text">
-        <h3>Judas Iscariot</h3>
-        <p class="occupation">The Treasurer who betrayed Jesus</p>
-    </div>
-    <div class="disciple-info">
-        <button class="more-info-btn silver-btn">More Info</button>
-    </div>
-</div> </section>
-
-    <!-- Disciple Modal -->
-    <div id="disciple-modal" class="modal-overlay">
-        <div class="modal-content" id="modal-content">
-            <button class="modal-close-btn" onclick="closeDiscipleModal()"><i class="fas fa-times"></i></button>
-            
-            <div class="modal-body">
-                <div class="modal-visuals">
-                    <div class="window-frame" style="width:160px; height:220px; margin: 0 auto 15px;">
-                        <img id="modal-img" src="" alt="" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="branch earthly">
+                        <span class="branch-label">His brothers</span>
+                        <div class="branch-grid">
+                            <button class="person small" data-person="James the Just" data-role="Brother of Jesus" data-img="static/image/james_brother.jpg" data-reveal="up"></button>
+                            <button class="person small" data-person="Jude" data-role="Brother of Jesus" data-img="static/image/jude_brother.jpg" data-reveal="up" style="--d:.1s"></button>
+                            <button class="person small" data-person="Simon" data-role="Brother of Jesus" data-img="static/image/simon_brother.jpg" data-reveal="up" style="--d:.2s"></button>
+                            <button class="person small" data-person="Joses" data-role="Brother of Jesus" data-img="static/image/joses.jpg" data-reveal="up" style="--d:.3s"></button>
+                        </div>
                     </div>
-                    <h2 id="modal-name"></h2>
-                    <p id="modal-occupation" class="occupation" style="color:#a67c52; font-family:'Cardo', serif;"></p>
-                </div>
-
-                <div class="modal-info">
-                    <h3>The Mission & Life</h3>
-                    <p id="modal-bio"></p>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- ================= APOSTLES ================= -->
+    <section class="section apostles">
+        <div class="container">
+            <div class="section-head" data-reveal="up">
+                <span class="eyebrow">Fishers of Men</span>
+                <h2>The Twelve Apostles</h2>
+                <p>Ordinary men, called by Christ, who carried the Gospel to the ends of the earth.</p>
+            </div>
+            <div class="apostle-grid">
+                <button class="person window" data-person="Saint Simon Peter" data-role="Fisherman from Bethsaida" data-img="static/image/peter.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Andrew" data-role="Fisherman and First-Called" data-img="static/image/andrew.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint James the Greater" data-role="Son of Zebedee, Fisherman" data-img="static/image/james_g.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint John the Beloved" data-role="The Evangelist, Son of Thunder" data-img="static/image/john.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Philip" data-role="Disciple from Bethsaida" data-img="static/image/philip.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Bartholomew" data-role="Also known as Nathanael" data-img="static/image/bartholomew.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Matthew" data-role="The Tax Collector from Capernaum" data-img="static/image/matthew.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Thomas" data-role="Known as Didymus (The Twin)" data-img="static/image/thomas.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint James the Lesser" data-role="Son of Alphaeus" data-img="static/image/james_l.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Jude Thaddeus" data-role="Patron Saint of Lost Causes" data-img="static/image/jude.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Simon the Zealot" data-role="The Canaanite" data-img="static/image/simon.jpg" data-reveal="up"></button>
+                <button class="person window" data-person="Saint Matthias" data-role="Chosen to replace Judas" data-img="static/image/matthias.jpg" data-reveal="up"></button>
+                <button class="person window judas" data-person="Judas Iscariot" data-role="The Treasurer who betrayed Jesus" data-img="static/image/judas.jpg" data-reveal="up"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CALL TO ACTION ================= -->
+    <section class="section-tight">
+        <div class="container">
+            <div class="cta-card glass gold-edge" data-reveal="zoom">
+                <div class="hero-cross" style="width:40px;height:60px"></div>
+                <h2 id="cta-title">Begin Your Spiritual Journey</h2>
+                <p id="cta-text">Take daily Bible quizzes, complete quests, climb from Seeker to Apostle and share your testimony with believers around the world.</p>
+                <div class="hero-ctas" id="cta-buttons">
+                    <a href="index.html?skip=1&register=1" class="btn btn-lg"><i class="fas fa-dove"></i> Create an Account</a>
+                    <a href="chatbot.html" class="btn btn-ghost btn-lg"><i class="fas fa-robot"></i> Ask GuideBot</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Person modal -->
+<div class="modal" id="person-modal">
+    <div class="modal-dialog wide person-dialog" role="dialog" aria-modal="true" aria-labelledby="pm-name">
+        <button class="icon-btn modal-close" type="button" aria-label="Close" data-close><i class="fas fa-xmark"></i></button>
+        <div class="pm-grid">
+            <div class="pm-visual">
+                <div class="pm-window"><img id="pm-img" src="" alt=""></div>
+            </div>
+            <div class="pm-info">
+                <span class="eyebrow" id="pm-role"></span>
+                <h2 id="pm-name"></h2>
+                <p id="pm-bio"></p>
+                <div class="pm-mission"><i class="fas fa-flag"></i><div><strong>Mission</strong><span id="pm-mission"></span></div></div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <span class="bible-icon">📖</span>
-        <p>© 2026 Jesus Christ The Truth. All Rights Reserved.</p>
-    </footer>
-
-    <script src="static/script.js"></script>
+<script src="static/js/config.js"></script>
+<script src="static/js/api.js"></script>
+<script src="static/js/layout.js"></script>
+<script src="static/js/home.js"></script>
 </body>
 </html>
