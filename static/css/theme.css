@@ -88,7 +88,7 @@ p { margin: 0 0 1em; }
 /* =====================================================================
    HEAVENLY SKY BACKGROUND (injected by layout.js)
    ===================================================================== */
-.sky {
+.sky-bg {
     position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
     background:
         radial-gradient(120% 70% at 50% -12%, rgba(255, 226, 160, 0.42) 0%, rgba(240, 180, 110, 0.16) 28%, transparent 60%),
@@ -96,7 +96,7 @@ p { margin: 0 0 1em; }
         radial-gradient(70% 60% at 10% 30%, rgba(70, 120, 220, 0.18), transparent 60%),
         linear-gradient(180deg, #1a1e57 0%, var(--night-2) 22%, var(--night-1) 55%, var(--night-0) 100%);
 }
-.sky canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sky-bg canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .sky-rays {
     position: absolute; left: 50%; top: -55vmax; width: 140vmax; height: 140vmax; translate: -50% 0;
     background: repeating-conic-gradient(from 0deg at 50% 50%,

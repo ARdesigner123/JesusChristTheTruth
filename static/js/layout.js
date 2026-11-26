@@ -41,7 +41,7 @@
 
     // ---------------- Sky background ----------------
     const sky = document.createElement('div');
-    sky.className = 'sky';
+    sky.className = 'sky-bg';
     sky.setAttribute('aria-hidden', 'true');
     sky.innerHTML = '<div class="sky-rays"></div><div class="sky-cloud c1"></div><div class="sky-cloud c2"></div><div class="sky-cloud c3"></div><canvas></canvas><div class="sky-vignette"></div>';
     body.prepend(sky);

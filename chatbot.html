@@ -2,144 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GuideBot - Jesus Christ The Truth</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/chatbot.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cardo:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GuideBot · Jesus Christ The Truth</title>
+    <meta name="description" content="Ask GuideBot questions about faith, the Bible and your spiritual journey.">
+    <meta name="theme-color" content="#090f2e">
+    <link rel="icon" href="static/image/jesusLogo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="static/css/theme.css">
+    <link rel="stylesheet" href="static/css/chatbot.css">
 </head>
-<body>
+<body data-page="guidebot" data-auth="none" data-no-footer>
+<main class="bot-page">
+    <aside class="bot-side glass" id="bot-side" aria-label="Conversations">
+        <div class="side-head">
+            <img src="static/image/botLogo.png" alt="">
+            <div><strong>GuideBot</strong><span>Your scriptural companion</span></div>
+            <button class="icon-btn side-close" id="side-close" aria-label="Close conversations"><i class="fas fa-xmark"></i></button>
+        </div>
+        <button class="btn btn-block" id="new-chat"><i class="fas fa-plus"></i> New Conversation</button>
+        <div class="side-list" id="side-list"></div>
+    </aside>
+    <div class="side-scrim" id="side-scrim"></div>
 
-    <nav class="navbar">
-        <div class="nav-left">
-            <img src="static/image/jesusLogo.png" alt="Jesus Logo" class="logo">
-            <a href="profile.html" class="nav-profile-icon" title="My Profile">
-                <img src="static/image/profileIcon.png" alt="Profile" class="profile-img-icon">
-            </a>
-        </div>
-        
-        <ul class="nav-links">
-            <div class="nav-indicator"></div>
-            <li><a href="main.html">Home</a></li>
-            <li><a href="bible.html">Bible</a></li>
-            <li><a href="church.html">Church</a></li>
-            <li><a href="topic.html">Topics</a></li>
-            <li><a href="#">About Me</a></li>
-            <li><a href="#">Games</a></li> <li><a href="#">Store</a></li>
-        </ul>
-        
-        <div class="nav-right">
-            <div class="live-user-container" title="Live Believers Online">
-                <i class="fas fa-users" style="color: #4da6ff;"></i>
-                <span id="live-user-count" class="live-count-badge">1</span>
-            </div>
-            
-            <a href="chatbot.html" class="nav-icon" title="Chatbot"><i class="fas fa-robot"></i></a>
-            <a href="index.html" class="nav-icon logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
-        </div>
-        
-        <div class="dropdown" id="dropdownMenu">
-            <ul class="mobile-nav-links">
-                <li><a href="main.html">Home</a></li>
-                <li><a href="bible.html" class="active">Bible</a></li>
-                <li><a href="church.html">Church</a></li>
-                <li><a href="#">Topics</a></li>
-                <li><a href="#">About Me</a></li>
-                <li><a href="#">Games</a></li>
-                <li><a href="#">Store</a></li>
-                <hr class="mobile-divider">
-                <li><a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot</a></li>
-                <li><a href="index.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
+    <section class="bot-main glass" aria-label="Chat">
+        <header class="bot-head">
+            <button class="icon-btn side-open" id="side-open" aria-label="Show conversations"><i class="fas fa-bars-staggered"></i></button>
+            <div class="bot-avatar"><img src="static/image/botLogo.png" alt=""><span class="pulse"></span></div>
+            <div class="bot-title"><strong id="chat-title">New Conversation</strong><span><span class="status-dot on" style="display:inline-block;width:7px;height:7px"></span> GuideBot · online</span></div>
+        </header>
+
+        <div class="bot-body" id="bot-body" aria-live="polite"></div>
+
+        <div class="starters" id="starters">
+            <button class="starter">What is this website about?</button>
+            <button class="starter">How can I start my Spiritual Journey?</button>
+            <button class="starter">How can I get Closer To God?</button>
+            <button class="starter">Who is Jesus?</button>
+            <button class="starter">What is the Trinity?</button>
+            <button class="starter">Why does God allow suffering?</button>
         </div>
 
-        <div class="menu-icon" id="menuIcon">
-            <i class="fas fa-bars"></i>
-        </div>
-    </nav>
-
-    <!-- LIVE USERS MODAL -->
-    <div id="live-users-modal" class="custom-popup-modal">
-    <div class="popup-modal-content" style="max-width: 500px; text-align: center;">
-        <i class="fas fa-times close-modal-icon" onclick="closeModal('live-users-modal')"></i>
-        
-        <div class="modal-header" style="margin-bottom: 25px;">
-            <i class="fas fa-users title-icon" style="color: #4da6ff; font-size: 2.5rem; margin-bottom: 10px;"></i>
-            <h2 class="popup-title">Live Believers</h2>
-            <p style="color: #a67c52; font-family: 'Cardo', serif;">Brethren currently online</p>
-        </div>
-        
-        <div class="live-list-container" style="text-align: left;">
-            <h3 class="live-section-title"><i class="fas fa-crown" style="color: gold;"></i> Owner</h3>
-            <div id="live-owner-list"></div>
-            
-            <h3 class="live-section-title" style="margin-top: 30px;"><i class="fas fa-globe" style="color: #cbb27d;"></i> Users</h3>
-            <div id="live-others-list" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
-        </div>
-    </div>
-</div>
-
-    <section class="hero" style="padding-bottom: 20px;">
-        <div class="hero-container">
-            <h1 class="main-title">
-                Spiritual GuideBot
-                <span class="cross-effect"></span>
-                <span class="cross-wings"></span>
-            </h1>
-            <p class="description">Ask questions about faith, the Bible, or your spiritual journey. GuideBot is here to provide scriptural wisdom and guidance.</p>
-        </div>
+        <form class="bot-input" id="bot-form">
+            <input class="input" id="bot-text" placeholder="Ask about faith, the Bible or your journey…" autocomplete="off" maxlength="1000">
+            <button class="btn" type="submit" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+        </form>
     </section>
-
-    <section class="chat-section">
-        <div class="chat-wrapper">
-            
-            <div class="chat-sidebar">
-                <div class="sidebar-header">
-                    <img src="static/image/botLogo.png" alt="GuideBot" class="sidebar-logo">
-                    <h3>My Chats</h3>
-                </div>
-                <button class="new-chat-btn" onclick="createNewChat()"><i class="fas fa-plus"></i> New Chat</button>
-                <div class="chat-history-list" id="chat-history-list">
-                    <p style="text-align:center; color:#a67c52; margin-top:20px;">Loading...</p>
-                </div>
-            </div>
-
-            <div class="chat-container">
-                <div class="chat-header">
-                    <img src="static/image/botLogo.png" alt="GuideBot" class="chat-bot-avatar">
-                    <div class="bot-info">
-                        <h3 id="current-chat-title">New Conversation</h3>
-                        <p>GuideBot • Online</p>
-                    </div>
-                </div>
-
-                <div class="chat-box" id="chat-box">
-                    </div>
-
-                <div class="starter-btns" id="starter-btns">
-                    <button class="starter-btn" onclick="sendStarter('What is this website about?')">What is this website about?</button>
-                    <button class="starter-btn" onclick="sendStarter('How can I start my Spiritual Journey?')">How can I start my Spiritual Journey?</button>
-                    <button class="starter-btn" onclick="sendStarter('How can I get Closer To God?')">How can I get Closer To God?</button>
-                </div>
-
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" placeholder="Type your question here..." onkeypress="handleEnter(event)">
-                    <button id="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <footer class="footer">
-        <span class="bible-icon">📖</span>
-        <p>© 2026 Jesus Christ The Truth. All Rights Reserved.</p>
-    </footer>
-
-    <script src="static/script.js"></script>
-    <script src="static/chatbot.js"></script>
+</main>
+<script src="static/js/config.js"></script>
+<script src="static/js/api.js"></script>
+<script src="static/js/layout.js"></script>
+<script src="static/js/guidebot-brain.js"></script>
+<script src="static/js/chatbot.js"></script>
 </body>
 </html>

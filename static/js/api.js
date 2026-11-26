@@ -102,7 +102,7 @@
     }
 
     // Allow only simple formatting tags from the rich-text editor.
-    const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV', 'SPAN', 'FONT', 'BLOCKQUOTE']);
+    const ALLOWED = new Set(['B', 'STRONG', 'I', 'EM', 'U', 'UL', 'OL', 'LI', 'BR', 'P', 'DIV', 'SPAN', 'FONT', 'BLOCKQUOTE', 'A']);
     function sanitize(html) {
         const doc = new DOMParser().parseFromString(`<div>${html || ''}</div>`, 'text/html');
         const root = doc.body.firstChild;
@@ -119,8 +119,13 @@
                         return;
                     }
                     const size = child.tagName === 'FONT' ? child.getAttribute('size') : null;
+                    const href = child.tagName === 'A' ? (child.getAttribute('href') || '') : null;
                     [...child.attributes].forEach(a => child.removeAttribute(a.name));
                     if (size && /^[1-7]$/.test(size)) child.setAttribute('size', size);
+                    if (href !== null && /^(https:\/\/|[\w-]+\.html(#[\w-]*)?$)/i.test(href)) {
+                        child.setAttribute('href', href);
+                        if (href.startsWith('https://')) { child.setAttribute('target', '_blank'); child.setAttribute('rel', 'noopener noreferrer'); }
+                    }
                     walk(child);
                 } else if (child.nodeType !== 3) {
                     child.remove();
