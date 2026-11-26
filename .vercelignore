@@ -1,0 +1,6 @@
+supabase
+README.md
+.git
+node_modules
+.env
+.env.*

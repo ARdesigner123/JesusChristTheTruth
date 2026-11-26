@@ -8,7 +8,13 @@
     const cfg = window.JCT_CONFIG || {};
     const BASE = (cfg.SUPABASE_URL || '').replace(/\/+$/, '');
     const KEY = cfg.SUPABASE_ANON_KEY || '';
-    const configured = !!(BASE && KEY);
+    // Never run with a secret / service_role key: it would bypass all database security.
+    const looksSecret = KEY.startsWith('sb_secret_') || (() => {
+        try { return KEY.startsWith('eyJ') && JSON.parse(atob(KEY.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))).role === 'service_role'; }
+        catch (e) { return false; }
+    })();
+    if (looksSecret) console.error('JCT: static/js/config.js contains a SECRET Supabase key. Replace it with the anon/publishable key and rotate the secret key now.');
+    const configured = !!(BASE && KEY) && !looksSecret;
 
     const TOKEN_KEY = 'jct_token';
     const USER_KEY = 'jct_user';

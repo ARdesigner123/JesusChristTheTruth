@@ -660,3 +660,10 @@ body.modal-locked { overflow: hidden; }
     *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
     [data-reveal] { opacity: 1; transform: none; filter: none; }
 }
+
+/* Cross-shaped cursors on devices with a mouse */
+@media (pointer: fine) {
+    body { cursor: url("../cursor/browncross.cur"), auto; }
+    a, button, [role="button"], select, summary, label { cursor: url("../cursor/yellowcross.cur"), pointer; }
+    input, textarea, .rich-input { cursor: text; }
+}
